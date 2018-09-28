@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14133" systemVersion="17E202" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Enroll" representedClassName="Enroll" syncable="YES" codeGenerationType="class">
+        <attribute name="done" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ongoingEventBenefit" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ongoingEventCDown" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ongoingEventCertification" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="ongoingEventPoster" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ongoingEventPrice" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ongoingEventTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="ongoingImage" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="ongoingIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="Sat" representedClassName="Sat" syncable="YES" codeGenerationType="class">
+        <attribute name="point" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Enroll" positionX="-63" positionY="-18" width="128" height="180"/>
+        <element name="Sat" positionX="-36" positionY="9" width="128" height="60"/>
+    </elements>
+</model>

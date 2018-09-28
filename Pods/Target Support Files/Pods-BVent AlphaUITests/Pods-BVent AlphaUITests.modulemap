@@ -1,0 +1,6 @@
+framework module Pods_BVent_AlphaUITests {
+  umbrella header "Pods-BVent AlphaUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

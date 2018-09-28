@@ -1,0 +1,6 @@
+framework module Pods_BVent_Alpha {
+  umbrella header "Pods-BVent Alpha-umbrella.h"
+
+  export *
+  module * { export * }
+}
