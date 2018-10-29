@@ -1,5 +1,5 @@
 # BVent
-BVent Alpha 1.0
+BVent Alpha 1.0.
 This is an iOS Project by BVent Team.
 Currently being developed for iOS only.
 This project is still in Alpha stage, therefore we're working hard to bring this project into stable stage.
