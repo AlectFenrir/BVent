@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		04AC1D6E613BE706BBD1ECA8 /* Pods_BVent_AlphaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAE1C6569E1EF8B6AF161DB5 /* Pods_BVent_AlphaTests.framework */; };
 		18F40C341F70D4F0442FC8D7 /* Pods_BVent_Alpha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81F1405C6BDFABA93CC66078 /* Pods_BVent_Alpha.framework */; };
+		2798A9C82188519E00F9923B /* myPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798A9C72188519E00F9923B /* myPostViewController.swift */; };
+		2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798A9C9218851B800F9923B /* myPostTableViewCell.swift */; };
 		27C373B420DC94C20096AE28 /* fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C373B320DC94C20096AE28 /* fetch.swift */; };
 		2C1D742D20B80914008850A9 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D742C20B80914008850A9 /* UserService.swift */; };
 		2C1D742F20B80AC0008850A9 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D742E20B80AC0008850A9 /* UserProfile.swift */; };
@@ -83,6 +85,8 @@
 
 /* Begin PBXFileReference section */
 		276A3A6E80D4D86A4CF6C9B2 /* Pods-BVent AlphaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BVent AlphaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BVent AlphaUITests/Pods-BVent AlphaUITests.release.xcconfig"; sourceTree = "<group>"; };
+		2798A9C72188519E00F9923B /* myPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPostViewController.swift; sourceTree = "<group>"; };
+		2798A9C9218851B800F9923B /* myPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPostTableViewCell.swift; sourceTree = "<group>"; };
 		27C373B320DC94C20096AE28 /* fetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetch.swift; sourceTree = "<group>"; };
 		2C1D742C20B80914008850A9 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		2C1D742E20B80AC0008850A9 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
@@ -252,6 +256,8 @@
 				2C4072E120AAA034003CC93E /* myProfileViewController.swift */,
 				2C4072E420AAA035003CC93E /* settingTableViewCell.swift */,
 				2C4072E220AAA034003CC93E /* settingViewController.swift */,
+				2798A9C72188519E00F9923B /* myPostViewController.swift */,
+				2798A9C9218851B800F9923B /* myPostTableViewCell.swift */,
 			);
 			path = setting;
 			sourceTree = "<group>";
@@ -596,6 +602,7 @@
 				2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */,
 				2C4072F120AAA055003CC93E /* detail1ViewController.swift in Sources */,
 				2C4072DD20AA9FA9003CC93E /* rumahViewController.swift in Sources */,
+				2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */,
 				2C1D743520B84459008850A9 /* ImageService.swift in Sources */,
 				2C64FC8220BBFDA100EE16DB /* signUpTest.swift in Sources */,
 				2C40730220AAA081003CC93E /* postEventViewController.swift in Sources */,
@@ -630,6 +637,7 @@
 				2C4072EA20AAA035003CC93E /* bookmarkTableViewCell.swift in Sources */,
 				2C4072F420AAA055003CC93E /* detail2ViewController.swift in Sources */,
 				2C4072F320AAA055003CC93E /* detail4ViewController.swift in Sources */,
+				2798A9C82188519E00F9923B /* myPostViewController.swift in Sources */,
 				2CC16C0420A1869A000205FE /* AppDelegate.swift in Sources */,
 				2C4072E620AAA035003CC93E /* myProfileViewController.swift in Sources */,
 				2C1D743320B83DD0008850A9 /* Post.swift in Sources */,

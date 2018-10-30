@@ -29,6 +29,7 @@ struct kumpulanData {
     var postId: String
     
     static var datas : [kumpulanData] = []
+    static var myPosts : [kumpulanData] = []
     
     static func fetch()-> [kumpulanData]{
         //        var ft: [kumpulanData] = []

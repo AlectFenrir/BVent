@@ -53,55 +53,21 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             
                 let temp = ambilData(fetch: fetch!)
             
-            //kumpulanData.datas.removeAll()
-            
-//            kumpulanData.datas.append(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, imageUrl: temp.imageUrl))
-            
                 kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
                 
                 self.loggedInUser = Auth.auth().currentUser
                 
-//                var ref2: DatabaseReference!
-//
-//                ref2 = Database.database().reference()
-                
                 if temp.poster == self.loggedInUser!.uid{
-                    
                 self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
-                    
-                    //setValue([snapshot.key: true])
                     
                 }
             
-            //            ft.append(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc:
-            //                temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title,imageUrl: temp.imageUrl))
-            //
-            
-            //kumpulanData.datas = kumpulanData.datas.reversed()
-            
                 pake = kumpulanData.datas
-            
-            //pake = pake.reversed()
             
                 print(pake.count)
             
                 self.table2.reloadData()
-            
-            //print("1")
-            
-            //print(self.pake[0].category)
-            
-            //}
         }
-        
-        //        var data: [kumpulanData] = kumpulanData.datas
-        //
-        //        var pake: [kumpulanData] = []
-        
-//        collection1?.backgroundColor = .clear
-//        collection1?.contentInset = UIEdgeInsets(top: 10, left: 18, bottom: 10, right: 18)
-        
-        // Do any additional setup after loading the view.
         
     }
     
