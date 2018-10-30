@@ -21,7 +21,7 @@ class rumahTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        foto.layer.cornerRadius = 3
+        foto.layer.cornerRadius = 7
         foto.layer.masksToBounds = true
         
     }

@@ -809,7 +809,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QWVAEMBXMM;
+				DEVELOPMENT_TEAM = TU2PLJYWUD;
 				INFOPLIST_FILE = "BVent Alpha/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -828,7 +828,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = QWVAEMBXMM;
+				DEVELOPMENT_TEAM = TU2PLJYWUD;
 				INFOPLIST_FILE = "BVent Alpha/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

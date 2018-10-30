@@ -21,11 +21,16 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
     let datePicker = UIDatePicker()
     @IBOutlet weak var eventLocationField: UITextField!
     @IBOutlet weak var eventDescriptionField: UITextField!
+    @IBOutlet weak var eventDesc: UITextView!
     
     @IBOutlet weak var chooseImage: UIButton!
     var imagePicker: UIImagePickerController!
     
+    var tanggal: String = ""
+    
     var ref: DatabaseReference?
+    
+    var loggedInUser: AnyObject?
     
     //var tableView = rumahViewController.tableView
     
@@ -68,11 +73,11 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
     }
     @objc func doneClicked()  {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        eventDateField.text = dateFormatter.string(from: datePicker.date)
-        self.view.endEditing(true)
-        eventDateField.text = "\(datePicker.date)"
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+        //eventDateField.text = dateFormatter.string(from: datePicker.date)
+        //self.view.endEditing(true)
+        tanggal = "\(dateFormatter.string(from: datePicker.date))"
+        eventDateField.text = String(tanggal.prefix(16))
         self.view.endEditing(true)
     }
     
@@ -119,6 +124,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         
         
         ref = Database.database().reference()
+        self.loggedInUser = Auth.auth().currentUser
         
         
         uploadMedia() { url in
@@ -127,9 +133,9 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
                     "category": self.categories.text!,
                     "title": self.eventTitleField.text!,
                     "price": self.eventPriceField.text!,
-                    "date": self.eventDateField.text!,
+                    "date": self.tanggal,
                     "location": self.eventLocationField.text!,
-                    "desc": "HELLO",
+                    "desc": self.eventDesc.text!,
 //                    "desc": self.eventDescriptionField.text!,
                     "benefit": "3 SAT Points",
                     "bookmark": false,
@@ -141,8 +147,9 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
                     "certification": true,
                     "time": "09.00 - 10.00",
                     "timestamp": "\(Date().timeIntervalSince1970)",
-                    "poster": "poster",
-                    "imageUrl": url!
+                    "poster": self.loggedInUser!.uid,
+                    "imageUrl": url!,
+                    //"postId": String(self.ref!.childByAutoId().key)
                     ] as [String: Any])
                 
                 print("Post Success!")

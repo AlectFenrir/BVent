@@ -26,6 +26,7 @@ struct kumpulanData {
     var timestamp: String
     var poster: String
     var imageUrl: String
+    var postId: String
     
     static var datas : [kumpulanData] = []
     

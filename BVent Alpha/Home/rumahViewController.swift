@@ -57,7 +57,21 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             
 //            kumpulanData.datas.append(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, imageUrl: temp.imageUrl))
             
-                kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl), at: 0)
+                kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
+                
+                self.loggedInUser = Auth.auth().currentUser
+                
+//                var ref2: DatabaseReference!
+//
+//                ref2 = Database.database().reference()
+                
+                if temp.poster == self.loggedInUser!.uid{
+                    
+                self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+                    
+                    //setValue([snapshot.key: true])
+                    
+                }
             
             //            ft.append(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc:
             //                temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title,imageUrl: temp.imageUrl))
@@ -136,6 +150,8 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = table2.dequeueReusableCell(withIdentifier: "rumahCell2", for: indexPath) as! rumahTableViewCell
         
+//        let dateFormatter = DateFormatter()
+        
         let url = URL(string: pake[indexPath.row].imageUrl)
         
         let dataImage = try? Data(contentsOf: url!)
@@ -177,7 +193,13 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         cell.location.text = pake[indexPath.row].location
         
-        cell.poster.text = "poster"
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E, d MMM"
+        guard let dateInShow = pake[indexPath.row].date.date else {return cell}
+        cell.poster.text = formatter.string(from: dateInShow)
+        
+
         
         //cell.configure(poster: self.loggedInUserData!["fullname"] as! String)
         
@@ -240,5 +262,14 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 destination.index = index
             }
         }
+    }
+}
+
+
+extension String{
+    var date : Date?{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+        return dateFormatter.date(from: self)
     }
 }

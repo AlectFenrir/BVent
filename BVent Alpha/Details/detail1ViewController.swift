@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class detail1ViewController: UIViewController {
     
@@ -31,8 +32,14 @@ class detail1ViewController: UIViewController {
     
     var phoneNumber: String = ""
     
+    var ref: DatabaseReference!
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         //self.navigationController?.navigationBar.prefersLargeTitles = false
         
@@ -139,6 +146,14 @@ class detail1ViewController: UIViewController {
             
             alert.addAction(action)
             present(alert, animated: true, completion: nil)
+            
+            ref = Database.database().reference()
+            
+            var loggedInUser: AnyObject?
+            
+            loggedInUser = Auth.auth().currentUser
+            self.ref?.child("posts").child(pake[index!].postId).child("attendees").child(loggedInUser!.uid).setValue(true)
+            
         }
             
         else{
