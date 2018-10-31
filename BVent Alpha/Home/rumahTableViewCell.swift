@@ -16,6 +16,7 @@ class rumahTableViewCell: UITableViewCell {
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var poster: UILabel!
+    @IBOutlet weak var homeImageLoader: UIActivityIndicatorView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,7 +24,7 @@ class rumahTableViewCell: UITableViewCell {
         
         foto.layer.cornerRadius = 7
         foto.layer.masksToBounds = true
-        
+        //self.homeImageLoader.hidesWhenStopped = true
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

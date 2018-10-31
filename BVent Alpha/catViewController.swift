@@ -89,10 +89,14 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         let url = URL(string: pake[indexPath.row].imageUrl)
         
-        let dataImage = try? Data(contentsOf: url!)
+//        let dataImage = try? Data(contentsOf: url!)
+//
+//        if let imageData = dataImage {
+//            cell.foto.image = UIImage(data: imageData)
+//        }
         
-        if let imageData = dataImage {
-            cell.foto.image = UIImage(data: imageData)
+        ImageService.getImage(withURL: url!) { (image) in
+            cell.foto.image = image
         }
         
         //cell.foto.image = pake[indexPath.row].image

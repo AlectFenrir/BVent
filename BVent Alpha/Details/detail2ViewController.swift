@@ -48,11 +48,16 @@ class detail2ViewController: UIViewController {
         
         let url = URL(string: pake[index!].imageUrl)
         
-        let dataImage = try? Data(contentsOf: url!)
+//        let dataImage = try? Data(contentsOf: url!)
+//
+//        if let imageData = dataImage {
+//            foto.image = UIImage(data: imageData)
+//        }
         
-        if let imageData = dataImage {
-            foto.image = UIImage(data: imageData)
+        ImageService.getImage(withURL: url!) { (image) in
+            self.foto.image = image
         }
+        
         //time.text = pake[index!].cdown
         
         if (pake[index!].price == ""){

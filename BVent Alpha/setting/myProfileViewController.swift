@@ -19,6 +19,7 @@ class myProfileViewController: UIViewController {
     @IBOutlet weak var accountEmail: UILabel!
     @IBOutlet weak var accountPhoneNumber: UILabel!
     @IBOutlet weak var accountProfilePicture: UIImageView!
+    @IBOutlet weak var myProfileImageLoader: UIActivityIndicatorView!
     
     var loggedInUser: AnyObject?
     //var databaseRef = Database.database().reference()
@@ -49,12 +50,23 @@ class myProfileViewController: UIViewController {
             //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String
             //self.accountEmail.text = snapshot["email"] as? String
             
-            let databaseProfilePic = snapshot["photoURL"]
-                as! String
+            let databaseProfilePic = snapshot["photoURL"] as! String
             
-            let data = try? Data(contentsOf: URL(string: databaseProfilePic)!)
+            self.myProfileImageLoader.startAnimating()
+            self.myProfileImageLoader.color = UIColor.white
             
-            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
+            let url = URL(string: databaseProfilePic)
+            
+            ImageService.getImage(withURL: url!) { (image) in
+                self.setProfilePicture(self.accountProfilePicture, imageToSet: image!)
+                
+                self.myProfileImageLoader.stopAnimating()
+                self.myProfileImageLoader.hidesWhenStopped = true
+            }
+            
+//            let data = try? Data(contentsOf: URL(string: databaseProfilePic)!)
+//
+//            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
         })
         
         btn.layer.cornerRadius = 7

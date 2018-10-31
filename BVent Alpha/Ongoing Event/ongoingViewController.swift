@@ -76,10 +76,14 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let url = URL(string: filteredData[indexPath.row].ongoingImage as! String)
         
-        let dataImage = try? Data(contentsOf: url!)
+//        let dataImage = try? Data(contentsOf: url!)
+//
+//        if let imageData = dataImage {
+//            cell.ongoingEventImage.image = UIImage(data: imageData)
+//        }
         
-        if let imageData = dataImage {
-            cell.ongoingEventImage.image = UIImage(data: imageData)
+        ImageService.getImage(withURL: url!) { (image) in
+            cell.ongoingEventImage.image = image
         }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage

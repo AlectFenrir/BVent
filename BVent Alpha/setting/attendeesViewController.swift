@@ -41,7 +41,7 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.ref = Database.database().reference()
         
-        ref.child("posts").child(postId!).child("attendees").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("posts").child(postId!).child("attendees").queryLimited(toLast: 10).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
             

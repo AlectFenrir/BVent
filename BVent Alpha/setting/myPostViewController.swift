@@ -36,7 +36,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             for postId in (value?.allKeys)!{
                 
-                self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
+                self.ref.child("posts").child(postId as! String).queryLimited(toLast: 10).observeSingleEvent(of: .value, with: { (snapshot2) in
                     // Get user value
                     let value2 = snapshot2.value as? NSDictionary
                 
@@ -100,10 +100,13 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if (myPostPake[indexPath.row].imageUrl != ""){
         let url = URL(string: myPostPake[indexPath.row].imageUrl)
         
-        let dataImage = try? Data(contentsOf: url!)
-        
-        if let imageData = dataImage {
-            cell.myPostPhoto.image = UIImage(data: imageData)
+//        let dataImage = try? Data(contentsOf: url!)
+//
+//        if let imageData = dataImage {
+//            cell.myPostPhoto.image = UIImage(data: imageData)
+//            }
+            ImageService.getImage(withURL: url!) { (image) in
+                cell.myPostPhoto.image = image
             }
         }
         

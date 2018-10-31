@@ -17,6 +17,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     var databaseHandle: DatabaseHandle?
     var loggedInUser: AnyObject?
     var loggedInUserData: NSDictionary?
+    var storageRef: StorageReference?
     
     @IBOutlet weak var table2: UITableView!
     
@@ -38,6 +39,10 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         //pake = data
         
         ref = Database.database().reference()
+        ref?.keepSynced(true)
+        
+        //let postsImageRef = storageRef?.child("posts")
+        //self.postsRef.keepSynced(true)
         
 //        self.loggedInUser = Auth.auth().currentUser
 //
@@ -45,7 +50,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
 //
 //            self.loggedInUserData = snapshot.value as? NSDictionary
         
-            self.databaseHandle = self.ref?.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
+            self.databaseHandle = self.ref?.child("posts").queryOrdered(byChild: "timestamp").queryLimited(toLast: 10).observe(.childAdded) { (snapshot) in
             
                 let fetch = snapshot.value as? [String:Any]
             
@@ -65,7 +70,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 pake = kumpulanData.datas
             
                 print(pake.count)
-            
+                
                 self.table2.reloadData()
         }
         
@@ -114,19 +119,19 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = table2.dequeueReusableCell(withIdentifier: "rumahCell2", for: indexPath) as! rumahTableViewCell
         
-//        let dateFormatter = DateFormatter()
+        cell.homeImageLoader.startAnimating()
+        //cell.homeImageLoader.backgroundColor = UIColor.white
         
         let url = URL(string: pake[indexPath.row].imageUrl)
-        
-        let dataImage = try? Data(contentsOf: url!)
-        
-        if let imageData = dataImage {
-            cell.foto.image = UIImage(data: imageData)
+        ImageService.getImage(withURL: url!) { (image) in
+            cell.foto.image = image
+            
+            cell.homeImageLoader.stopAnimating()
+            cell.homeImageLoader.hidesWhenStopped = true
         }
-        
-        //cell.foto.image = pake[indexPath.row].image
         
         cell.judul.text = pake[indexPath.row].title
         
@@ -164,8 +169,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         formatter.dateFormat = "E, d MMM"
         guard let dateInShow = pake[indexPath.row].date.date else {return cell}
         cell.poster.text = formatter.string(from: dateInShow)
-        
-
         
         //cell.configure(poster: self.loggedInUserData!["fullname"] as! String)
         
@@ -230,7 +233,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
 }
-
 
 extension String{
     var date : Date?{

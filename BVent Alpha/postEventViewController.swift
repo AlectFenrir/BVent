@@ -173,7 +173,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        /*if let uploadData = UIImagePNGRepresentation(self.eventImage.image!)*/ if let uploadData = UIImageJPEGRepresentation(self.eventImage.image!, 0.5) {
+        /*if let uploadData = UIImagePNGRepresentation(self.eventImage.image!)*/ if let uploadData = UIImageJPEGRepresentation(self.eventImage.image!, 0.2) {
             storageRef.putData(uploadData, metadata: metaData) { (metaData, error) in
                 if error != nil {
                     print("error")
