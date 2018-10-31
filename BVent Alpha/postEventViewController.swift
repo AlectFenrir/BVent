@@ -153,6 +153,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
                     ] as [String: Any])
                 
                 print("Post Success!")
+                _ = self.navigationController?.popViewController(animated: true)
             }
         }
         

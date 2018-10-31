@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		04AC1D6E613BE706BBD1ECA8 /* Pods_BVent_AlphaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAE1C6569E1EF8B6AF161DB5 /* Pods_BVent_AlphaTests.framework */; };
 		18F40C341F70D4F0442FC8D7 /* Pods_BVent_Alpha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81F1405C6BDFABA93CC66078 /* Pods_BVent_Alpha.framework */; };
+		272E656E2189776E00E8F800 /* attendeesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272E656D2189776E00E8F800 /* attendeesViewController.swift */; };
+		272E65702189778900E8F800 /* attendeesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272E656F2189778900E8F800 /* attendeesTableViewCell.swift */; };
 		2798A9C82188519E00F9923B /* myPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798A9C72188519E00F9923B /* myPostViewController.swift */; };
 		2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798A9C9218851B800F9923B /* myPostTableViewCell.swift */; };
 		27C373B420DC94C20096AE28 /* fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C373B320DC94C20096AE28 /* fetch.swift */; };
@@ -84,6 +86,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		272E656D2189776E00E8F800 /* attendeesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = attendeesViewController.swift; sourceTree = "<group>"; };
+		272E656F2189778900E8F800 /* attendeesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = attendeesTableViewCell.swift; sourceTree = "<group>"; };
 		276A3A6E80D4D86A4CF6C9B2 /* Pods-BVent AlphaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BVent AlphaUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-BVent AlphaUITests/Pods-BVent AlphaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2798A9C72188519E00F9923B /* myPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPostViewController.swift; sourceTree = "<group>"; };
 		2798A9C9218851B800F9923B /* myPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPostTableViewCell.swift; sourceTree = "<group>"; };
@@ -258,6 +262,8 @@
 				2C4072E220AAA034003CC93E /* settingViewController.swift */,
 				2798A9C72188519E00F9923B /* myPostViewController.swift */,
 				2798A9C9218851B800F9923B /* myPostTableViewCell.swift */,
+				272E656D2189776E00E8F800 /* attendeesViewController.swift */,
+				272E656F2189778900E8F800 /* attendeesTableViewCell.swift */,
 			);
 			path = setting;
 			sourceTree = "<group>";
@@ -618,6 +624,7 @@
 				2C4072DE20AA9FA9003CC93E /* rumahCollectionViewCell.swift in Sources */,
 				2C4072F920AAA06E003CC93E /* posterCollectionViewCell.swift in Sources */,
 				2C4072DF20AA9FA9003CC93E /* rumahTableViewCell.swift in Sources */,
+				272E65702189778900E8F800 /* attendeesTableViewCell.swift in Sources */,
 				2C4072D720AA9F89003CC93E /* signInViewController.swift in Sources */,
 				2C3A8A5D20E4FA030084D056 /* myProfile.swift in Sources */,
 				5FFB7867210CD5A0005ED749 /* eTicketViewController.swift in Sources */,
@@ -632,6 +639,7 @@
 				2C4072E820AAA035003CC93E /* bookmarkTableViewController.swift in Sources */,
 				2C4072C520AA9E6C003CC93E /* SAT.swift in Sources */,
 				2C4072CC20AA9F06003CC93E /* chooseCollectionViewCell.swift in Sources */,
+				272E656E2189776E00E8F800 /* attendeesViewController.swift in Sources */,
 				2C4072D820AA9F89003CC93E /* editProfileViewController.swift in Sources */,
 				2C4072C620AA9E6C003CC93E /* dataBase.swift in Sources */,
 				2C4072EA20AAA035003CC93E /* bookmarkTableViewCell.swift in Sources */,

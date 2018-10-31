@@ -17,6 +17,8 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var ref : DatabaseReference!
     
+    var postId: String = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +63,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     myPostPake = kumpulanData.myPosts
                     
                     self.table.reloadData()
-                    print("p")
+                    //print("p")
                 }) { (error) in
                     print(error.localizedDescription)
                 }
@@ -95,17 +97,35 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = table.dequeueReusableCell(withIdentifier: "myPost", for: indexPath) as! myPostTableViewCell
         
+        if (myPostPake[indexPath.row].imageUrl != ""){
         let url = URL(string: myPostPake[indexPath.row].imageUrl)
         
         let dataImage = try? Data(contentsOf: url!)
         
         if let imageData = dataImage {
             cell.myPostPhoto.image = UIImage(data: imageData)
+            }
         }
         
         cell.myPostTitle.text = myPostPake[indexPath.row].title
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        postId = myPostPake[indexPath.row].postId
+        
+        performSegue(withIdentifier: "attendees", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier{
+            if identifier == "attendees"{
+                    let destination = segue.destination as! attendeesViewController
+                    destination.postId = postId
+            }
+        }
     }
     
 
