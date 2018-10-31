@@ -32,11 +32,21 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
     
     var loggedInUser: AnyObject?
     
+    var postActivityIndicator: UIActivityIndicatorView!
+    let loadingTextLabel = UILabel()
+    
     //var tableView = rumahViewController.tableView
     
     //var pickerData:[String] = [String]()
     
     override func viewDidLoad() {
+        postActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        postActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        postActivityIndicator.hidesWhenStopped = true
+        postActivityIndicator.isHidden = true
+        postActivityIndicator.center = view.center
+        self.view.addSubview(postActivityIndicator)
+        
         super.viewDidLoad()
         
         createDatePicker()
@@ -122,6 +132,15 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func eventPost(_ sender: UIButton) {
         
+        postActivityIndicator.isHidden = false
+        postActivityIndicator.startAnimating()
+        
+        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.text = "Posting"
+        loadingTextLabel.font = UIFont(name: "Avenir Light", size: 20)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: postActivityIndicator.center.x, y: postActivityIndicator.center.y + 30)
+        self.view.addSubview(loadingTextLabel)
         
         ref = Database.database().reference()
         self.loggedInUser = Auth.auth().currentUser
@@ -153,6 +172,8 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
                     ] as [String: Any])
                 
                 print("Post Success!")
+                self.postActivityIndicator.stopAnimating()
+                self.postActivityIndicator.isHidden = true
                 _ = self.navigationController?.popViewController(animated: true)
             }
         }
