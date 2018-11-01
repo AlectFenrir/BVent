@@ -23,6 +23,7 @@ class detail1ViewController: UIViewController {
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var enrollBtn: UIButton!
     @IBOutlet weak var decsBtn: UITextView!
+    @IBOutlet weak var detail1ImageLoader: UIActivityIndicatorView!
     
     var data: [kumpulanData] = kumpulanData.fetch()
     
@@ -49,15 +50,14 @@ class detail1ViewController: UIViewController {
         
         //foto.image = pake[index!].image
         
-        let url = URL(string: pake[index!].imageUrl)
-//        let dataImage = try? Data(contentsOf: url!)
-//
-//        if let imageData = dataImage {
-//            foto.image = UIImage(data: imageData)
-//        }
+        detail1ImageLoader.startAnimating()
         
+        let url = URL(string: pake[index!].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in
             self.foto.image = image
+            
+            self.detail1ImageLoader.stopAnimating()
+            self.detail1ImageLoader.hidesWhenStopped = true
         }
         
         //time.text = pake[index!].cdown

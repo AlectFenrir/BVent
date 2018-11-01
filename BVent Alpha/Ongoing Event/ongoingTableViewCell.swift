@@ -18,6 +18,7 @@ class ongoingTableViewCell: UITableViewCell {
     @IBOutlet weak var ongoingEventCDown: UILabel!
     @IBOutlet weak var ongoingEventPoster: UILabel!
     @IBOutlet weak var done: UILabel!
+    @IBOutlet weak var ongoingImageLoader: UIActivityIndicatorView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

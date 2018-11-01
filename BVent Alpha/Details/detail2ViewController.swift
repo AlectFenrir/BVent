@@ -19,6 +19,7 @@ class detail2ViewController: UIViewController {
     @IBOutlet weak var tempat: UILabel!
     @IBOutlet weak var waktu: UILabel!
     @IBOutlet weak var jam: UILabel!
+    @IBOutlet weak var detail2ImageLoader: UIActivityIndicatorView!
     
     var data: [kumpulanData] = kumpulanData.fetch()
     
@@ -46,16 +47,14 @@ class detail2ViewController: UIViewController {
         
         //foto.image = pake[index!].image
         
+        detail2ImageLoader.startAnimating()
+        
         let url = URL(string: pake[index!].imageUrl)
-        
-//        let dataImage = try? Data(contentsOf: url!)
-//
-//        if let imageData = dataImage {
-//            foto.image = UIImage(data: imageData)
-//        }
-        
         ImageService.getImage(withURL: url!) { (image) in
             self.foto.image = image
+            
+            self.detail2ImageLoader.stopAnimating()
+            self.detail2ImageLoader.hidesWhenStopped = true
         }
         
         //time.text = pake[index!].cdown

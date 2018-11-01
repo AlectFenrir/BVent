@@ -73,6 +73,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = ongoingTable.dequeueReusableCell(withIdentifier: "ongoingCell", for: indexPath) as! ongoingTableViewCell
         
         // Configure the cell...
+        cell.ongoingImageLoader.startAnimating()
         
         let url = URL(string: filteredData[indexPath.row].ongoingImage as! String)
         
@@ -84,6 +85,9 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         ImageService.getImage(withURL: url!) { (image) in
             cell.ongoingEventImage.image = image
+            
+            cell.ongoingImageLoader.stopAnimating()
+            cell.ongoingImageLoader.hidesWhenStopped = true
         }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage

@@ -42,9 +42,11 @@ class myProfileViewController: UIViewController {
         databaseRef = Database.database().reference()
         storageRef = Storage.storage().reference()
         
+        databaseRef.keepSynced(true)
+        
         self.loggedInUser = Auth.auth().currentUser
         
-        self.databaseRef.child("users").child("regular").child(self.loggedInUser!.uid).child("profile").observe(.value, with: { (snapshot) in
+        self.databaseRef.child("users").child("regular").child(self.loggedInUser!.uid).child("profile").queryLimited(toLast: 10).observe(.value, with: { (snapshot) in
             let snapshot = snapshot.value as! [String: AnyObject]
             self.accountName.text = snapshot["fullname"] as? String
             //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String

@@ -693,6 +693,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sNm-dO-dea">
+                                                    <rect key="frame" x="79" y="59" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
@@ -703,6 +707,7 @@
                                             <outlet property="ongoingEventPoster" destination="xvB-HX-c60" id="nOp-OP-ZTt"/>
                                             <outlet property="ongoingEventPrice" destination="zb5-hJ-Ghk" id="N4o-xl-YmD"/>
                                             <outlet property="ongoingEventTitle" destination="sZi-rX-wef" id="Mjo-C8-1tb"/>
+                                            <outlet property="ongoingImageLoader" destination="sNm-dO-dea" id="ghh-CD-S4y"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -2337,6 +2342,10 @@
                                     <action selector="enroll:" destination="kui-YJ-jYu" eventType="touchUpInside" id="KzC-mY-5sU"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="9Ex-9m-gUz">
+                                <rect key="frame" x="177" y="157" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="oXK-lm-fcm"/>
@@ -2354,6 +2363,7 @@
                         <outlet property="benefit" destination="jBJ-mc-Umi" id="FnP-Hh-5IC"/>
                         <outlet property="category" destination="nwm-MO-QIh" id="K9Y-DM-2tg"/>
                         <outlet property="decsBtn" destination="H3L-X7-EYm" id="RML-Rz-5KR"/>
+                        <outlet property="detail1ImageLoader" destination="9Ex-9m-gUz" id="e1M-pu-gqb"/>
                         <outlet property="enrollBtn" destination="Jzt-yS-rOx" id="Rfd-8l-AWL"/>
                         <outlet property="foto" destination="xcV-H6-zN2" id="oqh-Gn-eyX"/>
                         <outlet property="isi" destination="H3L-X7-EYm" id="4um-x6-iPd"/>
@@ -2468,6 +2478,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="GdG-0f-XyK">
+                                <rect key="frame" x="177" y="155" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="QqH-OX-Kjc"/>
@@ -2482,6 +2496,7 @@
                     <connections>
                         <outlet property="benefit" destination="Mu3-SY-I8A" id="hC4-Cn-b9R"/>
                         <outlet property="category" destination="tQa-kR-0m7" id="3og-iQ-5cn"/>
+                        <outlet property="detail2ImageLoader" destination="GdG-0f-XyK" id="5eN-T1-K1G"/>
                         <outlet property="foto" destination="THq-Qa-XoY" id="UZz-Si-ccz"/>
                         <outlet property="isi" destination="QFh-1d-tT7" id="6rn-k1-RqS"/>
                         <outlet property="jam" destination="3AN-NW-hez" id="cEP-QI-YUq"/>
@@ -2591,6 +2606,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="6wJ-CH-022">
+                                <rect key="frame" x="177" y="148" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="bHc-97-ako"/>
@@ -2599,6 +2618,7 @@
                     <connections>
                         <outlet property="benefit" destination="GOE-0p-zxk" id="web-SH-ddk"/>
                         <outlet property="category" destination="BE5-TG-N2u" id="jPn-aU-F65"/>
+                        <outlet property="detail3ImageLoader" destination="6wJ-CH-022" id="68C-Pt-MWE"/>
                         <outlet property="foto" destination="G5K-l7-uTU" id="3cH-cF-NBl"/>
                         <outlet property="isi" destination="xbM-0u-bCe" id="FHC-wk-lMN"/>
                         <outlet property="jam" destination="YLd-8z-hTP" id="xZO-jc-OQl"/>
@@ -2704,6 +2724,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="fVf-ai-TYc">
+                                <rect key="frame" x="177" y="155" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="aZE-7w-wmO"/>
@@ -2718,6 +2742,7 @@
                     <connections>
                         <outlet property="benefit" destination="TbK-bf-80p" id="6OF-yq-tSB"/>
                         <outlet property="category" destination="mSQ-0A-NAw" id="n08-AR-euu"/>
+                        <outlet property="detail4ImageLoader" destination="fVf-ai-TYc" id="juo-oG-iGt"/>
                         <outlet property="foto" destination="LSb-Pg-k6R" id="eok-3Y-qOA"/>
                         <outlet property="isi" destination="I2I-d2-leo" id="rh5-wJ-BbM"/>
                         <outlet property="jam" destination="xzU-R5-LcS" id="cS0-QY-Y6Z"/>
@@ -2823,6 +2848,10 @@
                                 <rect key="frame" x="16" y="466" width="35" height="35"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="GR2-Xx-Gdh">
+                                <rect key="frame" x="177" y="151" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="D6g-Uj-vKb"/>
@@ -2837,6 +2866,7 @@
                     <connections>
                         <outlet property="benefit" destination="sIX-e5-w3L" id="89W-88-Qyj"/>
                         <outlet property="category" destination="4iw-rI-z6w" id="Iwg-7y-V3G"/>
+                        <outlet property="detail5ImageLoader" destination="GR2-Xx-Gdh" id="A8h-Bu-svI"/>
                         <outlet property="foto" destination="CXV-Rt-IQ0" id="yAD-h6-ZWo"/>
                         <outlet property="isi" destination="85T-qx-3Fq" id="BDG-og-LvM"/>
                         <outlet property="jam" destination="56O-mQ-4pw" id="9oB-eK-vpa"/>

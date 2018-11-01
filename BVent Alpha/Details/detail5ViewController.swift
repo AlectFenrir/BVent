@@ -22,6 +22,7 @@ class detail5ViewController: UIViewController {
     @IBOutlet weak var jam: UILabel!
     @IBOutlet weak var isi: UILabel!
     @IBOutlet weak var benefit: UILabel!
+    @IBOutlet weak var detail5ImageLoader: UIActivityIndicatorView!
     
     var video = AVCaptureVideoPreviewLayer()
     
@@ -55,16 +56,14 @@ class detail5ViewController: UIViewController {
         
         self.title = pake[index!].title
         
+        detail5ImageLoader.startAnimating()
+        
         let url = URL(string: pake[index!].imageUrl)
-        
-//        let dataImage = try? Data(contentsOf: url!)
-//
-//        if let imageData = dataImage {
-//            foto.image = UIImage(data: imageData)
-//        }
-        
         ImageService.getImage(withURL: url!) { (image) in
             self.foto.image = image
+            
+            self.detail5ImageLoader.stopAnimating()
+            self.detail5ImageLoader.hidesWhenStopped = true
         }
         
         if (pake[index!].price == ""){
