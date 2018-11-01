@@ -228,7 +228,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
 extension String{
     var date : Date?{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss a"
         return dateFormatter.date(from: self)
     }
 }
