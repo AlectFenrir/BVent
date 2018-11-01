@@ -21,22 +21,19 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBOutlet weak var table2: UITableView!
     
-    //@IBOutlet weak var collection1: UICollectionView!
-    
     let main = ["All", "Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
     
     let cat = ["cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8"]
     
     var lempar: String? = ""
     var index: Int?
-    //var posts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         table2.dataSource = self
         
-        //pake = data
+        pake.removeAll()
         
         ref = Database.database().reference()
         ref?.keepSynced(true)
@@ -54,8 +51,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             
                 let fetch = snapshot.value as? [String:Any]
             
-                print(fetch)
-            
                 let temp = ambilData(fetch: fetch!)
             
                 kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
@@ -68,8 +63,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 }
             
                 pake = kumpulanData.datas
-            
-                print(pake.count)
                 
                 self.table2.reloadData()
         }
@@ -108,9 +101,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //        if tableView == table2{
-        //
-        //        }
+
         return 125
     }
     

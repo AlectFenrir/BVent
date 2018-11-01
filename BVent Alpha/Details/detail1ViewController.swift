@@ -124,7 +124,6 @@ class detail1ViewController: UIViewController {
     
     @IBAction func enroll(_ sender: UIButton) {
         
-        //if (pake[index!].enroll == )
         
         if (pake[index!].enroll == false){
             
