@@ -43,6 +43,7 @@ class detail2ViewController: UIViewController {
             pake = data
         }
         
+        
         self.title = pake[index!].title
         
         //foto.image = pake[index!].image

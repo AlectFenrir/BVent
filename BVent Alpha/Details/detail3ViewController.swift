@@ -27,6 +27,7 @@ class detail3ViewController: UIViewController {
     
     var index: Int?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

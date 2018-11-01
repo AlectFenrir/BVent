@@ -14,7 +14,6 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     let isi = ["Satu", "Dua", "Tiga", "Empat"]
     let foto = ["1", "2", "3", "4"]
-    let text = ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "cccccccccccccccccccccccccccccccccccc", "ddddddddddddddddddddddddddddddddddddddd"]
     
     var category: String?
     

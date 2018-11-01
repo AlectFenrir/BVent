@@ -30,6 +30,7 @@ class detail4ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         //self.navigationController?.navigationBar.prefersLargeTitles = false
         
         pake = data.filter({ (s1) -> Bool in

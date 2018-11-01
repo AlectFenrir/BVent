@@ -30,6 +30,7 @@ class detail5ViewController: UIViewController {
     var validation: Bool = false
     
     
+    
     //var point: sat = sat.fetch()
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

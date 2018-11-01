@@ -125,6 +125,7 @@ class detail1ViewController: UIViewController {
     @IBAction func enroll(_ sender: UIButton) {
         
         
+        
         if (pake[index!].enroll == false){
             
             let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
