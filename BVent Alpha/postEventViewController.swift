@@ -78,17 +78,6 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
-//        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.NSNotification.Name.UIKeyboardWillHide, object: nil)
-//        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-    
-        //pickerCategories.isHidden = true;
-        //categories.text = "A4";
-        
-        //self.categories.delegate = self
-        //self.pickerCategories.delegate = self
-        //self.pickerCategories.dataSource = self
-        
-        //pickerData = ["A0","A1","A2","A3","A4","A5","A6","A7","A8","A9","A10"]
     }
     
     @objc func adjustForKeyboard(notification: Notification) {
