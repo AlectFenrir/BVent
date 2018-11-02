@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import Firebase
 
-class catViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class catViewController: UIViewController, UITableViewDelegate, UITableViewDataSource/*, UIViewControllerPreviewingDelegate*/ {
     
     let isi = ["Satu", "Dua", "Tiga", "Empat"]
     let foto = ["1", "2", "3", "4"]
@@ -55,6 +55,28 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
         
     }
+    
+//    func detailViewController(for index: Int) -> detail2ViewController {
+//        guard let vc = storyboard?.instantiateViewController(withIdentifier: "detail2ViewController") as? detail2ViewController else {
+//            fatalError("Couldn't load detail view controller")
+//        }
+//
+//        vc.index = index
+//        return vc
+//    }
+//
+//    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+//        if let indexPath = tabel1.indexPathForRow(at: location) {
+//            previewingContext.sourceRect = tabel1.rectForRow(at: indexPath)
+//            return detailViewController(for: indexPath.row)
+//        }
+//
+//        return nil
+//    }
+//
+//    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+//        navigationController?.pushViewController(viewControllerToCommit, animated: true)
+//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -136,6 +158,9 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         index = indexPath.row
         performSegue(withIdentifier: "details", sender: nil)
+        
+//        let vc = detailViewController(for: indexPath.row)
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {

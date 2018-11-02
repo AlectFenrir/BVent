@@ -11,7 +11,8 @@ import Foundation
 import CoreData
 import Firebase
 
-class rumahViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class rumahViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate {
+    
     
     //var temp: [ambilData] = []
     var ref: DatabaseReference?
@@ -81,6 +82,11 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 self.table2.reloadData()
         }
         
+        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
+        {
+            registerForPreviewing(with: self, sourceView: table2)
+            
+        }
         //self.table2.addSubview(self.refreshControl)
         
     }
@@ -118,6 +124,28 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     func dispatchDelay(delay:Double, closure:@escaping ()->()) {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
+    }
+    
+    func detailViewController(for index: Int) -> detail1ViewController {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "detail1ViewController") as? detail1ViewController else {
+            fatalError("Couldn't load detail view controller")
+        }
+        
+        vc.index = index
+        return vc
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let indexPath = table2.indexPathForRow(at: location) {
+            previewingContext.sourceRect = table2.rectForRow(at: indexPath)
+            return detailViewController(for: indexPath.row)
+        }
+        
+        return nil
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -221,6 +249,9 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         index = indexPath.row
         performSegue(withIdentifier: "details", sender: nil)
+        
+        let vc = detailViewController(for: indexPath.row)
+        navigationController?.pushViewController(vc, animated: true)
         
     }
     
