@@ -35,12 +35,14 @@ class detail1ViewController: UIViewController {
     
     var ref: DatabaseReference!
     
+    var val = false
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        val = false
         
         //self.navigationController?.navigationBar.prefersLargeTitles = false
         
@@ -124,50 +126,110 @@ class detail1ViewController: UIViewController {
     
     @IBAction func enroll(_ sender: UIButton) {
         
+        self.ref = Database.database().reference()
+        let userID = Auth.auth().currentUser
+        
+        ref.child("users").child("regular").child(userID!.uid).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            
+            if (snapshot.exists()){
+                
+                for postId in (value?.allKeys)!{
+                    
+                    if (self.pake[self.index!].postId == postId as! String){
+                        self.val = true
+                    }
+                    
+                }
+                
+                if (self.val == true){
+                    
+                    let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+                else{
+                    self.ref.child("users").child("regular").child(userID!.uid).child("enroll").setValue([self.pake[self.index!].postId: true])
+                    self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
+                    
+                    let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+            }
+            else{
+                self.ref.child("users").child("regular").child(userID!.uid).child("enroll").setValue([self.pake[self.index!].postId: true])
+                self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
+                
+                let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+                
+                let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            let username = value?["username"] as? String ?? ""
+            
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
+        }
         
         
-        if (pake[index!].enroll == false){
-            
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let newEntry = Enroll(context: context)
-            newEntry.ongoingEventTitle = pake[index!].title
-            newEntry.ongoingEventPrice = pake[index!].price
-            newEntry.ongoingImage = pake[index!].imageUrl as NSObject
-            newEntry.ongoingEventBenefit = pake[index!].benefit
-            //newEntry.ongoingEventCDown = pake[index!].cdown
-            newEntry.ongoingIndex = Int16(index!)
-            newEntry.done = false
-            newEntry.ongoingEventCertification = pake[index!].certification
-            //newEntry.ongoingEventPoster = pake[index!].po
-            
-            pake[index!].enroll = true
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
-            
-            let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
-            
-            let action = UIAlertAction(title: "OK", style: .default) { (_) in}
-            
-            alert.addAction(action)
-            present(alert, animated: true, completion: nil)
-            
-            ref = Database.database().reference()
-            
-            var loggedInUser: AnyObject?
-            
-            loggedInUser = Auth.auth().currentUser
-            self.ref?.child("posts").child(pake[index!].postId).child("attendees").child(loggedInUser!.uid).setValue(true)
-            
-        }
-            
-        else{
-            let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
-            
-            let action = UIAlertAction(title: "OK", style: .default) { (_) in}
-            
-            alert.addAction(action)
-            present(alert, animated: true, completion: nil)
-            
-        }
+        
+        
+//        if (pake[index!].enroll == false){
+//
+//            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//            let newEntry = Enroll(context: context)
+//            newEntry.ongoingEventTitle = pake[index!].title
+//            newEntry.ongoingEventPrice = pake[index!].price
+//            newEntry.ongoingImage = pake[index!].imageUrl as NSObject
+//            newEntry.ongoingEventBenefit = pake[index!].benefit
+//            //newEntry.ongoingEventCDown = pake[index!].cdown
+//            newEntry.ongoingIndex = Int16(index!)
+//            newEntry.done = false
+//            newEntry.ongoingEventCertification = pake[index!].certification
+//            //newEntry.ongoingEventPoster = pake[index!].po
+//
+//            pake[index!].enroll = true
+//            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+//
+//            let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+//
+//            let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+//
+//            alert.addAction(action)
+//            present(alert, animated: true, completion: nil)
+//
+//            ref = Database.database().reference()
+//
+//            var loggedInUser: AnyObject?
+//
+//            loggedInUser = Auth.auth().currentUser
+//            self.ref?.child("posts").child(pake[index!].postId).child("attendees").child(loggedInUser!.uid).setValue(true)
+//
+//        }
+//
+//        else{
+//            let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
+//
+//            let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+//
+//            alert.addAction(action)
+//            present(alert, animated: true, completion: nil)
+//
+//        }
         //useddata = pake
         
         
