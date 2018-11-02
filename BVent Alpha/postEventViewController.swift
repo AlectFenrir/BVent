@@ -22,6 +22,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var eventLocationField: UITextField!
     @IBOutlet weak var eventDescriptionField: UITextField!
     @IBOutlet weak var eventDesc: UITextView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var chooseImage: UIButton!
     var imagePicker: UIImagePickerController!
@@ -34,6 +35,8 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
     
     var postActivityIndicator: UIActivityIndicatorView!
     let loadingTextLabel = UILabel()
+    
+    let notificationCenter = NotificationCenter.default
     
     //var tableView = rumahViewController.tableView
     
@@ -51,6 +54,9 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         
         createDatePicker()
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
+        view.addGestureRecognizer(tapGesture)
+        
         let imageTap = UITapGestureRecognizer(target: self, action: #selector(openImagePicker))
         eventImage.isUserInteractionEnabled = true
         eventImage.addGestureRecognizer(imageTap)
@@ -62,6 +68,19 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         imagePicker.allowsEditing = true
         imagePicker.sourceType = .photoLibrary
         imagePicker.delegate = self
+        
+        categories.delegate = self
+        eventTitleField.delegate = self
+        eventPriceField.delegate = self
+        eventDateField.delegate = self
+        eventLocationField.delegate = self
+        
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+//        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard), name: UIResponder.NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    
         //pickerCategories.isHidden = true;
         //categories.text = "A4";
         
@@ -71,6 +90,44 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         
         //pickerData = ["A0","A1","A2","A3","A4","A5","A6","A7","A8","A9","A10"]
     }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        let userInfo = notification.userInfo!
+        
+        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+        
+        if notification.name == NSNotification.Name.UIKeyboardWillHide {
+            scrollView.contentInset = UIEdgeInsets.zero
+        } else {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+        }
+        
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        
+    }
+    
+    @objc func didTapView(gesture: UITapGestureRecognizer)  {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == categories {
+            eventTitleField.becomeFirstResponder()
+        }
+        if textField == eventTitleField {
+            eventPriceField.becomeFirstResponder()
+        }
+        if textField == eventPriceField {
+            eventDateField.becomeFirstResponder()
+        }
+        if textField == eventDateField {
+            eventLocationField.resignFirstResponder()
+        }
+        
+        return true
+    }
+    
     func createDatePicker(){
         
         datePicker.datePickerMode = .dateAndTime
