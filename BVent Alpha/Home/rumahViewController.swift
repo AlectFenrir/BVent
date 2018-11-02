@@ -250,9 +250,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         index = indexPath.row
         performSegue(withIdentifier: "details", sender: nil)
         
-        let vc = detailViewController(for: indexPath.row)
-        navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

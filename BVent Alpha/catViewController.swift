@@ -39,6 +39,8 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //tabel1.dataSource = self
+        
         self.title = category
         
         //self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -53,6 +55,12 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             pake = data
             //pake = pake.reversed()
         }
+        
+//        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
+//        {
+//            registerForPreviewing(with: self, sourceView: tabel1)
+//
+//        }
         
     }
     
@@ -140,7 +148,7 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         ref = Database.database().reference()
         
-        ref.child("users").child("regular").child(pake[indexPath.row].poster).child("profile").queryLimited(toLast: 10).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("users").child("regular").child(pake[indexPath.row].poster).child("profile").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
             self.name = value?["fullname"] as? String ?? ""
@@ -156,11 +164,10 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         index = indexPath.row
         performSegue(withIdentifier: "details", sender: nil)
         
-//        let vc = detailViewController(for: indexPath.row)
-//        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
