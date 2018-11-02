@@ -74,10 +74,14 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tabel1.dequeueReusableCell(withIdentifier: "cat1", for: indexPath) as! catTableViewCell
         
-        let url = URL(string: pake[indexPath.row].imageUrl)
+        cell.categoryImageLoader.startAnimating()
         
+        let url = URL(string: pake[indexPath.row].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in
             cell.foto.image = image
+            
+            cell.categoryImageLoader.stopAnimating()
+            cell.categoryImageLoader.hidesWhenStopped = true
         }
         
         //cell.foto.image = pake[indexPath.row].image

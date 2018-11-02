@@ -29,6 +29,18 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
 
     @IBOutlet weak var table: UITableView!
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributedTitle = NSAttributedString(string: "Fetching Attendees Data", attributes: attributes)
+
+        refreshControl.addTarget(self, action: #selector(attendeesViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        refreshControl.tintColor = UIColor.gray
+        refreshControl.attributedTitle = attributedTitle
+
+        return refreshControl
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,8 +52,9 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         attendeesName.removeAll()
         
         self.ref = Database.database().reference()
+        self.ref.keepSynced(true)
         
-        ref.child("posts").child(postId!).child("attendees").queryLimited(toLast: 10).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("posts").child(postId!).child("attendees").queryLimited(toLast: 250).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
             
@@ -49,15 +62,15 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 for userId in (value?.allKeys)!{
                     
-                    self.ref.child("users").child("regular").child(userId as! String).child("profile").observeSingleEvent(of: .value, with: { (snapshot2) in
+                    self.ref.child("users").child("regular").child(userId as! String).child("profile").queryLimited(toLast: 250).observeSingleEvent(of: .value, with: { (snapshot2) in
                         // Get user value
                         let value2 = snapshot2.value as? NSDictionary
                         //let username = value?["username"] as? String ?? ""
                         
-//                        attendee.profile.append(attendee(
-//
-//                            fullName: value2?["fullname"] as? String ?? "",
-//                            email: value2?["email"] as? String ?? ""))
+                        //                          attendee.profile.append(attendee(
+                        //
+                        //                              fullName: value2?["fullname"] as? String ?? "",
+                        //                              email: value2?["email"] as? String ?? ""))
                         self.attendeesName.append(value2?["fullname"] as? String ?? "")
                         self.attendeesEmail.append(value2?["email"] as? String ?? "")
                         
@@ -72,6 +85,61 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
                 
             }
             
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+        self.table.addSubview(self.refreshControl)
+        
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+
+        print ("a")
+
+        //attendee.profile.removeAll()
+
+        attendeesEmail.removeAll()
+        attendeesName.removeAll()
+
+        self.ref = Database.database().reference()
+        self.ref.keepSynced(true)
+
+        ref.child("posts").child(postId!).child("attendees").queryLimited(toLast: 250).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+
+            if (snapshot.exists()){
+
+                for userId in (value?.allKeys)!{
+
+                    self.ref.child("users").child("regular").child(userId as! String).child("profile").queryLimited(toLast: 250).observeSingleEvent(of: .value, with: { (snapshot2) in
+                        // Get user value
+                        let value2 = snapshot2.value as? NSDictionary
+                        //let username = value?["username"] as? String ?? ""
+
+                        //                          attendee.profile.append(attendee(
+                        //
+                        //                              fullName: value2?["fullname"] as? String ?? "",
+                        //                              email: value2?["email"] as? String ?? ""))
+                        self.attendeesName.append(value2?["fullname"] as? String ?? "")
+                        self.attendeesEmail.append(value2?["email"] as? String ?? "")
+
+                        self.table.reloadData()
+
+                        self.dispatchDelay(delay: 2.0) {
+                            self.refreshControl.endRefreshing()
+                        }
+
+                        // ...
+                    }) { (error) in
+                        print(error.localizedDescription)
+                    }
+
+                }
+
+            }
+
         }) { (error) in
             print(error.localizedDescription)
         }
@@ -95,6 +163,10 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
+    }
+    
+    func dispatchDelay(delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
     }
     
 

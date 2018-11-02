@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import CoreData
 import Firebase
 
@@ -28,6 +29,19 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     var lempar: String? = ""
     var index: Int?
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributedTitle = NSAttributedString(string: "Fetching Event Data", attributes: attributes)
+        
+        refreshControl.addTarget(self, action: #selector(rumahViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        refreshControl.tintColor = UIColor.gray
+        refreshControl.attributedTitle = attributedTitle
+        
+        return refreshControl
+    }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,11 +61,11 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
 //
 //            self.loggedInUserData = snapshot.value as? NSDictionary
         
-            self.databaseHandle = self.ref?.child("posts").queryOrdered(byChild: "timestamp").queryLimited(toLast: 10).observe(.childAdded) { (snapshot) in
+        self.databaseHandle = self.ref?.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
             
-                let fetch = snapshot.value as? [String:Any]
+                let value = snapshot.value as? [String:Any]
             
-                let temp = ambilData(fetch: fetch!)
+                let temp = ambilData(fetch: value!)
             
                 kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
                 
@@ -67,6 +81,43 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 self.table2.reloadData()
         }
         
+        //self.table2.addSubview(self.refreshControl)
+        
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        pake.removeAll()
+        
+        ref = Database.database().reference()
+        ref?.keepSynced(true)
+        
+        self.ref?.child("posts").queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            let value = snapshot.value as? [String:Any]
+            
+            let temp = ambilData(fetch: value!)
+            
+            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
+            
+            self.loggedInUser = Auth.auth().currentUser
+            
+            if temp.poster == self.loggedInUser!.uid{
+                self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+                
+            }
+            
+            pake = kumpulanData.datas
+            
+            self.table2.reloadData()
+            
+            self.dispatchDelay(delay: 2.0) {
+                self.refreshControl.endRefreshing()
+            }
+        })
+    }
+    
+    func dispatchDelay(delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
     }
     
     override func didReceiveMemoryWarning() {
@@ -106,6 +157,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return pake.count
     }
     
@@ -114,7 +166,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         let cell = table2.dequeueReusableCell(withIdentifier: "rumahCell2", for: indexPath) as! rumahTableViewCell
         
         cell.homeImageLoader.startAnimating()
-        //cell.homeImageLoader.backgroundColor = UIColor.white
         
         let url = URL(string: pake[indexPath.row].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in

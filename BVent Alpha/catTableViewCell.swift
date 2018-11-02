@@ -18,6 +18,7 @@ class catTableViewCell: UITableViewCell {
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var location: UILabel!
     @IBOutlet weak var poster: UILabel!
+    @IBOutlet weak var categoryImageLoader: UIActivityIndicatorView!
     
     
     override func awakeFromNib() {

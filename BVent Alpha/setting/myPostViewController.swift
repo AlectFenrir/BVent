@@ -19,6 +19,18 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var postId: String = ""
     
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributedTitle = NSAttributedString(string: "Fetching My Post(s) Data", attributes: attributes)
+        
+        refreshControl.addTarget(self, action: #selector(myPostViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        refreshControl.tintColor = UIColor.gray
+        refreshControl.attributedTitle = attributedTitle
+        
+        return refreshControl
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +38,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         kumpulanData.myPosts.removeAll()
         
         self.ref = Database.database().reference()
+        self.ref.keepSynced(true)
         
         let userID = Auth.auth().currentUser?.uid
         ref.child("users").child("regular").child(userID!).child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
@@ -36,7 +49,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             for postId in (value?.allKeys)!{
                 
-                self.ref.child("posts").child(postId as! String).queryLimited(toLast: 10).observeSingleEvent(of: .value, with: { (snapshot2) in
+                self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
                     // Get user value
                     let value2 = snapshot2.value as? NSDictionary
                 
@@ -77,8 +90,76 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+        self.table.addSubview(self.refreshControl)
 
         // Do any additional setup after loading the view.
+    }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        kumpulanData.myPosts.removeAll()
+        
+        self.ref = Database.database().reference()
+        self.ref.keepSynced(true)
+        
+        let userID = Auth.auth().currentUser?.uid
+        ref.child("users").child("regular").child(userID!).child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            
+            if (snapshot.exists()){
+                
+                for postId in (value?.allKeys)!{
+                    
+                    self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
+                        // Get user value
+                        let value2 = snapshot2.value as? NSDictionary
+                        
+                        kumpulanData.myPosts.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                                                                 bookmark: value2?["bookmark"] as? Bool ?? false,
+                                                                 category: value2?["category"] as? String ?? "",
+                                                                 certification: value2?["certification"] as? Bool ?? false,
+                                                                 confirmCode: value2?["confirmCode"] as? String ?? "",
+                                                                 cp: value2?["cp"] as? String ?? "",
+                                                                 date: value2?["date"] as? String ?? "",
+                                                                 desc: value2?["desc"] as? String ?? "",
+                                                                 done: value2?["done"] as? Bool ?? false,
+                                                                 enroll: value2?["enroll"] as? Bool ?? false,
+                                                                 location: value2?["location"] as? String ?? "",
+                                                                 price: value2?["price"] as? String ?? "",
+                                                                 sat: value2?["sat"] as? Int ?? 0,
+                                                                 time: value2?["time"] as? String ?? "",
+                                                                 title: value2?["title"] as? String ?? "",
+                                                                 timestamp: value2?["timestamp"] as? String ?? "",
+                                                                 poster: value2?["poster"] as? String ?? "",
+                                                                 imageUrl: value2?["imageUrl"] as? String ?? "",
+                                                                 postId: snapshot2.key))
+                        
+                        myPostPake = kumpulanData.myPosts
+                        
+                        self.table.reloadData()
+                        
+                        self.dispatchDelay(delay: 2.0) {
+                            self.refreshControl.endRefreshing()
+                        }
+                        //print("p")
+                    }) { (error) in
+                        print(error.localizedDescription)
+                    }
+                    
+                }
+            }
+            else{
+                
+            }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    func dispatchDelay(delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,6 +179,9 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = table.dequeueReusableCell(withIdentifier: "myPost", for: indexPath) as! myPostTableViewCell
         
         if (myPostPake[indexPath.row].imageUrl != ""){
+        
+        cell.myPostImageLoader.startAnimating()
+        
         let url = URL(string: myPostPake[indexPath.row].imageUrl)
         
 //        let dataImage = try? Data(contentsOf: url!)
@@ -107,6 +191,9 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
 //            }
             ImageService.getImage(withURL: url!) { (image) in
                 cell.myPostPhoto.image = image
+                
+                cell.myPostImageLoader.stopAnimating()
+                cell.myPostImageLoader.hidesWhenStopped = true
             }
         }
         
