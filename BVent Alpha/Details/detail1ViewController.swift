@@ -174,7 +174,7 @@ class detail1ViewController: UIViewController {
                     
                 }
                 else{
-                    self.ref.child("users").child("regular").child(userID!.uid).child("enroll").setValue([self.pake[self.index!].postId: true])
+                    self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.pake[self.index!].postId).setValue(true)
                     self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
                     
                     let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
@@ -187,7 +187,7 @@ class detail1ViewController: UIViewController {
                 
             }
             else{
-                self.ref.child("users").child("regular").child(userID!.uid).child("enroll").setValue([self.pake[self.index!].postId: true])
+                self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.pake[self.index!].postId).setValue(true)
                 self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
                 
                 let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
@@ -198,7 +198,7 @@ class detail1ViewController: UIViewController {
                 self.present(alert, animated: true, completion: nil)
             }
             
-            let username = value?["username"] as? String ?? ""
+            //let username = value?["username"] as? String ?? ""
             
             // ...
         }) { (error) in
@@ -207,6 +207,66 @@ class detail1ViewController: UIViewController {
         
     }
     
+    @IBAction func saveButton(_ sender: UIButton) {
+        
+        self.ref = Database.database().reference()
+        let userID = Auth.auth().currentUser
+        
+        ref.child("users").child("regular").child(userID!.uid).child("bookmark").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            
+            if (snapshot.exists()){
+                
+                for postId in (value?.allKeys)!{
+                    
+                    if (self.pake[self.index!].postId == postId as! String){
+                        self.val = true
+                    }
+                    
+                }
+                
+                if (self.val == true){
+                    
+                    let alert = UIAlertController(title: "The Post Is Saved Already!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+                else{
+                    self.ref.child("users").child("regular").child(userID!.uid).child("bookmark").child(self.pake[self.index!].postId).setValue(true)
+                    
+                    let alert = UIAlertController(title: "Saved!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+            }
+            else{
+                self.ref.child("users").child("regular").child(userID!.uid).child("bookmark").child(self.pake[self.index!].postId).setValue(true)
+                
+                let alert = UIAlertController(title: "Saved!", message: nil, preferredStyle: .alert)
+                
+                let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+            }
+            
+            //let username = value?["username"] as? String ?? ""
+            
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+    }
     
     func previewActionItems() -> [UIPreviewActionItem] {
         
