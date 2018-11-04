@@ -9,8 +9,9 @@
 import UIKit
 import Firebase
 
-class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    
     @IBOutlet weak var table: UITableView!
     
     var test = ["Hello", "Hi"]
@@ -180,15 +181,9 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         if (myPostPake[indexPath.row].imageUrl != ""){
         
-        cell.myPostImageLoader.startAnimating()
+            cell.myPostImageLoader.startAnimating()
         
-        let url = URL(string: myPostPake[indexPath.row].imageUrl)
-        
-//        let dataImage = try? Data(contentsOf: url!)
-//
-//        if let imageData = dataImage {
-//            cell.myPostPhoto.image = UIImage(data: imageData)
-//            }
+            let url = URL(string: myPostPake[indexPath.row].imageUrl)
             ImageService.getImage(withURL: url!) { (image) in
                 cell.myPostPhoto.image = image
                 

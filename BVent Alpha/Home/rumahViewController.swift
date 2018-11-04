@@ -15,7 +15,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     
     //var temp: [ambilData] = []
-    var ref: DatabaseReference?
+    var ref: DatabaseReference!
     var databaseHandle: DatabaseHandle?
     var loggedInUser: AnyObject?
     var loggedInUserData: NSDictionary?
@@ -51,7 +51,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         pake.removeAll()
         
         ref = Database.database().reference()
-        ref?.keepSynced(true)
+        ref.keepSynced(true)
         
         //let postsImageRef = storageRef?.child("posts")
         //self.postsRef.keepSynced(true)
@@ -62,7 +62,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
 //
 //            self.loggedInUserData = snapshot.value as? NSDictionary
         
-        self.databaseHandle = self.ref?.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
+        self.databaseHandle = self.ref.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
             
                 let value = snapshot.value as? [String:Any]
             
@@ -73,7 +73,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 self.loggedInUser = Auth.auth().currentUser
                 
                 if temp.poster == self.loggedInUser!.uid{
-                self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+                self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
                     
                 }
             
@@ -95,9 +95,9 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         pake.removeAll()
         
         ref = Database.database().reference()
-        ref?.keepSynced(true)
+        ref.keepSynced(true)
         
-        self.ref?.child("posts").queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("posts").queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
             
             let value = snapshot.value as? [String:Any]
             
@@ -108,7 +108,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             self.loggedInUser = Auth.auth().currentUser
             
             if temp.poster == self.loggedInUser!.uid{
-                self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+                self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
                 
             }
             
@@ -147,6 +147,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -197,10 +198,11 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         let url = URL(string: pake[indexPath.row].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in
-            cell.foto.image = image
+        cell.foto.image = image
             
             cell.homeImageLoader.stopAnimating()
             cell.homeImageLoader.hidesWhenStopped = true
+            
         }
         
         cell.judul.text = pake[indexPath.row].title
