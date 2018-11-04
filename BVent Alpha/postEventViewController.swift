@@ -212,7 +212,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
                     "certification": true,
                     "time": "09.00 - 10.00",
                     "timestamp": "\(Date().timeIntervalSince1970)",
-                    "poster": self.loggedInUser!.uid,
+                    "poster": self.loggedInUser!.uid!,
                     "imageUrl": url!,
                     //"postId": String(self.ref!.childByAutoId().key)
                     ] as [String: Any])
