@@ -1,20 +1,18 @@
 //
-//  ongoingViewController.swift
-//  BVent Pre-Alpha
+//  bookmarkViewController.swift
+//  BVent Alpha
 //
-//  Created by Rayhan Martiza Faluda on 03/05/18.
+//  Created by Rayhan Martiza Faluda on 05/11/18.
 //  Copyright © 2018 Rayhan Martiza Faluda. All rights reserved.
 //
 
 import UIKit
-import CoreData
 import Firebase
 
-class ongoingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class bookmarkViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var ongoingTable: UITableView!
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
+    @IBOutlet weak var bookmarkTable: UITableView!
+
     var ongoing: [Enroll] = []
     var selectedIndex: Int!
     
@@ -31,9 +29,9 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
-        let attributedTitle = NSAttributedString(string: "Fetching Ongoing Event Data", attributes: attributes)
+        let attributedTitle = NSAttributedString(string: "Fetching Bookmarked Event Data", attributes: attributes)
         
-        refreshControl.addTarget(self, action: #selector(ongoingViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(bookmarkViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
         refreshControl.attributedTitle = attributedTitle
         
@@ -44,19 +42,19 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.ongoingTable.estimatedRowHeight = 10
-        self.ongoingTable.rowHeight = UITableViewAutomaticDimension
+        self.bookmarkTable.estimatedRowHeight = 10
+        self.bookmarkTable.rowHeight = UITableViewAutomaticDimension
         
         val = false
         
         //ongoing.removeAll()
-        kumpulanData.ongoing.removeAll()
+        kumpulanData.bookmark.removeAll()
         
         ref = Database.database().reference()
         ref.keepSynced(true)
         
         let userID = Auth.auth().currentUser?.uid
-        ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("users").child("regular").child(userID!).child("bookmark").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
             
@@ -68,7 +66,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                         // Get user value
                         let value2 = snapshot2.value as? NSDictionary
                         
-                        kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                        kumpulanData.bookmark.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
                                                                  bookmark: value2?["bookmark"] as? Bool ?? false,
                                                                  category: value2?["category"] as? String ?? "",
                                                                  certification: value2?["certification"] as? Bool ?? false,
@@ -88,9 +86,9 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                                                  imageUrl: value2?["imageUrl"] as? String ?? "",
                                                                  postId: snapshot2.key))
                         
-                        ongoingPake = kumpulanData.ongoing
+                        bookmarkPake = kumpulanData.bookmark
                         
-                        self.ongoingTable.reloadData()
+                        self.bookmarkTable.reloadData()
                         //print("p")
                     }) { (error) in
                         print(error.localizedDescription)
@@ -106,7 +104,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             print(error.localizedDescription)
         }
         
-        self.ongoingTable.addSubview(self.refreshControl)
+        self.bookmarkTable.addSubview(self.refreshControl)
         
         // Do any additional setup after loading the view.
     }
@@ -116,13 +114,13 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         val = false
         
         //ongoing.removeAll()
-        kumpulanData.ongoing.removeAll()
+        kumpulanData.bookmark.removeAll()
         
         ref = Database.database().reference()
         ref.keepSynced(true)
         
         let userID = Auth.auth().currentUser?.uid
-        ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("users").child("regular").child(userID!).child("bookmark").observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             let value = snapshot.value as? NSDictionary
             
@@ -134,7 +132,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                         // Get user value
                         let value2 = snapshot2.value as? NSDictionary
                         
-                        kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                        kumpulanData.bookmark.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
                                                                  bookmark: value2?["bookmark"] as? Bool ?? false,
                                                                  category: value2?["category"] as? String ?? "",
                                                                  certification: value2?["certification"] as? Bool ?? false,
@@ -154,12 +152,12 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                                                  imageUrl: value2?["imageUrl"] as? String ?? "",
                                                                  postId: snapshot2.key))
                         
-                        ongoingPake = kumpulanData.ongoing
+                        bookmarkPake = kumpulanData.bookmark
                         
                         
                         
                         self.dispatchDelay(delay: 1.0) {
-                            self.ongoingTable.reloadData()
+                            self.bookmarkTable.reloadData()
                             self.refreshControl.endRefreshing()
                         }
                         //print("p")
@@ -189,25 +187,25 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        fetchData()
-//    }
-//
-//    func fetchData()
-//    {
-//        do
-//        {
-//            ongoing = try context.fetch(Enroll.fetchRequest())
-//            filteredData = ongoing
-//            DispatchQueue.main.async {
-//                self.ongoingTable.reloadData()
-//            }
-//        }
-//        catch
-//        {
-//            print("Couldn't Fetch Data")
-//        }
-//    }
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        fetchData()
+    //    }
+    //
+    //    func fetchData()
+    //    {
+    //        do
+    //        {
+    //            ongoing = try context.fetch(Enroll.fetchRequest())
+    //            filteredData = ongoing
+    //            DispatchQueue.main.async {
+    //                self.ongoingTable.reloadData()
+    //            }
+    //        }
+    //        catch
+    //        {
+    //            print("Couldn't Fetch Data")
+    //        }
+    //    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 135
@@ -217,92 +215,83 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return ongoingPake.count
+        return bookmarkPake.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ongoingTable.dequeueReusableCell(withIdentifier: "ongoingCell", for: indexPath) as! ongoingTableViewCell
+        let cell = bookmarkTable.dequeueReusableCell(withIdentifier: "bookmarkCell", for: indexPath) as! bookmarkTableViewCell
         
         // Configure the cell...
-        cell.ongoingImageLoader.startAnimating()
+        cell.bookmarkImageLoader.startAnimating()
         
-        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
+        let url = URL(string: bookmarkPake[indexPath.row].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in
-            cell.ongoingEventImage.image = image
+            cell.bookmarkPhoto.image = image
             
-            cell.ongoingImageLoader.stopAnimating()
-            cell.ongoingImageLoader.hidesWhenStopped = true
+            cell.bookmarkImageLoader.stopAnimating()
+            cell.bookmarkImageLoader.hidesWhenStopped = true
         }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage
-        cell.ongoingEventTitle.text = ongoingPake[indexPath.row].title
+        cell.bookmarkTitle.text = bookmarkPake[indexPath.row].title
         
-        if (ongoingPake[indexPath.row].price == ""){
-            cell.ongoingEventPrice.text = "Free"
+        if (bookmarkPake[indexPath.row].price == ""){
+            cell.bookmarkPrice.text = "Free"
         }
         else{
-            cell.ongoingEventPrice.text = "Rp. \(String(describing: ongoingPake[indexPath.row].price))"
+            cell.bookmarkPrice.text = "Rp. \(String(describing: bookmarkPake[indexPath.row].price))"
         }
         
         //cell.ongoingEventPrice.text = filteredData[indexPath.row].ongoingEventPrice
         
-        if (ongoingPake[indexPath.row].benefit != ""){
+        if (bookmarkPake[indexPath.row].benefit != ""){
             
-            if (ongoingPake[indexPath.row].certification == true){
-                cell.ongoingEventBenefit.text = "\(String(describing: ongoingPake[indexPath.row].benefit)), Certificate"
+            if (bookmarkPake[indexPath.row].certification == true){
+                cell.bookMarkBenefit.text = "\(String(describing: bookmarkPake[indexPath.row].benefit)), Certificate"
             }
             else{
-                cell.ongoingEventBenefit.text = "\(String(describing: ongoingPake[indexPath.row].benefit)))"
+                cell.bookMarkBenefit.text = "\(String(describing: bookmarkPake[indexPath.row].benefit)))"
             }
             
         }
         else{
             
-            if (ongoingPake[indexPath.row].certification == true){
-                cell.ongoingEventBenefit.text = "Certificate"
+            if (bookmarkPake[indexPath.row].certification == true){
+                cell.bookMarkBenefit.text = "Certificate"
             }
             else{
-                cell.ongoingEventBenefit.text = ""
+                cell.bookMarkBenefit.text = ""
             }
         }
         
         //cell.ongoingEventBenefit.text = filteredData[indexPath.row].ongoingEventBenefit
         
-        cell.ongoingEventCDown.text =  ongoingPake[indexPath.row].time
-        cell.ongoingEventPoster.text = "Himti Binus"/*
+        cell.bookmarkTime.text =  bookmarkPake[indexPath.row].time
+        cell.bookmarkPoster.text = "Himti Binus"/*
          filteredData[indexPath.row].ongoingEventPoster*/
-        if (ongoingPake[indexPath.row].done == true){ //REVISI
-            cell.done.text = "DONE"
-            cell.done.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        }
-        else{
-            cell.done.text = ""
-        }
         
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-
-        let delete = UITableViewRowAction(style: .destructive, title: "Un-Enroll") { (action, indexPath) in
+        
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
             // delete item at indexPath
-
+            
             let userID = Auth.auth().currentUser?.uid
             let ref = Database.database().reference(fromURL: "https://bvent-alpha-1.firebaseio.com/")
-            let groupRef = ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId)
-            let attendeesRef = ref.child("posts").child(ongoingPake[indexPath.row].postId).child("attendees").child(userID!)
+            let groupRef = ref.child("users").child("regular").child(userID!).child("bookmark").child(bookmarkPake[indexPath.row].postId)
             // ^^ this only works if the value is set to the firebase uid, otherwise you need to pull that data from somewhere else.
             
-            let alert = UIAlertController(title: "Un-Enroll", message: "You can't undo this un-errollment", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Delete", message: "You can't undo this deletion", preferredStyle: .alert)
             let OKAction = UIAlertAction(title: "Confirm", style: .default) { (action:UIAlertAction!) in
                 
                 // Code in this block will trigger when OK button tapped.
                 print("Confirm button tapped");
                 groupRef.removeValue()
-                attendeesRef.removeValue()
-                ongoingPake.remove(at: indexPath.row)
+                bookmarkPake.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 
             }
@@ -314,22 +303,22 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             alert.addAction(cancelAction)
             
             self.present(alert, animated: true, completion: nil)
-
+            
         }
         let share = UITableViewRowAction(style: .default, title: "Share") { (action, indexPath) in
             // delete item at indexPath
-
+            
             let alert3 = UIAlertController(title: "This Feature Is Not Ready Yet!", message: nil, preferredStyle: .alert)
             let action3 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-
+            
             alert3.addAction(action3)
             self.present(alert3, animated: true, completion: nil)
-
+            
         }
-
+        
         //delete.backgroundColor = #colorLiteral(red: 0.2293260694, green: 0.4044057131, blue: 0.57067734, alpha: 1)
         share.backgroundColor = UIColor(red: 54/255, green: 215/255, blue: 183/255, alpha: 1.0)
-
+        
         return [delete,share]
     }
     
@@ -337,7 +326,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let userID = Auth.auth().currentUser?.uid
         ref = Database.database().reference()
-        ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("users").child("regular").child(userID!).child("bookmark").child(bookmarkPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             self.val = (snapshot.value as? Bool)!
             
@@ -345,7 +334,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.failed()
             }
             else{
-                self.postId = ongoingPake[indexPath.row].postId
+                self.postId = bookmarkPake[indexPath.row].postId
                 self.success()
             }
             
@@ -366,26 +355,16 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func success(){
-        performSegue(withIdentifier: "ongoingDetails", sender: nil)
+        performSegue(withIdentifier: "bookmarkDetails", sender: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier{
-            if identifier == "ongoingDetails"{
-                let destination = segue.destination as! detail5ViewController
+            if identifier == "bookmarkDetails"{
+                let destination = segue.destination as! detail3ViewController
                 destination.postId = postId
             }
         }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+
 }

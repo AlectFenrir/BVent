@@ -71,6 +71,7 @@ class detail5ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
+        ref.keepSynced(true)
         
         ref.child("posts").child(postId!).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
@@ -168,7 +169,11 @@ class detail5ViewController: UIViewController {
         
         ref = Database.database().reference()
         let userID = Auth.auth().currentUser?.uid
+        
+//        let customViewController: ongoingViewController = ongoingViewController(nibName: nil, bundle: nil)
+//        let ongoingTable2 = customViewController.ongoingTable
         self.ref.child("users").child("regular").child(userID!).child("enroll").child(postId!).setValue(false)
+        
         _ = self.navigationController?.popViewController(animated: true)
         
         

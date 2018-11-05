@@ -31,6 +31,7 @@ struct kumpulanData {
     static var datas : [kumpulanData] = []
     static var myPosts : [kumpulanData] = []
     static var ongoing : [kumpulanData] = []
+    static var bookmark : [kumpulanData] = []
     
     static func fetch()-> [kumpulanData]{
         //        var ft: [kumpulanData] = []

@@ -125,9 +125,10 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
                         self.attendeesName.append(value2?["fullname"] as? String ?? "")
                         self.attendeesEmail.append(value2?["email"] as? String ?? "")
 
-                        self.table.reloadData()
+                        
 
-                        self.dispatchDelay(delay: 2.0) {
+                        self.dispatchDelay(delay: 1.0) {
+                            self.table.reloadData()
                             self.refreshControl.endRefreshing()
                         }
 
@@ -138,6 +139,9 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
 
                 }
 
+            }
+            else {
+                self.refreshControl.endRefreshing()
             }
 
         }) { (error) in

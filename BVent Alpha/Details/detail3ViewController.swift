@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class detail3ViewController: UIViewController {
     
@@ -43,68 +44,84 @@ class detail3ViewController: UIViewController {
     
     var data: [kumpulanData] = kumpulanData.fetch()
     
-    var pake: [kumpulanData] = []
+    var pake: kumpulanData!
+    
+    var pakes: [kumpulanData] = []
     
     var index: Int?
     
+    var validation: Bool = false
+    
+    var ref: DatabaseReference!
+    
+    var postId: String?
+    
+    var val = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //self.navigationController?.navigationBar.prefersLargeTitles = false
         
-        pake = data.filter({ (s1) -> Bool in
-            return s1.bookmark == true
-        })
+        ref = Database.database().reference()
+        ref.keepSynced(true)
         
-        self.title = pake[index!].title
-        
-        //foto.image = pake[index!].image
-        
-        detail3ImageLoader.startAnimating()
-        
-        let url = URL(string: pake[index!].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            self.foto.image = image
+        ref.child("posts").child(postId!).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value2 = snapshot.value as? NSDictionary
+            //let username = value?["username"] as? String ?? ""
+            self.pake = kumpulanData.init(benefit: value2?["benefit"] as? String ?? "", bookmark: value2?["bookmark"] as? Bool ?? false, category: value2?["category"] as? String ?? "", certification: value2?["certification"] as? Bool ?? false, confirmCode: value2?["confirmCode"] as? String ?? "", cp: value2?["cp"] as? String ?? "", date: value2?["date"] as? String ?? "", desc: value2?["desc"] as? String ?? "", done: value2?["done"] as? Bool ?? false, enroll: value2?["enroll"] as? Bool ?? false, location: value2?["location"] as? String ?? "", price: value2?["price"] as? String ?? "", sat: value2?["sat"] as? Int ?? 0, time: value2?["time"] as? String ?? "", title: value2?["title"] as? String ?? "", timestamp: value2?["timestamp"] as? String ?? "", poster: value2?["poster"] as? String ?? "", imageUrl: value2?["imageUrl"] as? String ?? "", postId: self.postId!)
             
-            self.detail3ImageLoader.stopAnimating()
-            self.detail3ImageLoader.hidesWhenStopped = true
-        }
-        
-        //time.text = pake[index!].cdown
-        
-        if (pake[index!].price == ""){
-            price.text = "Free"
-        }
-        else{
-            price.text = "Rp. \(pake[index!].price)"
-        }
-        
-        category.text = "in \(pake[index!].category)"
-        isi.text = pake[index!].desc
-        tempat.text = "Place: \(pake[index!].location)"
-        waktu.text = "Date: \(pake[index!].date)"
-        jam.text = "Time: \(pake[index!].time)"
-        
-        if (pake[index!].benefit != ""){
+            self.title = self.pake.title
             
-            if (pake[index!].certification == true){
-                benefit.text = "Benefits: \(pake[index!].benefit), Certificate"
+            self.detail3ImageLoader.startAnimating()
+            
+            let url = URL(string: self.pake.imageUrl)
+            ImageService.getImage(withURL: url!) { (image) in
+                self.foto.image = image
+                
+                self.detail3ImageLoader.stopAnimating()
+                self.detail3ImageLoader.hidesWhenStopped = true
+            }
+            
+            if (self.pake.price == ""){
+                self.price.text = "Free"
             }
             else{
-                benefit.text = "Benefit: \(pake[index!].benefit)"
+                self.price.text = "Rp. \(self.pake.price)"
             }
             
-        }
-        else{
+            self.category.text = "in \(self.pake.category)"
+            self.isi.text = self.pake.desc
+            self.tempat.text = "Place: \(self.pake.location)"
+            self.waktu.text = "Date: \(self.pake.date)"
+            self.jam.text = "Time: \(self.pake.time)"
             
-            if (pake[index!].certification == true){
-                benefit.text = "Benefit: Certificate"
+            if (self.pake.benefit != ""){
+                
+                if (self.pake.certification == true){
+                    self.benefit.text = "Benefits: \(self.pake.benefit), Certificate"
+                }
+                else{
+                    self.benefit.text = "Benefit: \(self.pake.benefit)"
+                }
+                
             }
             else{
-                benefit.text = ""
+                
+                if (self.pake.certification == true){
+                    self.benefit.text = "Benefit: Certificate"
+                }
+                else{
+                    self.benefit.text = ""
+                }
             }
+            
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
         }
+
         
         // Do any additional setup after loading the view.
     }
@@ -114,35 +131,63 @@ class detail3ViewController: UIViewController {
     
     @IBAction func enroll(_ sender: UIButton) {
         
-        if (pake[index!].enroll == false){
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            let newEntry = Enroll(context: context)
-            newEntry.ongoingEventTitle = pake[index!].title
-            newEntry.ongoingEventPrice = pake[index!].price
-            newEntry.ongoingImage = pake[index!].imageUrl as NSObject
-            newEntry.ongoingEventBenefit = pake[index!].benefit
-            //newEntry.ongoingEventCDown = pake[index!].cdown
-            newEntry.ongoingIndex = Int16(index!)
-            newEntry.done = false
-            newEntry.ongoingEventCertification = pake[index!].certification
-            //newEntry.ongoingEventPoster = pake[index!].po
+        self.ref = Database.database().reference()
+        let userID = Auth.auth().currentUser
+        
+        ref.child("users").child("regular").child(userID!.uid).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
             
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            if (snapshot.exists()){
+                
+                for postId in (value?.allKeys)!{
+                    
+                    if (self.postId == postId as! String){
+                        self.val = true
+                    }
+                    
+                }
+                
+                if (self.val == true){
+                    
+                    let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                    
+                }
+                else{
+                    self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.postId!).setValue(true)
+                    self.ref?.child("posts").child(self.postId!).child("attendees").child(userID!.uid).setValue(true)
+                    
+                    let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+            }
+            else{
+                self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.postId!).setValue(true)
+                self.ref?.child("posts").child(self.postId!).child("attendees").child(userID!.uid).setValue(true)
+                
+                let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+                
+                let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+            }
             
-            let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+            //let username = value?["username"] as? String ?? ""
             
-            let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-            
-            alert.addAction(action)
-            present(alert, animated: true, completion: nil)
-        }
-        else{
-            let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
-            
-            let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-            
-            alert.addAction(action)
-            present(alert, animated: true, completion: nil)
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
     

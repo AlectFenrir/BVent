@@ -138,9 +138,10 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         
                         myPostPake = kumpulanData.myPosts
                         
-                        self.table.reloadData()
                         
-                        self.dispatchDelay(delay: 2.0) {
+                        
+                        self.dispatchDelay(delay: 1.0) {
+                            self.table.reloadData()
                             self.refreshControl.endRefreshing()
                         }
                         //print("p")
@@ -151,7 +152,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
             else{
-                
+                self.refreshControl.endRefreshing()
             }
             
         }) { (error) in
@@ -202,6 +203,54 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         postId = myPostPake[indexPath.row].postId
         
         performSegue(withIdentifier: "attendees", sender: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            // delete item at indexPath
+            let userID = Auth.auth().currentUser?.uid
+            let ref = Database.database().reference(fromURL: "https://bvent-alpha-1.firebaseio.com/")
+            let groupRef = ref.child("posts").child(myPostPake[indexPath.row].postId)
+            let myPostsRef = ref.child("users").child("regular").child(userID!).child("posts").child(myPostPake[indexPath.row].postId)
+            // ^^ this only works if the value is set to the firebase uid, otherwise you need to pull that data from somewhere else.
+            
+            let alert = UIAlertController(title: "Delete", message: "You can't undo this deletion", preferredStyle: .alert)
+            let OKAction = UIAlertAction(title: "Confirm", style: .default) { (action:UIAlertAction!) in
+                
+                // Code in this block will trigger when OK button tapped.
+                print("Confirm button tapped");
+                groupRef.removeValue()
+                myPostsRef.removeValue()
+                myPostPake.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+            }
+            alert.addAction(OKAction)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action:UIAlertAction!) in
+                print("Cancel button tapped");
+            }
+            alert.addAction(cancelAction)
+            
+            self.present(alert, animated: true, completion: nil)
+            
+        }
+        let share = UITableViewRowAction(style: .default, title: "Share") { (action, indexPath) in
+            // delete item at indexPath
+            
+            let alert3 = UIAlertController(title: "This Feature Is Not Ready Yet!", message: nil, preferredStyle: .alert)
+            let action3 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
+            
+            alert3.addAction(action3)
+            self.present(alert3, animated: true, completion: nil)
+            
+        }
+        
+        //delete.backgroundColor = #colorLiteral(red: 0.2293260694, green: 0.4044057131, blue: 0.57067734, alpha: 1)
+        share.backgroundColor = UIColor(red: 54/255, green: 215/255, blue: 183/255, alpha: 1.0)
+        
+        return [delete,share]
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

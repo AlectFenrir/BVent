@@ -34,7 +34,6 @@
 		2C4072DF20AA9FA9003CC93E /* rumahTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072DC20AA9FA9003CC93E /* rumahTableViewCell.swift */; };
 		2C4072E620AAA035003CC93E /* myProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072E120AAA034003CC93E /* myProfileViewController.swift */; };
 		2C4072E720AAA035003CC93E /* settingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072E220AAA034003CC93E /* settingViewController.swift */; };
-		2C4072E820AAA035003CC93E /* bookmarkTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072E320AAA034003CC93E /* bookmarkTableViewController.swift */; };
 		2C4072E920AAA035003CC93E /* settingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072E420AAA035003CC93E /* settingTableViewCell.swift */; };
 		2C4072EA20AAA035003CC93E /* bookmarkTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072E520AAA035003CC93E /* bookmarkTableViewCell.swift */; };
 		2C4072F120AAA055003CC93E /* detail1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072EC20AAA054003CC93E /* detail1ViewController.swift */; };
@@ -56,6 +55,7 @@
 		2C64FC8620BBFF1C00EE16DB /* HelperExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */; };
 		2C9B037820AC488000467158 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B037720AC488000467158 /* AlertController.swift */; };
 		2C9B037A20B2A3C600467158 /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C9B037920B2A3C600467158 /* data.json */; };
+		2CA8B8F8219068D700CFD8CF /* bookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */; };
 		2CC16C0420A1869A000205FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0320A1869A000205FE /* AppDelegate.swift */; };
 		2CC16C0920A1869B000205FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0720A1869B000205FE /* Main.storyboard */; };
 		2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */; };
@@ -112,7 +112,6 @@
 		2C4072DC20AA9FA9003CC93E /* rumahTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rumahTableViewCell.swift; sourceTree = "<group>"; };
 		2C4072E120AAA034003CC93E /* myProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myProfileViewController.swift; sourceTree = "<group>"; };
 		2C4072E220AAA034003CC93E /* settingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = settingViewController.swift; sourceTree = "<group>"; };
-		2C4072E320AAA034003CC93E /* bookmarkTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bookmarkTableViewController.swift; sourceTree = "<group>"; };
 		2C4072E420AAA035003CC93E /* settingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = settingTableViewCell.swift; sourceTree = "<group>"; };
 		2C4072E520AAA035003CC93E /* bookmarkTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bookmarkTableViewCell.swift; sourceTree = "<group>"; };
 		2C4072EC20AAA054003CC93E /* detail1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = detail1ViewController.swift; sourceTree = "<group>"; };
@@ -134,6 +133,7 @@
 		2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperExtension.swift; sourceTree = "<group>"; };
 		2C9B037720AC488000467158 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		2C9B037920B2A3C600467158 /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
+		2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bookmarkViewController.swift; sourceTree = "<group>"; };
 		2CC16C0020A1869A000205FE /* BVent Alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BVent Alpha.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CC16C0320A1869A000205FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2CC16C0820A1869B000205FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -256,7 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				2C4072E520AAA035003CC93E /* bookmarkTableViewCell.swift */,
-				2C4072E320AAA034003CC93E /* bookmarkTableViewController.swift */,
+				2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */,
 				2C4072E120AAA034003CC93E /* myProfileViewController.swift */,
 				2C4072E420AAA035003CC93E /* settingTableViewCell.swift */,
 				2C4072E220AAA034003CC93E /* settingViewController.swift */,
@@ -625,6 +625,7 @@
 				2C4072F920AAA06E003CC93E /* posterCollectionViewCell.swift in Sources */,
 				2C4072DF20AA9FA9003CC93E /* rumahTableViewCell.swift in Sources */,
 				272E65702189778900E8F800 /* attendeesTableViewCell.swift in Sources */,
+				2CA8B8F8219068D700CFD8CF /* bookmarkViewController.swift in Sources */,
 				2C4072D720AA9F89003CC93E /* signInViewController.swift in Sources */,
 				2C3A8A5D20E4FA030084D056 /* myProfile.swift in Sources */,
 				5FFB7867210CD5A0005ED749 /* eTicketViewController.swift in Sources */,
@@ -636,7 +637,6 @@
 				5FFB7869210CDF40005ED749 /* QRGenViewController.swift in Sources */,
 				2C4072D520AA9F89003CC93E /* forgotPasswordViewController.swift in Sources */,
 				2C4072CF20AA9F06003CC93E /* CollectionViewCell.swift in Sources */,
-				2C4072E820AAA035003CC93E /* bookmarkTableViewController.swift in Sources */,
 				2C4072C520AA9E6C003CC93E /* SAT.swift in Sources */,
 				2C4072CC20AA9F06003CC93E /* chooseCollectionViewCell.swift in Sources */,
 				272E656E2189776E00E8F800 /* attendeesViewController.swift in Sources */,
@@ -826,13 +826,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TU2PLJYWUD;
+				DEVELOPMENT_TEAM = QWVAEMBXMM;
 				INFOPLIST_FILE = "BVent Alpha/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "iOSDA.BVent-Alpha-Jo";
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSDA.BVent-Alpha-Ray";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -847,13 +847,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TU2PLJYWUD;
+				DEVELOPMENT_TEAM = QWVAEMBXMM;
 				INFOPLIST_FILE = "BVent Alpha/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "iOSDA.BVent-Alpha-Jo";
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSDA.BVent-Alpha-Ray";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
