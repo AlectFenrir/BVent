@@ -186,7 +186,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "eTicketCell", for: indexPath) as! eTicketCollectionViewCell
+        let cell = eTicketCell.dequeueReusableCell(withReuseIdentifier: "eTicketCell", for: indexPath) as! eTicketCollectionViewCell
         
         cell.eTicketImageLoader.startAnimating()
         
