@@ -56,6 +56,7 @@
 		2C9B037820AC488000467158 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B037720AC488000467158 /* AlertController.swift */; };
 		2C9B037A20B2A3C600467158 /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C9B037920B2A3C600467158 /* data.json */; };
 		2CA8B8F8219068D700CFD8CF /* bookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */; };
+		2CA8B8FA21907AEA00CFD8CF /* eTicketCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B8F921907AEA00CFD8CF /* eTicketCollectionViewCell.swift */; };
 		2CC16C0420A1869A000205FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0320A1869A000205FE /* AppDelegate.swift */; };
 		2CC16C0920A1869B000205FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0720A1869B000205FE /* Main.storyboard */; };
 		2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */; };
@@ -134,6 +135,7 @@
 		2C9B037720AC488000467158 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		2C9B037920B2A3C600467158 /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bookmarkViewController.swift; sourceTree = "<group>"; };
+		2CA8B8F921907AEA00CFD8CF /* eTicketCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eTicketCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CC16C0020A1869A000205FE /* BVent Alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BVent Alpha.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CC16C0320A1869A000205FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2CC16C0820A1869B000205FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -264,6 +266,7 @@
 				2798A9C9218851B800F9923B /* myPostTableViewCell.swift */,
 				272E656D2189776E00E8F800 /* attendeesViewController.swift */,
 				272E656F2189778900E8F800 /* attendeesTableViewCell.swift */,
+				2CA8B8F921907AEA00CFD8CF /* eTicketCollectionViewCell.swift */,
 			);
 			path = setting;
 			sourceTree = "<group>";
@@ -608,6 +611,7 @@
 				2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */,
 				2C4072F120AAA055003CC93E /* detail1ViewController.swift in Sources */,
 				2C4072DD20AA9FA9003CC93E /* rumahViewController.swift in Sources */,
+				2CA8B8FA21907AEA00CFD8CF /* eTicketCollectionViewCell.swift in Sources */,
 				2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */,
 				2C1D743520B84459008850A9 /* ImageService.swift in Sources */,
 				2C64FC8220BBFDA100EE16DB /* signUpTest.swift in Sources */,

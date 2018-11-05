@@ -337,6 +337,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let userID = Auth.auth().currentUser?.uid
         ref = Database.database().reference()
+        ref.keepSynced(true)
         ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             self.val = (snapshot.value as? Bool)!

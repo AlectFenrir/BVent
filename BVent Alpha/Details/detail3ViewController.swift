@@ -46,8 +46,6 @@ class detail3ViewController: UIViewController {
     
     var pake: kumpulanData!
     
-    var pakes: [kumpulanData] = []
-    
     var index: Int?
     
     var validation: Bool = false

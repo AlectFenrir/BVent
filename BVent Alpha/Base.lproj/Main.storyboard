@@ -615,7 +615,7 @@
             </objects>
             <point key="canvasLocation" x="-1695" y="1899"/>
         </scene>
-        <!--Ongoing View Controller-->
+        <!--Ongoing-->
         <scene sceneID="eKT-YZ-dQh">
             <objects>
                 <viewController id="bmg-cx-mbv" customClass="ongoingViewController" customModule="BVent_Alpha" customModuleProvider="target" sceneMemberID="viewController">
@@ -720,7 +720,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="VG9-UY-0wW"/>
                     </view>
-                    <navigationItem key="navigationItem" id="FkF-aU-NtE"/>
+                    <navigationItem key="navigationItem" title="Ongoing" id="2rD-y4-UY7"/>
                     <connections>
                         <outlet property="ongoingTable" destination="9QC-1q-w9d" id="9BO-6t-47y"/>
                         <segue destination="Ks9-ue-D4n" kind="show" identifier="ongoingDetails" id="BSC-P6-26Q"/>
@@ -1047,10 +1047,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vn5-fV-vPI">
-                                <rect key="frame" x="13" y="242" width="148" height="82"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="trophy" translatesAutoresizingMaskIntoConstraints="NO" id="OjW-cy-IzR">
                                 <rect key="frame" x="13" y="385" width="27" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1099,25 +1095,60 @@
                                 <rect key="frame" x="61" y="125" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BQm-OX-gBl">
-                                <rect key="frame" x="263" y="242" width="46" height="30"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="XRK-Q3-01J">
+                                <rect key="frame" x="16" y="242" width="343" height="90"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mA2-Yf-HJP">
+                                    <size key="itemSize" width="96" height="91"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="eTicketCell" id="yNn-G0-oCZ" customClass="eTicketCollectionViewCell" customModule="BVent_Alpha" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="-0.5" width="96" height="91"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="96" height="91"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4v-HL-z2u">
+                                                    <rect key="frame" x="0.0" y="0.0" width="96" height="91"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="m3L-KU-xnO">
+                                                    <rect key="frame" x="38" y="35" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                        </view>
+                                        <connections>
+                                            <outlet property="eTicketImage" destination="u4v-HL-z2u" id="Pq0-Of-lqz"/>
+                                            <outlet property="eTicketImageLoader" destination="m3L-KU-xnO" id="I55-co-GF0"/>
+                                            <segue destination="Ks9-ue-D4n" kind="show" identifier="eTicketDetails" id="zbP-Mc-WKh"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
                                 <connections>
-                                    <segue destination="V4Q-Rd-BFX" kind="show" id="3LJ-HK-ear"/>
+                                    <outlet property="dataSource" destination="cJw-0k-pYi" id="Zk0-qh-ka5"/>
+                                    <outlet property="delegate" destination="cJw-0k-pYi" id="aib-vr-c7t"/>
                                 </connections>
-                            </button>
+                            </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="CTK-xt-Qv8"/>
                     </view>
                     <navigationItem key="navigationItem" title="My Profile" id="5zf-Ow-PYZ">
                         <rightBarButtonItems>
-                            <barButtonItem style="plain" id="lSz-xA-Mqv">
+                            <barButtonItem image="bookmark_ribbon" id="lSz-xA-Mqv">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kZx-ru-xWQ">
                                     <rect key="frame" x="327" y="6" width="32" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="003-bookmark"/>
+                                    <connections>
+                                        <segue destination="V4Q-Rd-BFX" kind="show" id="IOg-zQ-JTa"/>
+                                    </connections>
                                 </button>
                             </barButtonItem>
                             <barButtonItem image="001-settings" id="bCx-BQ-5uT">
@@ -1133,6 +1164,7 @@
                         <outlet property="accountName" destination="Xqs-14-J0m" id="I2J-yH-Hlo"/>
                         <outlet property="accountProfilePicture" destination="GEc-mT-2fU" id="CtX-d8-cbI"/>
                         <outlet property="btn" destination="tE6-iw-NO4" id="hdu-wj-MII"/>
+                        <outlet property="eTicketCell" destination="XRK-Q3-01J" id="hBs-FG-W4S"/>
                         <outlet property="myProfileImageLoader" destination="vUo-gP-SMs" id="Xqp-gV-gOi"/>
                     </connections>
                 </viewController>
@@ -3014,6 +3046,7 @@
         <image name="Logo HIMA" width="1522" height="1075"/>
         <image name="ava3" width="1200" height="1412"/>
         <image name="bell" width="30" height="30"/>
+        <image name="bookmark_ribbon" width="30" height="30"/>
         <image name="calendar" width="409.60000610351562" height="409.60000610351562"/>
         <image name="chat" width="30" height="30"/>
         <image name="clock" width="30" height="30"/>
@@ -3034,7 +3067,8 @@
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="NSd-m2-pXK"/>
+        <segue reference="zbP-Mc-WKh"/>
+        <segue reference="Dsm-2Y-WOD"/>
         <segue reference="IWi-l9-90m"/>
         <segue reference="e9P-2v-a0p"/>
         <segue reference="A17-Mi-QoJ"/>
