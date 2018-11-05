@@ -342,6 +342,8 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             // Get user value
             self.val = (snapshot.value as? Bool)!
             
+            print(snapshot)
+            
             if (self.val == false){
                 self.failed()
             }

@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import Firebase
 
-class myProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class myProfileViewController: UIViewController/*, UICollectionViewDelegate, UICollectionViewDataSource*/ {
     
     @IBOutlet weak var himaBinus: UIImageView!
     @IBOutlet weak var himaBinusButton: UIButton!
@@ -46,7 +46,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     //var loggedInUser: AnyObject?
     //var databaseRef = Database.database().reference()
     //var storageRef = Storage.storage().reference()
-    var databaseRef: DatabaseReference!
+    var ref: DatabaseReference!
     var storageRef: StorageReference!
     
     var postId: String = ""
@@ -67,15 +67,15 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         val = false
         kumpulanData.ongoing.removeAll()
         
-        databaseRef = Database.database().reference()
-        storageRef = Storage.storage().reference()
+        ref = Database.database().reference()
+        //storageRef = Storage.storage().reference()
         
-        databaseRef.keepSynced(true)
+        ref.keepSynced(true)
         
         //self.loggedInUser = Auth.auth().currentUser
         let userID = Auth.auth().currentUser?.uid
         
-        self.databaseRef.child("users").child("regular").child(userID!).child("profile").queryLimited(toLast: 10).observe(.value, with: { (snapshot) in
+        ref.child("users").child("regular").child(userID!).child("profile").queryLimited(toLast: 10).observe(.value, with: { (snapshot) in
             let snapshot = snapshot.value as! [String: AnyObject]
             self.accountName.text = snapshot["fullname"] as? String
             //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String
@@ -105,55 +105,55 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         btn.layer.borderWidth = 0.25
         btn.layer.borderColor = UIColor.black.cgColor
         
-        self.databaseRef.child("users").child("regular").child(userID!).child("enroll").observe(.value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-            
-            if (snapshot.exists()){
-                
-                for postId in (value?.allKeys)!{
-                    
-                    self.databaseRef.child("posts").child(postId as! String).observe(.value, with: { (snapshot2) in
-                        // Get user value
-                        let value2 = snapshot2.value as? NSDictionary
-                        
-                        kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
-                                                                 bookmark: value2?["bookmark"] as? Bool ?? false,
-                                                                 category: value2?["category"] as? String ?? "",
-                                                                 certification: value2?["certification"] as? Bool ?? false,
-                                                                 confirmCode: value2?["confirmCode"] as? String ?? "",
-                                                                 cp: value2?["cp"] as? String ?? "",
-                                                                 date: value2?["date"] as? String ?? "",
-                                                                 desc: value2?["desc"] as? String ?? "",
-                                                                 done: value2?["done"] as? Bool ?? false,
-                                                                 enroll: value2?["enroll"] as? Bool ?? false,
-                                                                 location: value2?["location"] as? String ?? "",
-                                                                 price: value2?["price"] as? String ?? "",
-                                                                 sat: value2?["sat"] as? Int ?? 0,
-                                                                 time: value2?["time"] as? String ?? "",
-                                                                 title: value2?["title"] as? String ?? "",
-                                                                 timestamp: value2?["timestamp"] as? String ?? "",
-                                                                 poster: value2?["poster"] as? String ?? "",
-                                                                 imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot2.key))
-                        
-                        ongoingPake = kumpulanData.ongoing
-                        
-                        self.eTicketCell.reloadData()
-                        //print("p")
-                    }) { (error) in
-                        print(error.localizedDescription)
-                    }
-                    
-                }
-            }
-            else{
-                
-            }
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+//        ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot2) in
+//            // Get user value
+//            let value3 = snapshot2.value as? NSDictionary
+//
+//            if (snapshot2.exists()){
+//
+//                for postId in (value3?.allKeys)!{
+//
+//                    self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot3) in
+//                        // Get user value
+//                        let value3 = snapshot3.value as? NSDictionary
+//
+//                        kumpulanData.ongoing.append(kumpulanData(benefit: value3?["benefit"] as? String ?? "",
+//                                                                 bookmark: value3?["bookmark"] as? Bool ?? false,
+//                                                                 category: value3?["category"] as? String ?? "",
+//                                                                 certification: value3?["certification"] as? Bool ?? false,
+//                                                                 confirmCode: value3?["confirmCode"] as? String ?? "",
+//                                                                 cp: value3?["cp"] as? String ?? "",
+//                                                                 date: value3?["date"] as? String ?? "",
+//                                                                 desc: value3?["desc"] as? String ?? "",
+//                                                                 done: value3?["done"] as? Bool ?? false,
+//                                                                 enroll: value3?["enroll"] as? Bool ?? false,
+//                                                                 location: value3?["location"] as? String ?? "",
+//                                                                 price: value3?["price"] as? String ?? "",
+//                                                                 sat: value3?["sat"] as? Int ?? 0,
+//                                                                 time: value3?["time"] as? String ?? "",
+//                                                                 title: value3?["title"] as? String ?? "",
+//                                                                 timestamp: value3?["timestamp"] as? String ?? "",
+//                                                                 poster: value3?["poster"] as? String ?? "",
+//                                                                 imageUrl: value3?["imageUrl"] as? String ?? "",
+//                                                                 postId: snapshot3.key))
+//
+//                        ongoingPake = kumpulanData.ongoing
+//
+//                        self.eTicketCell.reloadData()
+//                        //print("p")
+//                    }) { (error) in
+//                        print(error.localizedDescription)
+//                    }
+//
+//                }
+//            }
+//            else{
+//
+//            }
+//
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
         
         
         SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
@@ -181,72 +181,79 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         // Dispose of any resources that can be recreated.
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ongoingPake.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = eTicketCell.dequeueReusableCell(withReuseIdentifier: "ticketCell", for: indexPath) as! eTicketCollectionViewCell
-        
-        cell.eTicketImageLoader.startAnimating()
-        
-        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.eTicketImage.image = image
-            
-            cell.eTicketImageLoader.stopAnimating()
-            cell.eTicketImageLoader.hidesWhenStopped = true
-        }
-        
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let userID = Auth.auth().currentUser?.uid
-        databaseRef = Database.database().reference()
-        databaseRef.keepSynced(true)
-        databaseRef.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            self.val = (snapshot.value as? Bool)!
-            
-            if (self.val == false){
-                self.failed()
-            }
-            else{
-                self.postId = ongoingPake[indexPath.row].postId
-                self.success()
-            }
-            
-            // ...
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-    }
-    
-    func failed(){
-        let alert = UIAlertController(title: "This Event is Done Already!", message: nil, preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-        
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    func success(){
-        performSegue(withIdentifier: "eTicketDetails", sender: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let identifier = segue.identifier{
-            if identifier == "eTicketDetails"{
-                let destination = segue.destination as! detail5ViewController
-                destination.postId = postId
-            }
-        }
-        
-    }
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        return ongoingPake.count
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        let cell = eTicketCell.dequeueReusableCell(withReuseIdentifier: "ticketCell", for: indexPath) as! eTicketCollectionViewCell
+//
+//        cell.eTicketImageLoader.startAnimating()
+//
+//        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.eTicketImage.image = image
+//
+//            cell.eTicketImageLoader.stopAnimating()
+//            cell.eTicketImageLoader.hidesWhenStopped = true
+//        }
+//
+//        return cell
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//
+//        let userID = Auth.auth().currentUser?.uid
+//        ref = Database.database().reference()
+//        ref.keepSynced(true)
+//
+//        print("synced!")
+//
+//        ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot4) in
+//            // Get user value
+//            self.val = (snapshot4.value as? Bool)!
+//
+//            print(snapshot4)
+//
+//            if (self.val == false){
+//                self.failed()
+//                print("failed")
+//            }
+//            else{
+//                self.postId = ongoingPake[indexPath.row].postId
+//                self.success()
+//                print("success")
+//            }
+//
+//            // ...
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
+//
+//    }
+//
+//    func failed(){
+//        let alert = UIAlertController(title: "This Event is Done Already!", message: nil, preferredStyle: .alert)
+//
+//        let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
+//
+//        alert.addAction(action)
+//        present(alert, animated: true, completion: nil)
+//    }
+//
+//    func success(){
+//        performSegue(withIdentifier: "eTicketDetails", sender: nil)
+//    }
+//
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let identifier = segue.identifier{
+//            if identifier == "eTicketDetails"{
+//                let destination = segue.destination as! detail5ViewController
+//                destination.postId = postId
+//            }
+//        }
+//
+//    }
     
     /*
      // MARK: - Navigation
