@@ -64,8 +64,8 @@ class myProfileViewController: UIViewController/*, UICollectionViewDelegate, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        val = false
-        kumpulanData.ongoing.removeAll()
+//        val = false
+//        kumpulanData.ongoing.removeAll()
         
         ref = Database.database().reference()
         //storageRef = Storage.storage().reference()

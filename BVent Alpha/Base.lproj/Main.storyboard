@@ -1130,10 +1130,6 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="cJw-0k-pYi" id="Zk0-qh-ka5"/>
-                                    <outlet property="delegate" destination="cJw-0k-pYi" id="aib-vr-c7t"/>
-                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1164,7 +1160,6 @@
                         <outlet property="accountName" destination="Xqs-14-J0m" id="I2J-yH-Hlo"/>
                         <outlet property="accountProfilePicture" destination="GEc-mT-2fU" id="CtX-d8-cbI"/>
                         <outlet property="btn" destination="tE6-iw-NO4" id="hdu-wj-MII"/>
-                        <outlet property="eTicketCell" destination="XRK-Q3-01J" id="hBs-FG-W4S"/>
                         <outlet property="myProfileImageLoader" destination="vUo-gP-SMs" id="Xqp-gV-gOi"/>
                     </connections>
                 </viewController>
