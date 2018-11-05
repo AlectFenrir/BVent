@@ -34,6 +34,7 @@ class bookmarkViewController: UIViewController, UITableViewDelegate, UITableView
         refreshControl.addTarget(self, action: #selector(bookmarkViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
         refreshControl.attributedTitle = attributedTitle
+        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
         
         return refreshControl
     }()

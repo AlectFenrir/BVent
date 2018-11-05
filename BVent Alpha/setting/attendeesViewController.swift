@@ -37,6 +37,7 @@ class attendeesViewController: UIViewController, UITableViewDelegate, UITableVie
         refreshControl.addTarget(self, action: #selector(attendeesViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
         refreshControl.attributedTitle = attributedTitle
+        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
 
         return refreshControl
     }()

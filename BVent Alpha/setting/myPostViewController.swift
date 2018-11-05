@@ -28,6 +28,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
         refreshControl.addTarget(self, action: #selector(myPostViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
         refreshControl.attributedTitle = attributedTitle
+        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
         
         return refreshControl
     }()
