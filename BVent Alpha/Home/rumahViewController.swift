@@ -68,7 +68,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             
                 let temp = ambilData(fetch: value!)
             
-                kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
+            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
                 
                 self.loggedInUser = Auth.auth().currentUser
                 
@@ -78,6 +78,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 }
             
                 pake = kumpulanData.datas
+                //pake.sort(by: {$0.date > $1.date})
                 
                 self.table2.reloadData()
         }
@@ -87,7 +88,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             registerForPreviewing(with: self, sourceView: table2)
             
         }
-        //self.table2.addSubview(self.refreshControl)
+        self.table2.addSubview(self.refreshControl)
         
     }
     
@@ -113,6 +114,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             }
             
             pake = kumpulanData.datas
+            //pake.sort(by: {$0.date > $1.date})
             
             self.table2.reloadData()
             

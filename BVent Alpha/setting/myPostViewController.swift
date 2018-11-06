@@ -212,6 +212,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
             // delete item at indexPath
             let userID = Auth.auth().currentUser?.uid
             let ref = Database.database().reference(fromURL: "https://bvent-alpha-1.firebaseio.com/")
+            let attendeesRef = ref.child("posts").child(myPostPake[indexPath.row].postId).child("attendees")
             let groupRef = ref.child("posts").child(myPostPake[indexPath.row].postId)
             let myPostsRef = ref.child("users").child("regular").child(userID!).child("posts").child(myPostPake[indexPath.row].postId)
             // ^^ this only works if the value is set to the firebase uid, otherwise you need to pull that data from somewhere else.
@@ -221,6 +222,7 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 // Code in this block will trigger when OK button tapped.
                 print("Confirm button tapped");
+                attendeesRef.removeValue()
                 groupRef.removeValue()
                 myPostsRef.removeValue()
                 myPostPake.remove(at: indexPath.row)

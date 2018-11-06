@@ -123,7 +123,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         btn.layer.borderWidth = 0.25
         btn.layer.borderColor = UIColor.black.cgColor
         
-        ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot2) in
+        ref.child("users").child("regular").child(userID!).child("enroll").observe(.value, with: { (snapshot2) in
             // Get user value
             let value2 = snapshot2.value as? NSDictionary
 
@@ -131,7 +131,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 
                 for postId in (value2?.allKeys)!{
 
-                    self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot3) in
+                    self.ref.child("posts").child(postId as! String).observe(.value, with: { (snapshot3) in
                         // Get user value
                         let value3 = snapshot3.value as? NSDictionary
 
@@ -236,7 +236,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         btn.layer.borderWidth = 0.25
         btn.layer.borderColor = UIColor.black.cgColor
         
-        ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot2) in
+        ref.child("users").child("regular").child(userID!).child("enroll").observe(.value, with: { (snapshot2) in
             // Get user value
             let value2 = snapshot2.value as? NSDictionary
             
@@ -244,7 +244,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
                 
                 for postId in (value2?.allKeys)!{
                     
-                    self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot3) in
+                    self.ref.child("posts").child(postId as! String).observe(.value, with: { (snapshot3) in
                         // Get user value
                         let value3 = snapshot3.value as? NSDictionary
                         
