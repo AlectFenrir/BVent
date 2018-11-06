@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import LocalAuthentication
 
 class ongoingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -286,6 +287,10 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let context = LAContext()
+        var error: NSError?
+        context.localizedFallbackTitle = "Use Passcode"
 
         let delete = UITableViewRowAction(style: .destructive, title: "Un-Enroll") { (action, indexPath) in
             // delete item at indexPath
@@ -300,11 +305,31 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             let OKAction = UIAlertAction(title: "Confirm", style: .default) { (action:UIAlertAction!) in
                 
                 // Code in this block will trigger when OK button tapped.
-                print("Confirm button tapped");
-                groupRef.removeValue()
-                attendeesRef.removeValue()
-                ongoingPake.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
+                if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+                    let reason = "Identify yourself!"
+                    
+                    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) {
+                        [unowned self] success, authenticationError in
+                        
+                        DispatchQueue.main.async {
+                            if success {
+                                print("Confirm button tapped");
+                                groupRef.removeValue()
+                                attendeesRef.removeValue()
+                                ongoingPake.remove(at: indexPath.row)
+                                tableView.deleteRows(at: [indexPath], with: .fade)
+                            } else {
+                                let ac = UIAlertController(title: "Authentication failed", message: "Sorry!", preferredStyle: .alert)
+                                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                                self.present(ac, animated: true)
+                            }
+                        }
+                    }
+                } else {
+                    let ac = UIAlertController(title: "Touch ID not available", message: "Your device is not configured for Touch ID.", preferredStyle: .alert)
+                    ac.addAction(UIAlertAction(title: "OK", style: .default))
+                    self.present(ac, animated: true)
+                }
                 
             }
             alert.addAction(OKAction)

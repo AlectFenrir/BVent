@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import LocalAuthentication
 
 class detail1ViewController: UIViewController {
     
@@ -149,60 +150,84 @@ class detail1ViewController: UIViewController {
         self.ref = Database.database().reference()
         let userID = Auth.auth().currentUser
         
-        ref.child("users").child("regular").child(userID!.uid).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
+        let context = LAContext()
+        var error: NSError?
+        context.localizedFallbackTitle = "Use Passcode"
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Identify yourself!"
             
-            if (snapshot.exists()){
+            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) {
+                [unowned self] success, authenticationError in
                 
-                for postId in (value?.allKeys)!{
-                    
-                    if (self.pake[self.index!].postId == postId as! String){
-                        self.val = true
+                DispatchQueue.main.async {
+                    if success {
+                        self.ref.child("users").child("regular").child(userID!.uid).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+                            // Get user value
+                            let value = snapshot.value as? NSDictionary
+                            
+                            if (snapshot.exists()){
+                                
+                                for postId in (value?.allKeys)!{
+                                    
+                                    if (self.pake[self.index!].postId == postId as! String){
+                                        self.val = true
+                                    }
+                                    
+                                }
+                                
+                                if (self.val == true){
+                                    
+                                    let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
+                                    
+                                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                                    
+                                    alert.addAction(action)
+                                    self.present(alert, animated: true, completion: nil)
+                                    
+                                }
+                                else{
+                                    self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.pake[self.index!].postId).setValue(true)
+                                    self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
+                                    
+                                    let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+                                    
+                                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                                    
+                                    alert.addAction(action)
+                                    self.present(alert, animated: true, completion: nil)
+                                }
+                                
+                            }
+                            else{
+                                self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.pake[self.index!].postId).setValue(true)
+                                self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
+                                
+                                let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
+                                
+                                let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                                
+                                alert.addAction(action)
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                            
+                            //let username = value?["username"] as? String ?? ""
+                            
+                            // ...
+                        }) { (error) in
+                            print(error.localizedDescription)
+                        }
+                    } else {
+                        let ac = UIAlertController(title: "Authentication failed", message: "Sorry!", preferredStyle: .alert)
+                        ac.addAction(UIAlertAction(title: "OK", style: .default))
+                        self.present(ac, animated: true)
                     }
-                    
                 }
-                
-                if (self.val == true){
-                    
-                    let alert = UIAlertController(title: "You've been enrolled!", message: nil, preferredStyle: .alert)
-                    
-                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
-                    
-                    alert.addAction(action)
-                    self.present(alert, animated: true, completion: nil)
-                    
-                }
-                else{
-                    self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.pake[self.index!].postId).setValue(true)
-                    self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
-                    
-                    let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
-                    
-                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
-                    
-                    alert.addAction(action)
-                    self.present(alert, animated: true, completion: nil)
-                }
-                
             }
-            else{
-                self.ref.child("users").child("regular").child(userID!.uid).child("enroll").child(self.pake[self.index!].postId).setValue(true)
-                self.ref?.child("posts").child(self.pake[self.index!].postId).child("attendees").child(userID!.uid).setValue(true)
-                
-                let alert = UIAlertController(title: "Enrolled!", message: nil, preferredStyle: .alert)
-                
-                let action = UIAlertAction(title: "OK", style: .default) { (_) in}
-                
-                alert.addAction(action)
-                self.present(alert, animated: true, completion: nil)
-            }
-            
-            //let username = value?["username"] as? String ?? ""
-            
-            // ...
-        }) { (error) in
-            print(error.localizedDescription)
+        } else {
+            let ac = UIAlertController(title: "Touch ID not available", message: "Your device is not configured for Touch ID.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
         }
         
     }

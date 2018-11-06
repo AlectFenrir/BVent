@@ -38,6 +38,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         refreshControl.addTarget(self, action: #selector(rumahViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
         refreshControl.attributedTitle = attributedTitle
+        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
         
         return refreshControl
     }()
@@ -98,7 +99,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         ref = Database.database().reference()
         ref.keepSynced(true)
         
-        ref.child("posts").queryOrdered(byChild: "timestamp").observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
             
             let value = snapshot.value as? [String:Any]
             
@@ -116,12 +117,11 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             pake = kumpulanData.datas
             //pake.sort(by: {$0.date > $1.date})
             
-            self.table2.reloadData()
-            
             self.dispatchDelay(delay: 2.0) {
+                self.table2.reloadData()
                 self.refreshControl.endRefreshing()
             }
-        })
+        }
     }
     
     func dispatchDelay(delay:Double, closure:@escaping ()->()) {
