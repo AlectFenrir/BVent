@@ -11,10 +11,12 @@ import CoreData
 import Foundation
 import Firebase
 
-class postEventViewController: UIViewController, UITextFieldDelegate {
+class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var categories: UITextField!
+    let categoryPickerVal = ["Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
+    var categoryPicker = UIPickerView()
     @IBOutlet weak var eventTitleField: UITextField!
     @IBOutlet weak var eventPriceField: UITextField!
     @IBOutlet weak var eventDateField: UITextField!
@@ -52,6 +54,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         
         super.viewDidLoad()
         
+        createCategoryPicker()
         createDatePicker()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
@@ -127,7 +130,53 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         toolbar.setItems([doneButton], animated: true)
         eventDateField.inputAccessoryView = toolbar
     }
-    @objc func doneClicked()  {
+    
+    func createCategoryPicker() {
+        
+        categoryPicker.backgroundColor = .white
+        categories.inputView = categoryPicker
+        categoryPicker.delegate = self
+        categoryPicker.dataSource = self
+        
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        toolBar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector (categoryDoneClicked))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: #selector (categoryDoneClicked))
+        
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        
+        categories.inputAccessoryView = toolBar
+        
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return categoryPickerVal.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return categoryPickerVal[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        categories.text = categoryPickerVal[row]
+    }
+    
+    @objc func categoryDoneClicked() {
+        categories.inputView = categoryPicker
+        self.view.endEditing(true)
+    }
+    
+    @objc func doneClicked() {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
         //eventDateField.text = dateFormatter.string(from: datePicker.date)
@@ -136,7 +185,6 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         eventDateField.text = String(tanggal.prefix(16))
         self.view.endEditing(true)
     }
-    
     
     @IBAction func chooseImage(_ sender: UIButton) {
         let imagePickerController = UIImagePickerController()
@@ -163,12 +211,6 @@ class postEventViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-   
-    
     
     //    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
     //        self.categories.isHidden = true
