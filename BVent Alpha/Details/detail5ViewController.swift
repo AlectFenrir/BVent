@@ -146,25 +146,6 @@ class detail5ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        fetchData()
-    //    }
-    
-    //    func fetchData()
-    //    {
-    //        do
-    //        {
-    //            SATPoint = try context.fetch(Enroll.fetchRequest())
-    //            filteredData = SATPoint
-    //            DispatchQueue.main.async {
-    //
-    //            }
-    //        }
-    //        catch
-    //        {
-    //            print("Couldn't Fetch Data")
-    //        }
-    //    }
     
     @IBAction func confirmAttendance(_ sender: UIButton) {
         
@@ -328,24 +309,5 @@ class detail5ViewController: UIViewController {
         
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let identifier = segue.identifier{
-//            if identifier == "delete"{
-//                let destination = segue.destination as! ongoingViewController
-//                //destination.deleteIndex = self.deleteIndex
-//            }
-//        }
-//    }
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
 }
 
