@@ -323,46 +323,12 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-        let userID = Auth.auth().currentUser?.uid
-        ref = Database.database().reference()
-        ref.keepSynced(true)
-
-        print("synced!")
-
-        ref.child("users").child("regular").child(userID!).child("enroll").child(eTicketPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            self.val = (snapshot.value as? Bool)!
-
-            print(snapshot)
-
-            if (self.val == false){
-                self.failed()
-                print("failed")
-            }
-            else{
-                self.postId = eTicketPake[indexPath.row].postId
-                self.success()
-                print("success")
-            }
-
-            // ...
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-
-    }
-
-    func failed(){
-        let alert = UIAlertController(title: "This Event is Done Already!", message: nil, preferredStyle: .alert)
-
-        let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
-
-    func success(){
+//        ref.keepSynced(true)
+//
+//        print("synced!")
+        print("!")
+        
+        postId = eTicketPake[indexPath.row].postId
         performSegue(withIdentifier: "eTicketDetails", sender: nil)
     }
 
@@ -370,6 +336,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         if let identifier = segue.identifier{
             if identifier == "eTicketDetails"{
                 let destination = segue.destination as! detail6ViewController
+                print("2")
                 destination.postId = postId
             }
         }

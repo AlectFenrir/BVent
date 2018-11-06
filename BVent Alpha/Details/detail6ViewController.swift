@@ -68,6 +68,7 @@ class detail6ViewController: UIViewController {
     var categ: String?
     var postId: String?
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
