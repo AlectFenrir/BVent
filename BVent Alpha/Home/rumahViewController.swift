@@ -89,7 +89,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             registerForPreviewing(with: self, sourceView: table2)
             
         }
-        self.table2.addSubview(self.refreshControl)
+        //self.table2.addSubview(self.refreshControl)
         
     }
     
