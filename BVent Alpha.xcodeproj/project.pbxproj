@@ -58,6 +58,9 @@
 		2CA8B8F8219068D700CFD8CF /* bookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */; };
 		2CA8B8FA21907AEA00CFD8CF /* eTicketCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B8F921907AEA00CFD8CF /* eTicketCollectionViewCell.swift */; };
 		2CA8B8FC2190C0BA00CFD8CF /* detail6ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B8FB2190C0BA00CFD8CF /* detail6ViewController.swift */; };
+		2CA8B9022191FD2700CFD8CF /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9012191FD2600CFD8CF /* Message.swift */; };
+		2CA8B9042191FDF700CFD8CF /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9032191FDF700CFD8CF /* Conversation.swift */; };
+		2CA8B906219200CD00CFD8CF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B905219200CD00CFD8CF /* User.swift */; };
 		2CC16C0420A1869A000205FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0320A1869A000205FE /* AppDelegate.swift */; };
 		2CC16C0920A1869B000205FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0720A1869B000205FE /* Main.storyboard */; };
 		2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */; };
@@ -138,6 +141,9 @@
 		2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bookmarkViewController.swift; sourceTree = "<group>"; };
 		2CA8B8F921907AEA00CFD8CF /* eTicketCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eTicketCollectionViewCell.swift; sourceTree = "<group>"; };
 		2CA8B8FB2190C0BA00CFD8CF /* detail6ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detail6ViewController.swift; sourceTree = "<group>"; };
+		2CA8B9012191FD2600CFD8CF /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		2CA8B9032191FDF700CFD8CF /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
+		2CA8B905219200CD00CFD8CF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2CC16C0020A1869A000205FE /* BVent Alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BVent Alpha.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CC16C0320A1869A000205FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2CC16C0820A1869B000205FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -295,6 +301,16 @@
 			path = Poster;
 			sourceTree = "<group>";
 		};
+		2CA8B907219200D800CFD8CF /* Chat Services */ = {
+			isa = PBXGroup;
+			children = (
+				2CA8B9012191FD2600CFD8CF /* Message.swift */,
+				2CA8B9032191FDF700CFD8CF /* Conversation.swift */,
+				2CA8B905219200CD00CFD8CF /* User.swift */,
+			);
+			path = "Chat Services";
+			sourceTree = "<group>";
+		};
 		2CC16BF720A1869A000205FE = {
 			isa = PBXGroup;
 			children = (
@@ -343,6 +359,7 @@
 				2C4072D020AA9F26003CC93E /* Credentials */,
 				2C4072C720AA9ED2003CC93E /* Introduction */,
 				2C1D742B20B6BD9C008850A9 /* Firebase Services */,
+				2CA8B907219200D800CFD8CF /* Chat Services */,
 				2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */,
 				2C64FC8320BBFE0300EE16DB /* RoundedWhiteButton.swift */,
 			);
@@ -617,6 +634,7 @@
 				2CA8B8FA21907AEA00CFD8CF /* eTicketCollectionViewCell.swift in Sources */,
 				2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */,
 				2C1D743520B84459008850A9 /* ImageService.swift in Sources */,
+				2CA8B9022191FD2700CFD8CF /* Message.swift in Sources */,
 				2C64FC8220BBFDA100EE16DB /* signUpTest.swift in Sources */,
 				2C40730220AAA081003CC93E /* postEventViewController.swift in Sources */,
 				2C4072F520AAA055003CC93E /* detail5ViewController.swift in Sources */,
@@ -639,6 +657,7 @@
 				5FFB7867210CD5A0005ED749 /* eTicketViewController.swift in Sources */,
 				27C373B420DC94C20096AE28 /* fetch.swift in Sources */,
 				2C40730320AAA081003CC93E /* catViewController.swift in Sources */,
+				2CA8B906219200CD00CFD8CF /* User.swift in Sources */,
 				2C1D742D20B80914008850A9 /* UserService.swift in Sources */,
 				2C40730420AAA081003CC93E /* catTableViewCell.swift in Sources */,
 				2C1D742F20B80AC0008850A9 /* UserProfile.swift in Sources */,
@@ -650,6 +669,7 @@
 				272E656E2189776E00E8F800 /* attendeesViewController.swift in Sources */,
 				2C4072D820AA9F89003CC93E /* editProfileViewController.swift in Sources */,
 				2C4072C620AA9E6C003CC93E /* dataBase.swift in Sources */,
+				2CA8B9042191FDF700CFD8CF /* Conversation.swift in Sources */,
 				2C4072EA20AAA035003CC93E /* bookmarkTableViewCell.swift in Sources */,
 				2C4072F420AAA055003CC93E /* detail2ViewController.swift in Sources */,
 				2C4072F320AAA055003CC93E /* detail4ViewController.swift in Sources */,
