@@ -61,11 +61,20 @@
 		2CA8B9022191FD2700CFD8CF /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9012191FD2600CFD8CF /* Message.swift */; };
 		2CA8B9042191FDF700CFD8CF /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9032191FDF700CFD8CF /* Conversation.swift */; };
 		2CA8B906219200CD00CFD8CF /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B905219200CD00CFD8CF /* User.swift */; };
+		2CA8B9092192AEC900CFD8CF /* LandingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9082192AEC900CFD8CF /* LandingViewController.swift */; };
+		2CA8B90B2192BDDE00CFD8CF /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B90A2192BDDE00CFD8CF /* ChatViewController.swift */; };
+		2CA8B90F2192C9DA00CFD8CF /* SenderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B90E2192C9DA00CFD8CF /* SenderTableViewCell.swift */; };
+		2CA8B9112192C9E700CFD8CF /* ReceiverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9102192C9E700CFD8CF /* ReceiverTableViewCell.swift */; };
+		2CA8B9132192D4B400CFD8CF /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9122192D4B400CFD8CF /* ConversationViewController.swift */; };
+		2CA8B9152192D5C300CFD8CF /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9142192D5C300CFD8CF /* ConversationTableViewCell.swift */; };
+		2CA8B9172192DA3A00CFD8CF /* ChatNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9162192DA3A00CFD8CF /* ChatNavigationViewController.swift */; };
+		2CA8B9192192DAD100CFD8CF /* ContactsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B9182192DAD100CFD8CF /* ContactsCollectionViewCell.swift */; };
+		2CA8B91B2192F46100CFD8CF /* newMessage.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2CA8B91A2192F46000CFD8CF /* newMessage.wav */; };
+		2CA8B91D21931AC800CFD8CF /* MyChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA8B91C21931AC800CFD8CF /* MyChatViewController.swift */; };
 		2CC16C0420A1869A000205FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0320A1869A000205FE /* AppDelegate.swift */; };
 		2CC16C0920A1869B000205FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0720A1869B000205FE /* Main.storyboard */; };
 		2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */; };
 		2CC16C0E20A1869B000205FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0D20A1869B000205FE /* Assets.xcassets */; };
-		2CC16C1120A1869B000205FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0F20A1869B000205FE /* LaunchScreen.storyboard */; };
 		2CC16C1C20A1869B000205FE /* BVent_AlphaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C1B20A1869B000205FE /* BVent_AlphaTests.swift */; };
 		2CC16C2720A1869B000205FE /* BVent_AlphaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C2620A1869B000205FE /* BVent_AlphaUITests.swift */; };
 		5FFB7867210CD5A0005ED749 /* eTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFB7866210CD5A0005ED749 /* eTicketViewController.swift */; };
@@ -144,12 +153,21 @@
 		2CA8B9012191FD2600CFD8CF /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		2CA8B9032191FDF700CFD8CF /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		2CA8B905219200CD00CFD8CF /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		2CA8B9082192AEC900CFD8CF /* LandingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingViewController.swift; sourceTree = "<group>"; };
+		2CA8B90A2192BDDE00CFD8CF /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		2CA8B90E2192C9DA00CFD8CF /* SenderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SenderTableViewCell.swift; sourceTree = "<group>"; };
+		2CA8B9102192C9E700CFD8CF /* ReceiverTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiverTableViewCell.swift; sourceTree = "<group>"; };
+		2CA8B9122192D4B400CFD8CF /* ConversationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
+		2CA8B9142192D5C300CFD8CF /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
+		2CA8B9162192DA3A00CFD8CF /* ChatNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatNavigationViewController.swift; sourceTree = "<group>"; };
+		2CA8B9182192DAD100CFD8CF /* ContactsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionViewCell.swift; sourceTree = "<group>"; };
+		2CA8B91A2192F46000CFD8CF /* newMessage.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = newMessage.wav; sourceTree = "<group>"; };
+		2CA8B91C21931AC800CFD8CF /* MyChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyChatViewController.swift; sourceTree = "<group>"; };
 		2CC16C0020A1869A000205FE /* BVent Alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BVent Alpha.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CC16C0320A1869A000205FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2CC16C0820A1869B000205FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2CC16C0B20A1869B000205FE /* BVent_Alpha.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BVent_Alpha.xcdatamodel; sourceTree = "<group>"; };
 		2CC16C0D20A1869B000205FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		2CC16C1020A1869B000205FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2CC16C1220A1869B000205FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CC16C1720A1869B000205FE /* BVent AlphaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BVent AlphaTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CC16C1B20A1869B000205FE /* BVent_AlphaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BVent_AlphaTests.swift; sourceTree = "<group>"; };
@@ -307,6 +325,14 @@
 				2CA8B9012191FD2600CFD8CF /* Message.swift */,
 				2CA8B9032191FDF700CFD8CF /* Conversation.swift */,
 				2CA8B905219200CD00CFD8CF /* User.swift */,
+				2CA8B90A2192BDDE00CFD8CF /* ChatViewController.swift */,
+				2CA8B90E2192C9DA00CFD8CF /* SenderTableViewCell.swift */,
+				2CA8B9102192C9E700CFD8CF /* ReceiverTableViewCell.swift */,
+				2CA8B9122192D4B400CFD8CF /* ConversationViewController.swift */,
+				2CA8B9142192D5C300CFD8CF /* ConversationTableViewCell.swift */,
+				2CA8B9162192DA3A00CFD8CF /* ChatNavigationViewController.swift */,
+				2CA8B9182192DAD100CFD8CF /* ContactsCollectionViewCell.swift */,
+				2CA8B91C21931AC800CFD8CF /* MyChatViewController.swift */,
 			);
 			path = "Chat Services";
 			sourceTree = "<group>";
@@ -339,6 +365,7 @@
 			children = (
 				2C40730720AAA3A6003CC93E /* GoogleService-Info.plist */,
 				2CC16C0720A1869B000205FE /* Main.storyboard */,
+				2CA8B91A2192F46000CFD8CF /* newMessage.wav */,
 				2CC16C0D20A1869B000205FE /* Assets.xcassets */,
 				5FFB7868210CDF40005ED749 /* QRGenViewController.swift */,
 				5FFB7866210CD5A0005ED749 /* eTicketViewController.swift */,
@@ -347,7 +374,6 @@
 				2C4072FE20AAA080003CC93E /* catTableViewCell.swift */,
 				2C4072FD20AAA080003CC93E /* catViewController.swift */,
 				2C4072FC20AAA080003CC93E /* postEventViewController.swift */,
-				2CC16C0F20A1869B000205FE /* LaunchScreen.storyboard */,
 				2CC16C1220A1869B000205FE /* Info.plist */,
 				2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */,
 				2C1D743020B8357F008850A9 /* Offline Database */,
@@ -362,6 +388,7 @@
 				2CA8B907219200D800CFD8CF /* Chat Services */,
 				2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */,
 				2C64FC8320BBFE0300EE16DB /* RoundedWhiteButton.swift */,
+				2CA8B9082192AEC900CFD8CF /* LandingViewController.swift */,
 			);
 			path = "BVent Alpha";
 			sourceTree = "<group>";
@@ -515,10 +542,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CC16C1120A1869B000205FE /* LaunchScreen.storyboard in Resources */,
 				2C40730820AAA3A6003CC93E /* GoogleService-Info.plist in Resources */,
 				2CC16C0E20A1869B000205FE /* Assets.xcassets in Resources */,
 				2C9B037A20B2A3C600467158 /* data.json in Resources */,
+				2CA8B91B2192F46100CFD8CF /* newMessage.wav in Resources */,
 				2CC16C0920A1869B000205FE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -627,21 +654,27 @@
 			files = (
 				2C4072D620AA9F89003CC93E /* signUpViewController.swift in Sources */,
 				2C64FC8420BBFE0300EE16DB /* RoundedWhiteButton.swift in Sources */,
+				2CA8B9172192DA3A00CFD8CF /* ChatNavigationViewController.swift in Sources */,
 				2C4072F220AAA055003CC93E /* detail3ViewController.swift in Sources */,
+				2CA8B9192192DAD100CFD8CF /* ContactsCollectionViewCell.swift in Sources */,
 				2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */,
 				2C4072F120AAA055003CC93E /* detail1ViewController.swift in Sources */,
 				2C4072DD20AA9FA9003CC93E /* rumahViewController.swift in Sources */,
 				2CA8B8FA21907AEA00CFD8CF /* eTicketCollectionViewCell.swift in Sources */,
 				2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */,
 				2C1D743520B84459008850A9 /* ImageService.swift in Sources */,
+				2CA8B90F2192C9DA00CFD8CF /* SenderTableViewCell.swift in Sources */,
 				2CA8B9022191FD2700CFD8CF /* Message.swift in Sources */,
+				2CA8B90B2192BDDE00CFD8CF /* ChatViewController.swift in Sources */,
 				2C64FC8220BBFDA100EE16DB /* signUpTest.swift in Sources */,
 				2C40730220AAA081003CC93E /* postEventViewController.swift in Sources */,
 				2C4072F520AAA055003CC93E /* detail5ViewController.swift in Sources */,
+				2CA8B9092192AEC900CFD8CF /* LandingViewController.swift in Sources */,
 				2C40730120AAA081003CC93E /* ongoingViewController.swift in Sources */,
 				2C9B037820AC488000467158 /* AlertController.swift in Sources */,
 				2C4072FA20AAA06E003CC93E /* posterViewController.swift in Sources */,
 				2C64FC8620BBFF1C00EE16DB /* HelperExtension.swift in Sources */,
+				2CA8B9112192C9E700CFD8CF /* ReceiverTableViewCell.swift in Sources */,
 				2C40730520AAA081003CC93E /* ongoingTableViewCell.swift in Sources */,
 				2C40730620AAA081003CC93E /* oongoingTableViewController.swift in Sources */,
 				2C4072E920AAA035003CC93E /* settingTableViewCell.swift in Sources */,
@@ -665,10 +698,13 @@
 				2C4072D520AA9F89003CC93E /* forgotPasswordViewController.swift in Sources */,
 				2C4072CF20AA9F06003CC93E /* CollectionViewCell.swift in Sources */,
 				2C4072C520AA9E6C003CC93E /* SAT.swift in Sources */,
+				2CA8B9152192D5C300CFD8CF /* ConversationTableViewCell.swift in Sources */,
 				2C4072CC20AA9F06003CC93E /* chooseCollectionViewCell.swift in Sources */,
 				272E656E2189776E00E8F800 /* attendeesViewController.swift in Sources */,
+				2CA8B9132192D4B400CFD8CF /* ConversationViewController.swift in Sources */,
 				2C4072D820AA9F89003CC93E /* editProfileViewController.swift in Sources */,
 				2C4072C620AA9E6C003CC93E /* dataBase.swift in Sources */,
+				2CA8B91D21931AC800CFD8CF /* MyChatViewController.swift in Sources */,
 				2CA8B9042191FDF700CFD8CF /* Conversation.swift in Sources */,
 				2C4072EA20AAA035003CC93E /* bookmarkTableViewCell.swift in Sources */,
 				2C4072F420AAA055003CC93E /* detail2ViewController.swift in Sources */,
@@ -720,14 +756,6 @@
 				2CC16C0820A1869B000205FE /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		2CC16C0F20A1869B000205FE /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2CC16C1020A1869B000205FE /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

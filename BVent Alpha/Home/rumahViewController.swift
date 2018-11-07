@@ -73,7 +73,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 
                 self.loggedInUser = Auth.auth().currentUser
                 
-                if temp.poster == self.loggedInUser!.uid{
+                if temp.poster == self.loggedInUser?.uid{
                 self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
                     
                 }

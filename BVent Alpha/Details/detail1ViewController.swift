@@ -58,6 +58,10 @@ class detail1ViewController: UIViewController {
     
     var val = false
     
+    var posterId: String = ""
+    
+    var userLempar: User!
+    
     
     
     override func viewDidLoad() {
@@ -141,9 +145,6 @@ class detail1ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func message(_ sender: Any) {
-        UIApplication.shared.open(URL(string: "sms:")!, options: [:], completionHandler: nil)
-    }
     
     @IBAction func enroll(_ sender: UIButton) {
         
@@ -308,6 +309,56 @@ class detail1ViewController: UIViewController {
         
     }
     
+    @IBAction func message(_ sender: Any) {
+//        let vc = self.storyboard?.instantiateViewController(withIdentifier: "Navigation") as! UINavigationController
+//        self.show(vc, sender: nil)
+        
+        posterId = pake[index!].poster
+        
+        self.ref = Database.database().reference()
+        
+        let userID = Auth.auth().currentUser?.uid
+        
+        self.ref.child("users").child("regular").child(posterId).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            let id = snapshot.key
+            let data = snapshot.value as! [String: Any]
+            let credentials = data["profile"] as! [String: String]
+            
+            let fullname = credentials["fullname"]!
+            let email = credentials["email"]!
+            let phoneNumber = credentials["phoneNumber"]!
+            let link = URL.init(string: credentials["photoURL"]!)
+            
+            ImageService.getImage(withURL: link!) {(image) in
+                
+                let profilePic = image
+                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!)
+                self.userLempar = user
+                
+                if (userID != self.posterId) {
+                    
+                    self.performSegue(withIdentifier: "chat segue", sender: nil)
+                    
+                } else {
+                    let alert = UIAlertController(title: "You Can't Chat Yourself!", message: nil, preferredStyle: .alert)
+                    
+                    let action = UIAlertAction(title: "OK", style: .default) { (_) in}
+                    
+                    alert.addAction(action)
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
+            }
+            
+            
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
+        
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -324,5 +375,16 @@ class detail1ViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier{
+            if identifier == "chat segue"{
+                
+                let destination = segue.destination as! ChatViewController
+                destination.currentUser = self.userLempar
+                
+            }
+        }
+    }
     
 }

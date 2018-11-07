@@ -63,5 +63,4 @@ class settingViewController: UIViewController, UITableViewDelegate, UITableViewD
         try! Auth.auth().signOut()
     }
     
-    
 }

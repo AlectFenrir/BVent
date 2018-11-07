@@ -15,23 +15,49 @@ class signInViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailField2: UITextField!
     @IBOutlet weak var passwordField2: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
-    //@IBOutlet weak var signIn: UIButton!
+    @IBOutlet var inputFields: [UITextField]!
+    @IBOutlet weak var darkView: UIView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
-    //var
+    @IBOutlet weak var backgroundImageView: UIImageView!
+    var imageFileName: String!
     
     @IBAction func signIn(_ sender: UIButton) {
-        guard let email2 = emailField2.text else {return}
-        guard let password2 = passwordField2.text else {return}
         
-        Auth.auth().signIn(withEmail: email2, password: password2) { user, error in
-            if error == nil && user != nil {
-                self.dismiss(animated: false, completion: nil)
-            } else {
-                print("Error logging in: \(error!.localizedDescription)")
-                
-                self.resetForm()
+        for item in self.inputFields {
+            item.resignFirstResponder()
+        }
+        self.showLoading(state: true)
+        User.loginUser(withEmail: self.emailField2.text!, password: self.passwordField2.text!) { [weak weakSelf = self](status) in
+            DispatchQueue.main.async {
+                weakSelf?.showLoading(state: false)
+                for item in self.inputFields {
+                    item.text = ""
+                }
+                if status == true {
+                    weakSelf?.pushTomainView()
+                } else {
+                    self.resetForm()
+//                    for item in (weakSelf?.waringLabels)! {
+//                        item.isHidden = false
+//                    }
+                }
+                weakSelf = nil
             }
         }
+        
+//        guard let email2 = emailField2.text else {return}
+//        guard let password2 = passwordField2.text else {return}
+//
+//        Auth.auth().signIn(withEmail: email2, password: password2) { user, error in
+//            if error == nil && user != nil {
+//                self.dismiss(animated: false, completion: nil)
+//            } else {
+//                print("Error logging in: \(error!.localizedDescription)")
+//
+//                self.resetForm()
+//            }
+//        }
         
         //        Auth.auth().signIn(withEmail: email2, password: password2, completion: {
         //            user, error in
@@ -62,6 +88,28 @@ class signInViewController: UIViewController, UITextFieldDelegate {
         //let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         //let newPoint = Sat(context: context)
         //newPoint.point = 0
+    }
+    
+    func showLoading(state: Bool)  {
+        if state {
+            self.darkView.isHidden = false
+            self.spinner.startAnimating()
+            UIView.animate(withDuration: 0.3, animations: {
+                self.darkView.alpha = 0.5
+            })
+        } else {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.darkView.alpha = 0
+            }, completion: { _ in
+                self.spinner.stopAnimating()
+                self.darkView.isHidden = true
+            })
+        }
+    }
+    
+    func pushTomainView() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
+        self.show(vc, sender: nil)
     }
     
     @objc func handleSignIn() {
@@ -102,6 +150,10 @@ class signInViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        
         emailField2.delegate = self
         passwordField2.delegate = self
         

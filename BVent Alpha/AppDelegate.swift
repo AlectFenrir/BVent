@@ -73,29 +73,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Database.database().isPersistenceEnabled = true
         
-        let authListener = Auth.auth().addStateDidChangeListener { auth, user in
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            
-            if user != nil {
-                
-                UserService.observeUserProfile(user!.uid) { userProfile in
-                    UserService.currentUserProfile = userProfile
-                }
-                //
-                let controller = storyboard.instantiateViewController(withIdentifier: "main") as! UITabBarController
-                self.window?.rootViewController = controller
-                self.window?.makeKeyAndVisible()
-            } else {
-                
-                UserService.currentUserProfile = nil
-                
-                // Welcome screen
-                let controller = storyboard.instantiateViewController(withIdentifier: "welcomeViewController") as! welcomeViewController
-                self.window?.rootViewController = controller
-                self.window?.makeKeyAndVisible()
-            }
-        }
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(named: "navigation")!.resizableImage(withCapInsets: UIEdgeInsetsMake(0, 0, 0, 0), resizingMode: .stretch), for: .default)
+        //UINavigationBar.appearance().isTranslucent = false
+        
+//        let authListener = Auth.auth().addStateDidChangeListener { auth, user in
+//
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//
+//            if user != nil {
+//
+//                UserService.observeUserProfile(user!.uid) { userProfile in
+//                    UserService.currentUserProfile = userProfile
+//                }
+//                //
+//                let controller = storyboard.instantiateViewController(withIdentifier: "main") as! UITabBarController
+//                self.window?.rootViewController = controller
+//                self.window?.makeKeyAndVisible()
+//            } else {
+//
+//                UserService.currentUserProfile = nil
+//
+//                // Welcome screen
+//                let controller = storyboard.instantiateViewController(withIdentifier: "welcomeViewController") as! welcomeViewController
+//                self.window?.rootViewController = controller
+//                self.window?.makeKeyAndVisible()
+//            }
+//        }
         
         return true
     }
