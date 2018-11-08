@@ -110,25 +110,61 @@ class editProfileViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func logout(_ sender: Any) {
-        do{
-            try Auth.auth().signOut()
-            dismiss(animated: true, completion: nil)
-            performSegue(withIdentifier: "login", sender: nil)
-        }
-        catch{
-            print("ERROR")
+    
+    @IBAction func updateProfile(_ sender: Any) {
+        if ((emailField4.text != "" || fullNameField4.text != "" || phoneNumberField4.text != "") && (emailField4.text != nil || fullNameField4.text != nil || phoneNumberField4.text != nil)){
+            let userID = Auth.auth().currentUser?.uid
+            
+            let userRef = Database.database().reference().child("users").child("regular").child(userID!).child("profile")
+            if let new_Email = emailField4.text as? String{
+                
+                Auth.auth().currentUser!.updateEmail(to: emailField4.text!) { error in
+                    
+                    if error == nil{
+                        userRef.updateChildValues(["email" : new_Email ], withCompletionBlock: {(errEM, referenceEM)   in
+                            
+                            if errEM == nil{
+                                print(referenceEM)
+                            }else{
+                                print(errEM?.localizedDescription)
+                            }
+                        })
+                    }
+                    else {
+                        print("Error Updating Profile!")
+                    }
+                }
+            }
+            
+            if let new_Name = fullNameField4.text as? String{
+                
+                userRef.updateChildValues(["fullname" : new_Name ], withCompletionBlock: {(errNM, referenceNM)   in
+                    
+                    if errNM == nil{
+                        print(referenceNM)
+                    }else{
+                        print(errNM?.localizedDescription)
+                    }
+                })
+            }
+            
+            if let new_PhoneNumber = phoneNumberField4.text as? String {
+                userRef.updateChildValues(["phoneNumber" : new_PhoneNumber ], withCompletionBlock: {(errNM, referenceNM)   in
+                    
+                    if errNM == nil{
+                        print(referenceNM)
+                    }else{
+                        print(errNM?.localizedDescription)
+                    }
+                })
+            }
+            _ = self.navigationController?.popViewController(animated: true)
+            
+        }else{
+            
+            print("Please fill in one or more of the missing text fields that you would like to update.")
+            
         }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
 }
