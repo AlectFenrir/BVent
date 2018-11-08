@@ -212,14 +212,20 @@ class detail1ViewController: UIViewController {
                                             dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
                                             dateFormatter.timeZone = TimeZone(abbreviation: "GMT+7:00") //Current time zone
                                             //according to date format your date string
-                                            guard let date = dateFormatter.date(from: self.pake[self.index!].date) else {
-                                                fatalError()
-                                            }
+                                            let date = dateFormatter.date(from: self.pake[self.index!].date)
                                             print(date)
+                                            
+                                            var predicateString = "title == '\(event.title)' AND location == '\(event.location)' AND notes == '\(event.notes)'"
+                                            var matches = NSPredicate(format: predicateString)
+                                            var datedEvents: [EKEvent]? = nil
+                                            if let aDate = event.endDate {
+                                                datedEvents = self.eventStore.events(matching: self.eventStore.predicateForEvents(withStart: event.startDate, end: aDate, calendars: nil))
+                                            }
+                                            var matchingEvents = (datedEvents as NSArray?)?.filtered(using: matches)
                                             
                                             event.title = self.pake[self.index!].title
                                             event.startDate = date
-                                            event.endDate = date.addingTimeInterval(7200 as TimeInterval)
+                                            event.endDate = date!.addingTimeInterval(7200 as TimeInterval)
                                             event.notes = self.pake[self.index!].desc
                                             event.location = self.pake[self.index!].location
                                             event.addAlarm(alarm30minutes)
@@ -265,6 +271,14 @@ class detail1ViewController: UIViewController {
                                         //according to date format your date string
                                         let date = dateFormatter.date(from: self.pake[self.index!].date)
                                         print(date)
+                                        
+                                        var predicateString = "title == '\(event.title)' AND location == '\(event.location)' AND notes == '\(event.notes)'"
+                                        var matches = NSPredicate(format: predicateString)
+                                        var datedEvents: [EKEvent]? = nil
+                                        if let aDate = event.endDate {
+                                            datedEvents = self.eventStore.events(matching: self.eventStore.predicateForEvents(withStart: event.startDate, end: aDate, calendars: nil))
+                                        }
+                                        var matchingEvents = (datedEvents as NSArray?)?.filtered(using: matches)
                                         
                                         event.title = self.pake[self.index!].title
                                         event.startDate = date

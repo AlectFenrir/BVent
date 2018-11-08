@@ -128,13 +128,17 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector (doneClicked))
-        toolbar.setItems([doneButton], animated: true)
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        //let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: #selector (doneClicked))
+        
+        toolbar.setItems([/*cancelButton, */spaceButton, doneButton], animated: true)
+        toolbar.isUserInteractionEnabled = true
         eventDateField.inputAccessoryView = toolbar
     }
     
     func createCategoryPicker() {
         
-        categoryPicker.backgroundColor = .white
+        categoryPicker.backgroundColor = UIColor(red: 207/255, green: 212/255, blue: 218/255, alpha: 1)
         categories.inputView = categoryPicker
         categoryPicker.delegate = self
         categoryPicker.dataSource = self
@@ -142,14 +146,14 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
         toolBar.isTranslucent = true
-        toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
+        //toolBar.tintColor = UIColor(red: 76/255, green: 217/255, blue: 100/255, alpha: 1)
         toolBar.sizeToFit()
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: nil, action: #selector (categoryDoneClicked))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: nil, action: #selector (categoryDoneClicked))
         
-        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: true)
         toolBar.isUserInteractionEnabled = true
         
         categories.inputAccessoryView = toolBar
@@ -297,61 +301,6 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
             }
         }
     }
-    
-    
-    func uploadEventImage(_ image:UIImage, completion: @escaping ((_ url:URL?)->())) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        
-        let storageRef = Storage.storage().reference().child("post/\(uid)")
-        
-        guard let imageData = UIImageJPEGRepresentation(image, 0.75) else { return }
-        
-        
-        let metaData = StorageMetadata()
-        metaData.contentType = "image/jpg"
-        
-        storageRef.putData(imageData, metadata: metaData) { metaData, error in
-            if error == nil, metaData != nil {
-                if let url = metaData?.downloadURL() {
-                    completion(url)
-                } else {
-                    completion(nil)
-                }
-                // success!
-            } else {
-                // failed
-                completion(nil)
-            }
-        }
-    }
-    
-    func saveProfile(fullname:String, profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
-        let databaseRef = Database.database().reference().child("users/profile/\(uid)")
-        
-        let userObject = [
-            "fullname": fullname,
-            "photoURL": profileImageURL.absoluteString
-            ] as [String:Any]
-        
-        databaseRef.setValue(userObject) { error, ref in
-            completion(error == nil)
-        }
-    }
-    
-    
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 
 

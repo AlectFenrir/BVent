@@ -28,6 +28,8 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var ref: DatabaseReference!
     
+    var name: String = ""
+    
     let eventStore: EKEventStore = EKEventStore()
     var events: [EKEvent]?
     
@@ -286,8 +288,20 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         //cell.ongoingEventBenefit.text = filteredData[indexPath.row].ongoingEventBenefit
         
         cell.ongoingEventCDown.text =  ongoingPake[indexPath.row].time
-        cell.ongoingEventPoster.text = "Himti Binus"/*
-         filteredData[indexPath.row].ongoingEventPoster*/
+        
+        ref = Database.database().reference()
+        ref.child("users").child("regular").child(pake[indexPath.row].poster).child("profile").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            self.name = value?["fullname"] as? String ?? ""
+            cell.ongoingEventPoster.text = self.name
+            
+            print("a")
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
         if (ongoingPake[indexPath.row].done == true){ //REVISI
             cell.done.text = "DONE"
             cell.done.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)

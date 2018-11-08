@@ -231,72 +231,7 @@ class detail6ViewController: UIViewController {
                 present(ac, animated: true)
             }
             
-            //            let action = UIAlertAction(title: "Confirm", style: .default) { (_) in
-            //
-            //                if alert.textFields!.first!.text! == self.pake.confirmCode{
-            //
-            //                    //if (self.validation == false)
-            //
-            //                    point = point + self.pake.sat
-            //                    //print(point)
-            //
-            //                    let alert1 = UIAlertController(title: "Verified!", message: nil, preferredStyle: .alert)
-            //
-            //                    let action1 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-            //
-            //                    alert1.addAction(action1)
-            //                    self.present(alert1, animated: true, completion: nil)
-            //
-            //                    let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Enroll")
-            //
-            //                    let predicate = NSPredicate(format: "done = '\(false)'")
-            //                    fetchRequest.predicate = predicate
-            //                    do
-            //                    {
-            //                        let test = try self.context.fetch(fetchRequest)
-            //                        if test.count == 1
-            //                        {
-            //                            let objectUpdate = test[0] as! NSManagedObject
-            //                            objectUpdate.setValue(true, forKey: "done")
-            //                            do{
-            //                                try self.context.save()
-            //                            }
-            //                            catch
-            //                            {
-            //                                print(error)
-            //                            }
-            //                        }
-            //                    }
-            //                    catch
-            //                    {
-            //                        print(error)
-            //                    }
-            //
-            //                    self.pake.enroll = true
-            //                    self.validation = true
-            //
-            //                    self.ref.child("users").child("regular").child(userID!).child("enroll").child(self.postId!).setValue(false)
-            //
-            //                    _ = self.navigationController?.popViewController(animated: true)
-            //
-            //                }
-            //                else{
-            //                    let alert2 = UIAlertController(title: "Wrong Code!!", message: nil, preferredStyle: .alert)
-            //
-            //                    let action2 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-            //
-            //                    alert2.addAction(action2)
-            //                    self.present(alert2, animated: true, completion: nil)
-            //                    self.validation = false
-            //                }
-            //
-            //            }
-            //            alert.addAction(action)
-            //            present(alert, animated: true, completion: nil)
-            //
-            //            //deleteIndex = index
-            //
-            //        }
+  
         } else {
             //print("BEGO")
             
