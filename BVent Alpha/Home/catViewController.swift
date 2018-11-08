@@ -55,36 +55,8 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             pake = data
             //pake = pake.reversed()
         }
-        
-//        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
-//        {
-//            registerForPreviewing(with: self, sourceView: tabel1)
-//
-//        }
-        
     }
     
-//    func detailViewController(for index: Int) -> detail2ViewController {
-//        guard let vc = storyboard?.instantiateViewController(withIdentifier: "detail2ViewController") as? detail2ViewController else {
-//            fatalError("Couldn't load detail view controller")
-//        }
-//
-//        vc.index = index
-//        return vc
-//    }
-//
-//    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-//        if let indexPath = tabel1.indexPathForRow(at: location) {
-//            previewingContext.sourceRect = tabel1.rectForRow(at: indexPath)
-//            return detailViewController(for: indexPath.row)
-//        }
-//
-//        return nil
-//    }
-//
-//    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-//        navigationController?.pushViewController(viewControllerToCommit, animated: true)
-//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
