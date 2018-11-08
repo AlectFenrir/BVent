@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import Firebase
 import LocalAuthentication
+import EventKit
 
 class ongoingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -26,6 +27,9 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     var validation: Int?
     
     var ref: DatabaseReference!
+    
+    let eventStore: EKEventStore = EKEventStore()
+    var events: [EKEvent]?
     
     var val: Bool = false
     
@@ -58,54 +62,64 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         ref.keepSynced(true)
         
         let userID = Auth.auth().currentUser?.uid
-        ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
+        
+        self.eventStore.requestAccess(to: .event) { (granted, error) in
             
-            if (snapshot.exists()){
-                
-                for postId in (value?.allKeys)!{
+            if (granted) && (error == nil) {
+                self.ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+                    // Get user value
+                    let value = snapshot.value as? NSDictionary
                     
-                    self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
-                        // Get user value
-                        let value2 = snapshot2.value as? NSDictionary
+                    if (snapshot.exists()){
                         
-                        kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
-                                                                 bookmark: value2?["bookmark"] as? Bool ?? false,
-                                                                 category: value2?["category"] as? String ?? "",
-                                                                 certification: value2?["certification"] as? Bool ?? false,
-                                                                 confirmCode: value2?["confirmCode"] as? String ?? "",
-                                                                 cp: value2?["cp"] as? String ?? "",
-                                                                 date: value2?["date"] as? String ?? "",
-                                                                 desc: value2?["desc"] as? String ?? "",
-                                                                 done: value2?["done"] as? Bool ?? false,
-                                                                 enroll: value2?["enroll"] as? Bool ?? false,
-                                                                 location: value2?["location"] as? String ?? "",
-                                                                 price: value2?["price"] as? String ?? "",
-                                                                 sat: value2?["sat"] as? Int ?? 0,
-                                                                 time: value2?["time"] as? String ?? "",
-                                                                 title: value2?["title"] as? String ?? "",
-                                                                 timestamp: value2?["timestamp"] as? String ?? "",
-                                                                 poster: value2?["poster"] as? String ?? "",
-                                                                 imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot2.key))
+                        for postId in (value?.allKeys)!{
+                            
+                            self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
+                                // Get user value
+                                let value2 = snapshot2.value as? NSDictionary
+                                
+                                kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                                                                         bookmark: value2?["bookmark"] as? Bool ?? false,
+                                                                         category: value2?["category"] as? String ?? "",
+                                                                         certification: value2?["certification"] as? Bool ?? false,
+                                                                         confirmCode: value2?["confirmCode"] as? String ?? "",
+                                                                         cp: value2?["cp"] as? String ?? "",
+                                                                         date: value2?["date"] as? String ?? "",
+                                                                         desc: value2?["desc"] as? String ?? "",
+                                                                         done: value2?["done"] as? Bool ?? false,
+                                                                         enroll: value2?["enroll"] as? Bool ?? false,
+                                                                         location: value2?["location"] as? String ?? "",
+                                                                         price: value2?["price"] as? String ?? "",
+                                                                         sat: value2?["sat"] as? Int ?? 0,
+                                                                         time: value2?["time"] as? String ?? "",
+                                                                         title: value2?["title"] as? String ?? "",
+                                                                         timestamp: value2?["timestamp"] as? String ?? "",
+                                                                         poster: value2?["poster"] as? String ?? "",
+                                                                         imageUrl: value2?["imageUrl"] as? String ?? "",
+                                                                         postId: snapshot2.key))
+                                
+                                ongoingPake = kumpulanData.ongoing
+                                
+                                self.ongoingTable.reloadData()
+                                //print("p")
+                            }) { (error) in
+                                print(error.localizedDescription)
+                            }
+                            
+                        }
+                    }
+                    else{
                         
-                        ongoingPake = kumpulanData.ongoing
-                        
-                        self.ongoingTable.reloadData()
-                        //print("p")
-                    }) { (error) in
-                        print(error.localizedDescription)
                     }
                     
+                }) { (error) in
+                    print(error.localizedDescription)
                 }
             }
             else{
                 
+                print("failed to save event with error : \(error) or access not granted")
             }
-            
-        }) { (error) in
-            print(error.localizedDescription)
         }
         
         self.ongoingTable.addSubview(self.refreshControl)
@@ -294,7 +308,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
 
         let delete = UITableViewRowAction(style: .destructive, title: "Un-Enroll") { (action, indexPath) in
             // delete item at indexPath
-
+            //let event:EKEvent = EKEvent(eventStore: self.eventStore)
             let userID = Auth.auth().currentUser?.uid
             let ref = Database.database().reference(fromURL: "https://bvent-alpha-1.firebaseio.com/")
             let groupRef = ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId)
@@ -318,6 +332,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                 attendeesRef.removeValue()
                                 ongoingPake.remove(at: indexPath.row)
                                 tableView.deleteRows(at: [indexPath], with: .fade)
+                                //self.deleteEntry(event: event)
                             } else {
                                 let ac = UIAlertController(title: "Authentication failed", message: "Sorry!", preferredStyle: .alert)
                                 ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -407,14 +422,13 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+//    func deleteEntry(event : EKEvent){
+//        do{
+//            try eventStore.remove(event, span: EKSpan.thisEvent, commit: true)
+//        }catch{
+//            print("Error while deleting event: \(error.localizedDescription)")
+//        }
+//    }
+    
     
 }

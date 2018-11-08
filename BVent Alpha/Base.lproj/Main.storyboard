@@ -90,7 +90,7 @@
                                     <color key="titleColor" red="0.91764705879999997" green="0.94509803920000002" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <segue destination="A8T-o7-U9W" kind="show" id="IWi-l9-90m"/>
+                                    <segue destination="8uy-i5-iXb" kind="show" id="MOH-kZ-JFI"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s6s-Fv-dQI">
@@ -350,7 +350,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="A8T-o7-U9W" kind="show" identifier="SignIn" id="Ko7-rb-8Rl"/>
+                                    <segue destination="8uy-i5-iXb" kind="show" id="Jfq-Q3-Kqw"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -3589,7 +3589,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile pic" translatesAutoresizingMaskIntoConstraints="NO" id="Ps0-vS-pQ6" customClass="RoundedImageView" customModule="QuickChat" customModuleProvider="target">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile pic" translatesAutoresizingMaskIntoConstraints="NO" id="Ps0-vS-pQ6" customClass="RoundedImageView" customModule="BVent_Alpha" customModuleProvider="target">
                                                     <rect key="frame" x="10" y="15" width="50" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="50" id="HFd-Z2-6Uq"/>
@@ -3763,7 +3763,7 @@
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile pic" translatesAutoresizingMaskIntoConstraints="NO" id="PyU-bJ-gVF" customClass="RoundedImageView" customModule="QuickChat" customModuleProvider="target">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile pic" translatesAutoresizingMaskIntoConstraints="NO" id="PyU-bJ-gVF" customClass="RoundedImageView" customModule="BVent_Alpha" customModuleProvider="target">
                                                 <rect key="frame" x="12" y="18" width="96" height="96"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <constraints>
@@ -4320,8 +4320,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="NSd-m2-pXK"/>
-        <segue reference="Ko7-rb-8Rl"/>
-        <segue reference="e9P-2v-a0p"/>
-        <segue reference="tDa-ic-kcx"/>
+        <segue reference="MOH-kZ-JFI"/>
+        <segue reference="A17-Mi-QoJ"/>
     </inferredMetricsTieBreakers>
 </document>

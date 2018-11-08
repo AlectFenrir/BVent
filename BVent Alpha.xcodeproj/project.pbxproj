@@ -19,6 +19,7 @@
 		2C1D743320B83DD0008850A9 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D743220B83DD0008850A9 /* Post.swift */; };
 		2C1D743520B84459008850A9 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D743420B84459008850A9 /* ImageService.swift */; };
 		2C3A8A5D20E4FA030084D056 /* myProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3A8A5C20E4FA030084D056 /* myProfile.swift */; };
+		2C3F7F0621940572000A7F87 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C3F7F0521940572000A7F87 /* MapKit.framework */; };
 		2C4072C520AA9E6C003CC93E /* SAT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072C320AA9E6B003CC93E /* SAT.swift */; };
 		2C4072C620AA9E6C003CC93E /* dataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072C420AA9E6C003CC93E /* dataBase.swift */; };
 		2C4072CC20AA9F06003CC93E /* chooseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072C820AA9F05003CC93E /* chooseCollectionViewCell.swift */; };
@@ -111,6 +112,7 @@
 		2C1D743220B83DD0008850A9 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		2C1D743420B84459008850A9 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		2C3A8A5C20E4FA030084D056 /* myProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myProfile.swift; sourceTree = "<group>"; };
+		2C3F7F0521940572000A7F87 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2C4072C320AA9E6B003CC93E /* SAT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAT.swift; sourceTree = "<group>"; };
 		2C4072C420AA9E6C003CC93E /* dataBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dataBase.swift; sourceTree = "<group>"; };
 		2C4072C820AA9F05003CC93E /* chooseCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chooseCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		2C64FC8120BBFDA100EE16DB /* signUpTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUpTest.swift; sourceTree = "<group>"; };
 		2C64FC8320BBFE0300EE16DB /* RoundedWhiteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedWhiteButton.swift; sourceTree = "<group>"; };
 		2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperExtension.swift; sourceTree = "<group>"; };
+		2C65CED121948A3000A84118 /* BVent Alpha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BVent Alpha.entitlements"; sourceTree = "<group>"; };
 		2C9B037720AC488000467158 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		2C9B037920B2A3C600467158 /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		2CA8B8F7219068D700CFD8CF /* bookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bookmarkViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +195,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C3F7F0621940572000A7F87 /* MapKit.framework in Frameworks */,
 				18F40C341F70D4F0442FC8D7 /* Pods_BVent_Alpha.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,6 +247,8 @@
 				2C4072FF20AAA081003CC93E /* ongoingTableViewCell.swift */,
 				2C4072FB20AAA080003CC93E /* ongoingViewController.swift */,
 				2C40730020AAA081003CC93E /* oongoingTableViewController.swift */,
+				5FFB7868210CDF40005ED749 /* QRGenViewController.swift */,
+				5FFB7866210CD5A0005ED749 /* eTicketViewController.swift */,
 			);
 			path = "Ongoing Event";
 			sourceTree = "<group>";
@@ -273,6 +279,9 @@
 		2C4072D920AA9F97003CC93E /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2C4072FE20AAA080003CC93E /* catTableViewCell.swift */,
+				2C4072FD20AAA080003CC93E /* catViewController.swift */,
+				2C4072FC20AAA080003CC93E /* postEventViewController.swift */,
 				2C4072DB20AA9FA9003CC93E /* rumahCollectionViewCell.swift */,
 				2C4072DC20AA9FA9003CC93E /* rumahTableViewCell.swift */,
 				2C4072DA20AA9FA9003CC93E /* rumahViewController.swift */,
@@ -363,17 +372,12 @@
 		2CC16C0220A1869A000205FE /* BVent Alpha */ = {
 			isa = PBXGroup;
 			children = (
+				2C65CED121948A3000A84118 /* BVent Alpha.entitlements */,
 				2C40730720AAA3A6003CC93E /* GoogleService-Info.plist */,
 				2CC16C0720A1869B000205FE /* Main.storyboard */,
 				2CA8B91A2192F46000CFD8CF /* newMessage.wav */,
 				2CC16C0D20A1869B000205FE /* Assets.xcassets */,
-				5FFB7868210CDF40005ED749 /* QRGenViewController.swift */,
-				5FFB7866210CD5A0005ED749 /* eTicketViewController.swift */,
 				2CC16C0320A1869A000205FE /* AppDelegate.swift */,
-				2C9B037720AC488000467158 /* AlertController.swift */,
-				2C4072FE20AAA080003CC93E /* catTableViewCell.swift */,
-				2C4072FD20AAA080003CC93E /* catViewController.swift */,
-				2C4072FC20AAA080003CC93E /* postEventViewController.swift */,
 				2CC16C1220A1869B000205FE /* Info.plist */,
 				2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */,
 				2C1D743020B8357F008850A9 /* Offline Database */,
@@ -389,6 +393,7 @@
 				2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */,
 				2C64FC8320BBFE0300EE16DB /* RoundedWhiteButton.swift */,
 				2CA8B9082192AEC900CFD8CF /* LandingViewController.swift */,
+				2C9B037720AC488000467158 /* AlertController.swift */,
 			);
 			path = "BVent Alpha";
 			sourceTree = "<group>";
@@ -414,6 +419,7 @@
 		444C625DC9503F53D71F6FF3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2C3F7F0521940572000A7F87 /* MapKit.framework */,
 				81F1405C6BDFABA93CC66078 /* Pods_BVent_Alpha.framework */,
 				BAE1C6569E1EF8B6AF161DB5 /* Pods_BVent_AlphaTests.framework */,
 				467CA9F08550422F27C0C427 /* Pods_BVent_AlphaUITests.framework */,
@@ -506,6 +512,17 @@
 				TargetAttributes = {
 					2CC16BFF20A1869A000205FE = {
 						CreatedOnToolsVersion = 9.3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					2CC16C1620A1869B000205FE = {
 						CreatedOnToolsVersion = 9.3;

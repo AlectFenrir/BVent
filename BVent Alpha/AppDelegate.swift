@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import UserNotifications
 
 //let primaryColor = UIColor(red: 210/255, green: 109/255, blue: 180/255, alpha: 1)
 //let secondaryColor = UIColor(red: 52/255, green: 148/255, blue: 230/255, alpha: 1)
@@ -21,86 +22,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
-        //        let defaults = UserDefaults.standard
-        //        let signIn = defaults.bool(forKey: "signIn")
-        //        let skip = defaults.bool(forKey: "skip")
-        //        let doneChooseInterest = defaults.bool(forKey: "doneChooseInterest")
-        //        let signUp = defaults.bool(forKey: "signUp")
-        
-        //        if signUp
-        //        {
-        //            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //
-        //            let nextView: UIViewController = mainStoryboard.instantiateViewController(withIdentifier: "chooseInterest")
-        //
-        //            window?.rootViewController = nextView
-        //        }
-        //
-        //        if signIn
-        //        {
-        //            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //
-        //            let nextView: UITabBarController = mainStoryboard.instantiateViewController(withIdentifier: "main") as! UITabBarController
-        //
-        //            window?.rootViewController = nextView
-        //
-        //        }
-        //        if skip
-        //        {
-        //            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //
-        //            let nextView: UITabBarController = mainStoryboard.instantiateViewController(withIdentifier: "main") as! UITabBarController
-        //
-        //            window?.rootViewController = nextView
-        //        }
-        //
-        //        else if doneChooseInterest
-        //        {
-        //            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        //
-        //            let nextView: UITabBarController = mainStoryboard.instantiateViewController(withIdentifier: "main") as! UITabBarController
-        //
-        //            window?.rootViewController = nextView
-        //        }
-        //
-        //        else {
-        //            UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
-        //            UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.red
-        //        }
-        
         FirebaseApp.configure()
         
         Database.database().isPersistenceEnabled = true
         
-//        UINavigationBar.appearance().setBackgroundImage(UIImage(named: "navigation")!.resizableImage(withCapInsets: UIEdgeInsetsMake(0, 0, 0, 0), resizingMode: .stretch), for: .default)
-        //UINavigationBar.appearance().isTranslucent = false
-        
-//        let authListener = Auth.auth().addStateDidChangeListener { auth, user in
-//
-//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//
-//            if user != nil {
-//
-//                UserService.observeUserProfile(user!.uid) { userProfile in
-//                    UserService.currentUserProfile = userProfile
-//                }
-//                //
-//                let controller = storyboard.instantiateViewController(withIdentifier: "main") as! UITabBarController
-//                self.window?.rootViewController = controller
-//                self.window?.makeKeyAndVisible()
-//            } else {
-//
-//                UserService.currentUserProfile = nil
-//
-//                // Welcome screen
-//                let controller = storyboard.instantiateViewController(withIdentifier: "welcomeViewController") as! welcomeViewController
-//                self.window?.rootViewController = controller
-//                self.window?.makeKeyAndVisible()
-//            }
-//        }
+        registerForRemoteNotification()
         
         return true
+    }
+    
+    func registerForRemoteNotification() {
+        if #available(iOS 10.0, *) {
+            let center  = UNUserNotificationCenter.current()
+            center.delegate = self as? UNUserNotificationCenterDelegate
+            center.requestAuthorization(options: [.sound, .alert, .badge]) { (granted, error) in
+                if error == nil{
+                    DispatchQueue.main.async(execute: {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    })
+                }
+            }
+        }
+        else {
+            UIApplication.shared.registerUserNotificationSettings(UIUserNotificationSettings(types: [.sound, .alert, .badge], categories: nil))
+            UIApplication.shared.registerForRemoteNotifications()
+        }
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

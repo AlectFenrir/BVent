@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import LocalAuthentication
+import EventKit
 
 class detail1ViewController: UIViewController {
     
@@ -62,7 +63,7 @@ class detail1ViewController: UIViewController {
     
     var userLempar: User!
     
-    
+    let eventStore: EKEventStore = EKEventStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -197,6 +198,44 @@ class detail1ViewController: UIViewController {
                                     
                                     alert.addAction(action)
                                     self.present(alert, animated: true, completion: nil)
+                                    
+                                    self.eventStore.requestAccess(to: .event) { (granted, error) in
+                                        
+                                        if (granted) && (error == nil) {
+                                            print("granted \(granted)")
+                                            print("error \(error)")
+                                            
+                                            let event:EKEvent = EKEvent(eventStore: self.eventStore)
+                                            let alarm30minutes = EKAlarm(relativeOffset: -1800)
+                                            let dateFormatter = DateFormatter()
+                                            dateFormatter.locale = Locale(identifier: "en_ID")
+                                            dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+                                            dateFormatter.timeZone = TimeZone(abbreviation: "GMT+7:00") //Current time zone
+                                            //according to date format your date string
+                                            guard let date = dateFormatter.date(from: self.pake[self.index!].date) else {
+                                                fatalError()
+                                            }
+                                            print(date)
+                                            
+                                            event.title = self.pake[self.index!].title
+                                            event.startDate = date
+                                            event.endDate = date.addingTimeInterval(7200 as TimeInterval)
+                                            event.notes = self.pake[self.index!].desc
+                                            event.location = self.pake[self.index!].location
+                                            event.addAlarm(alarm30minutes)
+                                            event.calendar = self.eventStore.defaultCalendarForNewEvents
+                                            do {
+                                                try self.eventStore.save(event, span: .thisEvent)
+                                            } catch let error as NSError {
+                                                print("failed to save event with error : \(error)")
+                                            }
+                                            print("Saved Event")
+                                        }
+                                        else{
+                                            
+                                            print("failed to save event with error : \(error) or access not granted")
+                                        }
+                                    }
                                 }
                                 
                             }
@@ -210,6 +249,42 @@ class detail1ViewController: UIViewController {
                                 
                                 alert.addAction(action)
                                 self.present(alert, animated: true, completion: nil)
+                                
+                                self.eventStore.requestAccess(to: .event) { (granted, error) in
+                                    
+                                    if (granted) && (error == nil) {
+                                        print("granted \(granted)")
+                                        print("error \(error)")
+                                        
+                                        let event:EKEvent = EKEvent(eventStore: self.eventStore)
+                                        let alarm30minutes = EKAlarm(relativeOffset: -1800)
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.locale = Locale(identifier: "en_ID")
+                                        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+                                        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+7:00") //Current time zone
+                                        //according to date format your date string
+                                        let date = dateFormatter.date(from: self.pake[self.index!].date)
+                                        print(date)
+                                        
+                                        event.title = self.pake[self.index!].title
+                                        event.startDate = date
+                                        event.endDate = date!.addingTimeInterval(7200 as TimeInterval)
+                                        event.notes = self.pake[self.index!].desc
+                                        event.location = self.pake[self.index!].location
+                                        event.addAlarm(alarm30minutes)
+                                        event.calendar = self.eventStore.defaultCalendarForNewEvents
+                                        do {
+                                            try self.eventStore.save(event, span: .thisEvent)
+                                        } catch let error as NSError {
+                                            print("failed to save event with error : \(error)")
+                                        }
+                                        print("Saved Event")
+                                    }
+                                    else{
+                                        
+                                        print("failed to save event with error : \(error) or access not granted")
+                                    }
+                                }
                             }
                             
                             //let username = value?["username"] as? String ?? ""
@@ -360,21 +435,16 @@ class detail1ViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier{

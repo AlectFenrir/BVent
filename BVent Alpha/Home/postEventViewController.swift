@@ -123,6 +123,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     func createDatePicker(){
         
         datePicker.datePickerMode = .dateAndTime
+        datePicker.locale = NSLocale.init(localeIdentifier: "en_ID") as Locale
         eventDateField.inputView = datePicker
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
@@ -178,7 +179,9 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     
     @objc func doneClicked() {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm:ss"
+        dateFormatter.locale = Locale(identifier: "en_ID")
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT+7:00")
         //eventDateField.text = dateFormatter.string(from: datePicker.date)
         //self.view.endEditing(true)
         tanggal = "\(dateFormatter.string(from: datePicker.date))"

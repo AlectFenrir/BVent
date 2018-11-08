@@ -46,10 +46,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.contentInset.bottom = self.barHeight
         self.tableView.scrollIndicatorInsets.bottom = self.barHeight
         self.navigationItem.title = self.currentUser?.fullname
-        self.navigationItem.setHidesBackButton(true, animated: false)
-        let icon = UIImage.init(named: "back")?.withRenderingMode(.alwaysOriginal)
-        let backButton = UIBarButtonItem.init(image: icon!, style: .plain, target: self, action: #selector(self.dismissSelf))
-        self.navigationItem.leftBarButtonItem = backButton
+        self.tabBarController?.tabBar.isHidden = true
+//        self.navigationItem.setHidesBackButton(true, animated: false)
+//        let icon = UIImage.init(named: "back")?.withRenderingMode(.alwaysOriginal)
+//        let backButton = UIBarButtonItem.init(image: icon!, style: .plain, target: self, action: #selector(self.dismissSelf))
+//        self.navigationItem.leftBarButtonItem = backButton
         self.locationManager.delegate = self
     }
     
@@ -292,6 +293,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     //MARK: ViewController lifecycle
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.navigationController?.navigationBar.barTintColor = .blue
+//    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.inputBar.backgroundColor = UIColor.clear

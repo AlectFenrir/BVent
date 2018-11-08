@@ -98,7 +98,11 @@ class editProfileViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func logOut(_ sender: UIBarButtonItem) {
-        try! Auth.auth().signOut()
+        User.logOutUser { (status) in
+            if status == true {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
