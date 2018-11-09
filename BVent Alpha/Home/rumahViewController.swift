@@ -43,7 +43,6 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         return refreshControl
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
