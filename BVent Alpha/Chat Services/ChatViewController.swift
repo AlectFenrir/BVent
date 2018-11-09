@@ -10,8 +10,9 @@ import UIKit
 import Photos
 import Firebase
 import CoreLocation
+import MapKit
 
-class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,  UINavigationControllerDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate,  UINavigationControllerDelegate, UIImagePickerControllerDelegate, CLLocationManagerDelegate,  UIScrollViewDelegate {
     
     //MARK: Properties
     
@@ -19,6 +20,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputTextField: UITextField!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet var previewView: UIView!
+    @IBOutlet weak var previewImageView: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet var mapPreviewView: UIView!
+    @IBOutlet weak var mapVIew: MKMapView!
     
     override var inputAccessoryView: UIView? {
         get {
@@ -36,6 +42,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     let barHeight: CGFloat = 50
     var currentUser: User?
     var canSendLocation = true
+    var topAnchorContraint: NSLayoutConstraint!
+    let darkView = UIView.init()
     
     
     //MARK: Methods
@@ -52,6 +60,46 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 //        let backButton = UIBarButtonItem.init(image: icon!, style: .plain, target: self, action: #selector(self.dismissSelf))
 //        self.navigationItem.leftBarButtonItem = backButton
         self.locationManager.delegate = self
+        
+        self.view.addSubview(self.darkView)
+        self.darkView.backgroundColor = UIColor.black
+        self.darkView.alpha = 0
+        self.darkView.translatesAutoresizingMaskIntoConstraints = false
+        self.darkView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        self.darkView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        self.darkView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        self.darkView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        self.darkView.isHidden = true
+        //ContainerView customization
+        let extraViewsContainer = UIView.init()
+        extraViewsContainer.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(extraViewsContainer)
+        self.topAnchorContraint = NSLayoutConstraint.init(item: extraViewsContainer, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 1000)
+        self.topAnchorContraint.isActive = true
+        extraViewsContainer.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        extraViewsContainer.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        extraViewsContainer.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 1).isActive = true
+        extraViewsContainer.backgroundColor = UIColor.clear
+        //PreviewView Customization
+        extraViewsContainer.addSubview(self.previewView)
+        self.previewView.isHidden = true
+        self.previewView.translatesAutoresizingMaskIntoConstraints = false
+        self.previewView.leadingAnchor.constraint(equalTo: extraViewsContainer.leadingAnchor).isActive = true
+        self.previewView.topAnchor.constraint(equalTo: extraViewsContainer.topAnchor).isActive = true
+        self.previewView.trailingAnchor.constraint(equalTo: extraViewsContainer.trailingAnchor).isActive = true
+        self.previewView.bottomAnchor.constraint(equalTo: extraViewsContainer.bottomAnchor).isActive = true
+        self.scrollView.minimumZoomScale = 1.0
+        self.scrollView.maximumZoomScale = 3.0
+        //MapPreView Customization
+        extraViewsContainer.addSubview(self.mapPreviewView)
+        self.mapPreviewView.isHidden = true
+        self.mapPreviewView.translatesAutoresizingMaskIntoConstraints = false
+        self.mapPreviewView.leadingAnchor.constraint(equalTo: extraViewsContainer.leadingAnchor).isActive = true
+        self.mapPreviewView.topAnchor.constraint(equalTo: extraViewsContainer.topAnchor).isActive = true
+        self.mapPreviewView.trailingAnchor.constraint(equalTo: extraViewsContainer.trailingAnchor).isActive = true
+        self.mapPreviewView.bottomAnchor.constraint(equalTo: extraViewsContainer.bottomAnchor).isActive = true
+        //NotificationCenter for showing extra views
+        NotificationCenter.default.addObserver(self, selector: #selector(self.showExtraViews(notification:)), name: NSNotification.Name(rawValue: "showExtraView"), object: nil)
     }
     
     //Downloads messages
@@ -253,6 +301,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
                 let info = ["viewType" : ShowExtraView.preview, "pic": photo] as [String : Any]
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showExtraView"), object: nil, userInfo: info)
                 self.inputAccessoryView?.isHidden = true
+                self.navigationController?.navigationBar.isHidden = true
             }
         case .location:
             let coordinates = (self.items[indexPath.row].content as! String).components(separatedBy: ":")
@@ -260,6 +309,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             let info = ["viewType" : ShowExtraView.map, "location": location] as [String : Any]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "showExtraView"), object: nil, userInfo: info)
             self.inputAccessoryView?.isHidden = true
+            self.navigationController?.navigationBar.isHidden = true
         default: break
         }
     }
@@ -292,6 +342,87 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    func dismissExtraViews() {
+        self.topAnchorContraint.constant = 1000
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+            self.view.layoutIfNeeded()
+            self.darkView.alpha = 0
+            self.view.transform = CGAffineTransform.identity
+        }, completion:  { (true) in
+            self.darkView.isHidden = true
+            self.previewView.isHidden = true
+            self.mapPreviewView.isHidden = true
+            self.mapVIew.removeAnnotations(self.mapVIew.annotations)
+            //let vc = self.childViewControllers.last
+            //vc?.inputAccessoryView?.isHidden = false
+            self.inputAccessoryView?.isHidden = false
+            self.navigationController?.navigationBar.isHidden = false
+        })
+    }
+    
+    //Show extra view
+    @objc func showExtraViews(notification: NSNotification)  {
+        let transform = CGAffineTransform.init(scaleX: 0.94, y: 0.94)
+        self.topAnchorContraint.constant = 0
+        self.darkView.isHidden = false
+        if let type = notification.userInfo?["viewType"] as? ShowExtraView {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                self.view.layoutIfNeeded()
+                self.darkView.alpha = 0.8
+                if (type == .contacts || type == .profile) {
+                    self.view.transform = transform
+                }
+            })
+            switch type {
+            case .preview:
+                self.previewView.isHidden = false
+                self.previewImageView.image = notification.userInfo?["pic"] as? UIImage
+                self.scrollView.contentSize = self.previewImageView.frame.size
+            case .map:
+                self.mapPreviewView.isHidden = false
+                let coordinate = notification.userInfo?["location"] as? CLLocationCoordinate2D
+                let annotation = MKPointAnnotation.init()
+                annotation.coordinate = coordinate!
+                self.mapVIew.addAnnotation(annotation)
+                self.mapVIew.showAnnotations(self.mapVIew.annotations, animated: false)
+            case .contacts:
+                self.previewView.isHidden = false
+                self.scrollView.contentSize = self.previewImageView.frame.size
+            case .profile:
+                self.previewView.isHidden = false
+                self.scrollView.contentSize = self.previewImageView.frame.size
+            }
+        }
+    }
+    
+    //Preview view scrollview's zoom calculation
+    func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+        var zoomRect = CGRect.zero
+        zoomRect.size.height = self.previewImageView.frame.size.height / scale
+        zoomRect.size.width  = self.previewImageView.frame.size.width  / scale
+        let newCenter = self.previewImageView.convert(center, from: self.scrollView)
+        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
+        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
+        return zoomRect
+    }
+    
+    @IBAction func doubleTapGesture(_ sender: UITapGestureRecognizer) {
+        if self.scrollView.zoomScale == 1 {
+            self.scrollView.zoom(to: zoomRectForScale(scale: self.scrollView.maximumZoomScale, center: sender.location(in: sender.view)), animated: true)
+        } else {
+            self.scrollView.setZoomScale(1, animated: true)
+        }
+    }
+    
+    
+    @IBAction func closeView(_ sender: Any) {
+        self.dismissExtraViews()
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.previewImageView
+    }
+    
     //MARK: ViewController lifecycle
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
@@ -315,6 +446,10 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         self.customization()
         self.fetchData()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        self.view.transform = CGAffineTransform.identity
     }
 }
 
