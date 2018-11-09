@@ -181,7 +181,7 @@ class detail6ViewController: UIViewController {
                             point = point + self.pake.sat
                             print(point)
                             
-                            self.ref.child("users").child("regular").child(userID!).child("profile").updateChildValues(["SAT": point])
+                            self.ref.child("users").child("regular").child(userID!).child("profile").updateChildValues(["SAT": String(point)])
                             
                             let action1 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
                             
