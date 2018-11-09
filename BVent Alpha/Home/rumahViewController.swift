@@ -51,6 +51,8 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         pake.removeAll()
         
+        kumpulanData.datas.removeAll()
+        
         ref = Database.database().reference()
         ref.keepSynced(true)
         
