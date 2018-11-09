@@ -17,10 +17,11 @@ class User: NSObject {
     let email: String
     let phoneNumber: String
     let id: String
+    var SAT: String
     var profilePic: UIImage
     
     //MARK: Methods
-    class func registerUser(withName: String, email: String, phoneNumber: String, password: String, profilePic: UIImage, completion: @escaping (Bool) -> Swift.Void) {
+    class func registerUser(withName: String, email: String, phoneNumber: String, password: String, profilePic: UIImage, SAT: String, completion: @escaping (Bool) -> Swift.Void) {
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
                 //user?.sendEmailVerification(completion: nil)
@@ -29,7 +30,7 @@ class User: NSObject {
                 storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
                     if err == nil {
                         let path = metadata?.downloadURL()?.absoluteString
-                        let values = ["fullname": withName, "email": email, "phoneNumber": phoneNumber, "photoURL": path!]
+                        let values = ["fullname": withName, "email": email, "phoneNumber": phoneNumber, "photoURL": path!, "SAT": SAT]
                         Database.database().reference().child("users").child("regular").child((user?.uid)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
                             if errr == nil {
                                 let userInfo = ["email" : email, "password" : password]
@@ -56,6 +57,22 @@ class User: NSObject {
                 completion(false)
             }
         })
+        
+        var ref: DatabaseReference!
+        
+        ref = Database.database().reference()
+        
+        let userId = Auth.auth().currentUser?.uid
+        
+        ref.child("users").child("regular").child(userId!).child("profile").observeSingleEvent(of: .value, with: {(snapshot) in
+            let snapshot = snapshot.value as! [String: AnyObject]
+            
+            point = snapshot["SAT"] as! Int
+            
+            
+        })
+        
+        
     }
     
     class func logOutUser(completion: @escaping (Bool) -> Swift.Void) {
@@ -74,11 +91,12 @@ class User: NSObject {
                 let fullname = data["fullname"]!
                 let email = data["email"]!
                 let phoneNumber = data["phoneNumber"]!
+                let SAT = data["SAT"]!
                 let link = URL.init(string: data["photoURL"]!)
                 URLSession.shared.dataTask(with: link!, completionHandler: { (data, response, error) in
                     if error == nil {
                         let profilePic = UIImage.init(data: data!)
-                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: forUserID, profilePic: profilePic!)
+                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: forUserID, profilePic: profilePic!, SAT: SAT )
                         completion(user)
                     }
                 }).resume()
@@ -95,11 +113,12 @@ class User: NSObject {
                 let fullname = credentials["fullname"]!
                 let email = credentials["email"]!
                 let phoneNumber = credentials["phoneNumber"]!
+                let SAT = credentials["SAT"]
                 let link = URL.init(string: credentials["photoURL"]!)
                 URLSession.shared.dataTask(with: link!, completionHandler: { (data, response, error) in
                     if error == nil {
                         let profilePic = UIImage.init(data: data!)
-                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!)
+                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!, SAT: SAT!)
                         completion(user)
                     }
                 }).resume()
@@ -116,11 +135,12 @@ class User: NSObject {
     
     
     //MARK: Inits
-    init(fullname: String, email: String, phoneNumber: String, id: String, profilePic: UIImage) {
+    init(fullname: String, email: String, phoneNumber: String, id: String, profilePic: UIImage, SAT: String) {
         self.fullname = fullname
         self.email = email
         self.phoneNumber = phoneNumber
         self.id = id
         self.profilePic = profilePic
+        self.SAT = SAT
     }
 }

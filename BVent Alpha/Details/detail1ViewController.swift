@@ -417,12 +417,13 @@ class detail1ViewController: UIViewController {
             let fullname = credentials["fullname"]!
             let email = credentials["email"]!
             let phoneNumber = credentials["phoneNumber"]!
+            let SAT = credentials["SAT"]
             let link = URL.init(string: credentials["photoURL"]!)
             
             ImageService.getImage(withURL: link!) {(image) in
                 
                 let profilePic = image
-                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!)
+                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!, SAT: SAT!)
                 self.userLempar = user
                 
                 if (userID != self.posterId) {

@@ -84,6 +84,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         
         val = false
         kumpulanData.eTicket.removeAll()
+        eTicketPake.removeAll()
         
         ref = Database.database().reference()
         //storageRef = Storage.storage().reference()
@@ -98,6 +99,9 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
             self.accountName.text = snapshot["fullname"] as? String
             //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String
             //self.accountEmail.text = snapshot["email"] as? String
+            
+            let satPoint = snapshot["SAT"]!
+            self.SATPoint.text = "Your SAT Point Is: \(satPoint) from \(remainPoint)"
             
             let databaseProfilePic = snapshot["photoURL"] as! String
             
@@ -123,59 +127,9 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         btn.layer.borderWidth = 0.25
         btn.layer.borderColor = UIColor.black.cgColor
         
-        ref.child("users").child("regular").child(userID!).child("enroll").observe(.value, with: { (snapshot2) in
-            // Get user value
-            let value2 = snapshot2.value as? NSDictionary
-
-            if (snapshot2.exists()){
-
-                for postId in (value2?.allKeys)!{
-
-                    self.ref.child("posts").child(postId as! String).observe(.value, with: { (snapshot3) in
-                        // Get user value
-                        let value3 = snapshot3.value as? NSDictionary
-
-                        kumpulanData.eTicket.append(kumpulanData(benefit: value3?["benefit"] as? String ?? "",
-                                                                 bookmark: value3?["bookmark"] as? Bool ?? false,
-                                                                 category: value3?["category"] as? String ?? "",
-                                                                 certification: value3?["certification"] as? Bool ?? false,
-                                                                 confirmCode: value3?["confirmCode"] as? String ?? "",
-                                                                 cp: value3?["cp"] as? String ?? "",
-                                                                 date: value3?["date"] as? String ?? "",
-                                                                 desc: value3?["desc"] as? String ?? "",
-                                                                 done: value3?["done"] as? Bool ?? false,
-                                                                 enroll: value3?["enroll"] as? Bool ?? false,
-                                                                 location: value3?["location"] as? String ?? "",
-                                                                 price: value3?["price"] as? String ?? "",
-                                                                 sat: value3?["sat"] as? Int ?? 0,
-                                                                 time: value3?["time"] as? String ?? "",
-                                                                 title: value3?["title"] as? String ?? "",
-                                                                 timestamp: value3?["timestamp"] as? String ?? "",
-                                                                 poster: value3?["poster"] as? String ?? "",
-                                                                 imageUrl: value3?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot3.key))
-
-                        eTicketPake = kumpulanData.eTicket
-
-                        self.eTicketCellController.reloadData()
-                        //print("p")
-                    }) { (error) in
-                        print(error.localizedDescription)
-                    }
-
-                }
-            }
-            else{
-
-            }
-
-        }) { (error) in
-            print(error.localizedDescription)
-        }
+        self.eTicketCellController.reloadData()
         
         self.view.addSubview(tableView)
-        
-        SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
         
         //himaBinus.image = UIImage(named: "calendar")
         
@@ -186,6 +140,11 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        
+        self.eTicketCellController.reloadData()
+        
+        //kumpulanData.eTicket.removeAll()
+        //eTicketPake.removeAll()
     }
     
     //var users: [NSManagedObject] = []
@@ -209,90 +168,11 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         ref.keepSynced(true)
         
         //self.loggedInUser = Auth.auth().currentUser
-        let userID = Auth.auth().currentUser?.uid
-        
-        ref.child("users").child("regular").child(userID!).child("profile").queryLimited(toLast: 10).observe(.value, with: { (snapshot) in
-            let snapshot = snapshot.value as! [String: AnyObject]
-            self.accountName.text = snapshot["fullname"] as? String
-            //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String
-            //self.accountEmail.text = snapshot["email"] as? String
-            
-            let databaseProfilePic = snapshot["photoURL"] as! String
-            
-            self.myProfileImageLoader.startAnimating()
-            self.myProfileImageLoader.color = UIColor.white
-            
-            let url = URL(string: databaseProfilePic)
-            
-            ImageService.getImage(withURL: url!) { (image) in
-                self.setProfilePicture(self.accountProfilePicture, imageToSet: image!)
-                
-                self.myProfileImageLoader.stopAnimating()
-                self.myProfileImageLoader.hidesWhenStopped = true
-            }
-            
-            //            let data = try? Data(contentsOf: URL(string: databaseProfilePic)!)
-            //
-            //            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
-        })
-        
+
         btn.layer.cornerRadius = 7
         btn.clipsToBounds = true
         btn.layer.borderWidth = 0.25
         btn.layer.borderColor = UIColor.black.cgColor
-        
-        ref.child("users").child("regular").child(userID!).child("enroll").observe(.value, with: { (snapshot2) in
-            // Get user value
-            let value2 = snapshot2.value as? NSDictionary
-            
-            if (snapshot2.exists()){
-                
-                for postId in (value2?.allKeys)!{
-                    
-                    self.ref.child("posts").child(postId as! String).observe(.value, with: { (snapshot3) in
-                        // Get user value
-                        let value3 = snapshot3.value as? NSDictionary
-                        
-                        kumpulanData.eTicket.append(kumpulanData(benefit: value3?["benefit"] as? String ?? "",
-                                                                 bookmark: value3?["bookmark"] as? Bool ?? false,
-                                                                 category: value3?["category"] as? String ?? "",
-                                                                 certification: value3?["certification"] as? Bool ?? false,
-                                                                 confirmCode: value3?["confirmCode"] as? String ?? "",
-                                                                 cp: value3?["cp"] as? String ?? "",
-                                                                 date: value3?["date"] as? String ?? "",
-                                                                 desc: value3?["desc"] as? String ?? "",
-                                                                 done: value3?["done"] as? Bool ?? false,
-                                                                 enroll: value3?["enroll"] as? Bool ?? false,
-                                                                 location: value3?["location"] as? String ?? "",
-                                                                 price: value3?["price"] as? String ?? "",
-                                                                 sat: value3?["sat"] as? Int ?? 0,
-                                                                 time: value3?["time"] as? String ?? "",
-                                                                 title: value3?["title"] as? String ?? "",
-                                                                 timestamp: value3?["timestamp"] as? String ?? "",
-                                                                 poster: value3?["poster"] as? String ?? "",
-                                                                 imageUrl: value3?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot3.key))
-                        
-                        eTicketPake = kumpulanData.eTicket
-                        
-                        self.dispatchDelay(delay: 1.0) {
-                            self.tableView.reloadData()
-                            self.refreshControl.endRefreshing()
-                        }
-                        //print("p")
-                    }) { (error) in
-                        print(error.localizedDescription)
-                    }
-                    
-                }
-            }
-            else{
-                self.refreshControl.endRefreshing()
-            }
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
         
         
         SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
@@ -308,7 +188,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return eTicketPake.count
+        return ongoingPake.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -316,7 +196,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 
         cell.eTicketImageLoader.startAnimating()
 
-        let url = URL(string: eTicketPake[indexPath.row].imageUrl)
+        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in
             cell.eTicketImage.image = image
 
@@ -333,8 +213,30 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 //        print("synced!")
         print("!")
         
-        postId = eTicketPake[indexPath.row].postId
-        performSegue(withIdentifier: "eTicketDetails", sender: nil)
+        postId = ongoingPake[indexPath.row].postId
+        
+        let userID = Auth.auth().currentUser?.uid
+        ref = Database.database().reference()
+        ref.keepSynced(true)
+        ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            self.val = (snapshot.value as? Bool)!
+            
+            print(snapshot)
+            
+            if (self.val == false){
+                self.failed()
+            }
+            else{
+                self.postId = ongoingPake[indexPath.row].postId
+                self.success()
+            }
+            
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -348,6 +250,18 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 
     }
     
+    func failed(){
+        let alert = UIAlertController(title: "This Event is Done Already!", message: nil, preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func success(){
+        performSegue(withIdentifier: "eTicketDetails", sender: nil)
+    }
     
     @IBAction func message(_ sender: Any) {
         self.performSegue(withIdentifier: "My Conversations", sender: nil)

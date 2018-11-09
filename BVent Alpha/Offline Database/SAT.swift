@@ -8,7 +8,7 @@
 
 import Foundation
 
-var point: Int = 0
+var point = 0
 var data: [kumpulanData] = kumpulanData.datas
 var pake: [kumpulanData] = []
 var myPostPake: [kumpulanData] = []
