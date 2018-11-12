@@ -26,8 +26,13 @@ struct kumpulanData {
     var timestamp: String
     var poster: String
     var imageUrl: String
+    var postId: String
     
     static var datas : [kumpulanData] = []
+    static var myPosts : [kumpulanData] = []
+    static var ongoing : [kumpulanData] = []
+    static var bookmark : [kumpulanData] = []
+    static var eTicket: [kumpulanData] = []
     
     static func fetch()-> [kumpulanData]{
         //        var ft: [kumpulanData] = []

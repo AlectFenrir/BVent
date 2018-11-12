@@ -10,20 +10,22 @@ import UIKit
 
 class bookmarkTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var foot: UIImageView!
-    @IBOutlet weak var judul: UILabel!
-    @IBOutlet weak var benefit: UILabel!
-    @IBOutlet weak var price: UILabel!
-    @IBOutlet weak var cDown: UILabel!
-    @IBOutlet weak var poster: UILabel!
+    @IBOutlet weak var bookmarkPhoto: UIImageView!
+    @IBOutlet weak var bookmarkTitle: UILabel!
+    @IBOutlet weak var bookMarkBenefit: UILabel!
+    @IBOutlet weak var bookmarkPrice: UILabel!
+    @IBOutlet weak var bookmarkTime: UILabel!
+    @IBOutlet weak var bookmarkPoster: UILabel!
+    @IBOutlet weak var bookmarkImageLoader: UIActivityIndicatorView!
+    
     
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
         
-        foot.layer.cornerRadius = 5
-        foot.layer.masksToBounds = true
+        bookmarkPhoto.layer.cornerRadius = 5
+        bookmarkPhoto.layer.masksToBounds = true
         
     }
     

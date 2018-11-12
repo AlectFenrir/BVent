@@ -10,8 +10,9 @@ import UIKit
 import CoreData
 import Firebase
 
-class myProfileViewController: UIViewController {
+class myProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    @IBOutlet weak var myProfileScrollView: UIScrollView!
     @IBOutlet weak var himaBinus: UIImageView!
     @IBOutlet weak var himaBinusButton: UIButton!
     @IBOutlet weak var accountName: UILabel!
@@ -19,12 +20,55 @@ class myProfileViewController: UIViewController {
     @IBOutlet weak var accountEmail: UILabel!
     @IBOutlet weak var accountPhoneNumber: UILabel!
     @IBOutlet weak var accountProfilePicture: UIImageView!
+    @IBOutlet weak var myProfileImageLoader: UIActivityIndicatorView!
     
-    var loggedInUser: AnyObject?
+    @IBOutlet weak var eTicketCellController: UICollectionView!
+    
+    @IBAction func imageTapped(_ sender: UITapGestureRecognizer) {
+        let imageView = sender.view as! UIImageView
+        let newImageView = UIImageView(image: imageView.image)
+        newImageView.frame = UIScreen.main.bounds
+        newImageView.backgroundColor = .black
+        newImageView.contentMode = .scaleAspectFit
+        newImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage))
+        newImageView.addGestureRecognizer(tap)
+        self.view.addSubview(newImageView)
+        self.navigationController?.isNavigationBarHidden = true
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+        sender.view?.removeFromSuperview()
+    }
+    
+    var tableView = UITableView()
+    lazy var refreshControl: UIRefreshControl = {
+        tableView.frame = view.frame
+        
+        let refreshControl = UIRefreshControl()
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributedTitle = NSAttributedString(string: "Fetching My Profile Data", attributes: attributes)
+        
+        refreshControl.addTarget(self, action: #selector(myProfileViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        tableView.addSubview(refreshControl)
+        refreshControl.tintColor = UIColor.gray
+        refreshControl.attributedTitle = attributedTitle
+        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
+        
+        return refreshControl
+    }()
+    
+    //var loggedInUser: AnyObject?
     //var databaseRef = Database.database().reference()
     //var storageRef = Storage.storage().reference()
-    var databaseRef: DatabaseReference!
+    var ref: DatabaseReference!
     var storageRef: StorageReference!
+    
+    var postId: String = ""
+    var val: Bool = false
     
     @IBOutlet weak var btn: UIButton!
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -38,23 +82,44 @@ class myProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        databaseRef = Database.database().reference()
-        storageRef = Storage.storage().reference()
+        val = false
+        kumpulanData.eTicket.removeAll()
+        eTicketPake.removeAll()
         
-        self.loggedInUser = Auth.auth().currentUser
+        ref = Database.database().reference()
+        //storageRef = Storage.storage().reference()
         
-        self.databaseRef.child("users").child("regular").child(self.loggedInUser!.uid).child("profile").observe(.value, with: { (snapshot) in
+        ref.keepSynced(true)
+        
+        //self.loggedInUser = Auth.auth().currentUser
+        let userID = Auth.auth().currentUser?.uid
+        
+        ref.child("users").child("regular").child(userID!).child("profile").queryLimited(toLast: 10).observe(.value, with: { (snapshot) in
             let snapshot = snapshot.value as! [String: AnyObject]
             self.accountName.text = snapshot["fullname"] as? String
             //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String
             //self.accountEmail.text = snapshot["email"] as? String
             
-            let databaseProfilePic = snapshot["photoURL"]
-                as! String
+            let satPoint = snapshot["SAT"]!
+            self.SATPoint.text = "Your SAT Point Is: \(satPoint) from \(remainPoint)"
             
-            let data = try? Data(contentsOf: URL(string: databaseProfilePic)!)
+            let databaseProfilePic = snapshot["photoURL"] as! String
             
-            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
+            self.myProfileImageLoader.startAnimating()
+            self.myProfileImageLoader.color = UIColor.white
+            
+            let url = URL(string: databaseProfilePic)
+            
+            ImageService.getImage(withURL: url!) { (image) in
+                self.setProfilePicture(self.accountProfilePicture, imageToSet: image!)
+                
+                self.myProfileImageLoader.stopAnimating()
+                self.myProfileImageLoader.hidesWhenStopped = true
+            }
+            
+//            let data = try? Data(contentsOf: URL(string: databaseProfilePic)!)
+//
+//            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
         })
         
         btn.layer.cornerRadius = 7
@@ -62,29 +127,9 @@ class myProfileViewController: UIViewController {
         btn.layer.borderWidth = 0.25
         btn.layer.borderColor = UIColor.black.cgColor
         
-        //fetchData()
+        self.eTicketCellController.reloadData()
         
-        //fetchUserProfile()
-        
-        //fetchUserData()
-        
-        //fetchUserDataCustom()
-        
-        //fetchUserInfoTesting()
-        
-        //fetchCurrentUserInfo()
-        
-        //set(user: <#T##UserProfile#>)
-        
-        //        accountName.text = user[0].fullname
-        //
-        //        accountPhoneNumber.text = user[0].phoneNumber
-        //
-        //        accountEmail.text = user[0].userEmail
-        
-        
-        
-        SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
+        self.view.addSubview(tableView)
         
         //himaBinus.image = UIImage(named: "calendar")
         
@@ -92,13 +137,18 @@ class myProfileViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    //var users: [NSManagedObject] = []
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
         
-        //fetchData()
+        self.eTicketCellController.reloadData()
+        
+        //kumpulanData.eTicket.removeAll()
+        //eTicketPake.removeAll()
     }
+    
+    //var users: [NSManagedObject] = []
+    
     
     internal func setProfilePicture(_ imageView:UIImageView,imageToSet:UIImage)
     {
@@ -108,22 +158,113 @@ class myProfileViewController: UIViewController {
         imageView.image = imageToSet
     }
     
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        val = false
+        kumpulanData.eTicket.removeAll()
+        
+        ref = Database.database().reference()
+        //storageRef = Storage.storage().reference()
+        
+        ref.keepSynced(true)
+        
+        //self.loggedInUser = Auth.auth().currentUser
+
+        btn.layer.cornerRadius = 7
+        btn.clipsToBounds = true
+        btn.layer.borderWidth = 0.25
+        btn.layer.borderColor = UIColor.black.cgColor
+        
+        
+        SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
+    }
+    
+    func dispatchDelay(delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return ongoingPake.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = eTicketCellController.dequeueReusableCell(withReuseIdentifier: "ticketCell", for: indexPath) as! eTicketCollectionViewCell
+
+        cell.eTicketImageLoader.startAnimating()
+
+        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
+        ImageService.getImage(withURL: url!) { (image) in
+            cell.eTicketImage.image = image
+
+            cell.eTicketImageLoader.stopAnimating()
+            cell.eTicketImageLoader.hidesWhenStopped = true
+        }
+
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        ref.keepSynced(true)
+//
+//        print("synced!")
+        print("!")
+        
+        postId = ongoingPake[indexPath.row].postId
+        
+        let userID = Auth.auth().currentUser?.uid
+        ref = Database.database().reference()
+        ref.keepSynced(true)
+        ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            self.val = (snapshot.value as? Bool)!
+            
+            print(snapshot)
+            
+            if (self.val == false){
+                self.failed()
+            }
+            else{
+                self.postId = ongoingPake[indexPath.row].postId
+                self.success()
+            }
+            
+            // ...
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier{
+            if identifier == "eTicketDetails"{
+                let destination = segue.destination as! detail6ViewController
+                print("2")
+                destination.postId = postId
+            }
+        }
+
+    }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    func failed(){
+        let alert = UIAlertController(title: "This Event is Done Already!", message: nil, preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func success(){
+        performSegue(withIdentifier: "eTicketDetails", sender: nil)
+    }
+    
+    @IBAction func message(_ sender: Any) {
+        self.performSegue(withIdentifier: "My Conversations", sender: nil)
+    }
     
 }

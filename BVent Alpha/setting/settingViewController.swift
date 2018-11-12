@@ -60,8 +60,11 @@ class settingViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func signOut(_ sender: UIButton) {
-        try! Auth.auth().signOut()
+        User.logOutUser { (status) in
+            if status == true {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
-    
     
 }

@@ -7,20 +7,21 @@
 //
 
 import UIKit
+import Foundation
 import CoreData
 import Firebase
 
-class rumahViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource {
+class rumahViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate {
+    
     
     //var temp: [ambilData] = []
-    var ref: DatabaseReference?
+    var ref: DatabaseReference!
     var databaseHandle: DatabaseHandle?
     var loggedInUser: AnyObject?
     var loggedInUserData: NSDictionary?
+    var storageRef: StorageReference?
     
     @IBOutlet weak var table2: UITableView!
-    
-    //@IBOutlet weak var collection1: UICollectionView!
     
     let main = ["All", "Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
     
@@ -28,16 +29,34 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     var lempar: String? = ""
     var index: Int?
-    //var posts = [Post]()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
+        let attributedTitle = NSAttributedString(string: "Fetching Event Data", attributes: attributes)
+        
+        refreshControl.addTarget(self, action: #selector(rumahViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        refreshControl.tintColor = UIColor.gray
+        refreshControl.attributedTitle = attributedTitle
+        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
+        
+        return refreshControl
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         table2.dataSource = self
         
-        //pake = data
+        pake.removeAll()
+        
+        kumpulanData.datas.removeAll()
         
         ref = Database.database().reference()
+        ref.keepSynced(true)
+        
+        //let postsImageRef = storageRef?.child("posts")
+        //self.postsRef.keepSynced(true)
         
 //        self.loggedInUser = Auth.auth().currentUser
 //
@@ -45,51 +64,93 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
 //
 //            self.loggedInUserData = snapshot.value as? NSDictionary
         
-            self.databaseHandle = self.ref?.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
+        self.databaseHandle = self.ref.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
             
-                let fetch = snapshot.value as? [String:Any]
+                let value = snapshot.value as? [String:Any]
             
-                print(fetch)
+                let temp = ambilData(fetch: value!)
             
-                let temp = ambilData(fetch: fetch!)
-            
-            //kumpulanData.datas.removeAll()
-            
-//            kumpulanData.datas.append(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, imageUrl: temp.imageUrl))
-            
-                kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl), at: 0)
-            
-            //            ft.append(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc:
-            //                temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title,imageUrl: temp.imageUrl))
-            //
-            
-            //kumpulanData.datas = kumpulanData.datas.reversed()
+            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
+                
+                self.loggedInUser = Auth.auth().currentUser
+                
+                if temp.poster == self.loggedInUser?.uid{
+                self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+                    
+                }
             
                 pake = kumpulanData.datas
-            
-            //pake = pake.reversed()
-            
-                print(pake.count)
-            
+                //pake.sort(by: {$0.date > $1.date})
+                
                 self.table2.reloadData()
-            
-            //print("1")
-            
-            //print(self.pake[0].category)
-            
-            //}
         }
         
-        //        var data: [kumpulanData] = kumpulanData.datas
-        //
-        //        var pake: [kumpulanData] = []
-        
-//        collection1?.backgroundColor = .clear
-//        collection1?.contentInset = UIEdgeInsets(top: 10, left: 18, bottom: 10, right: 18)
-        
-        // Do any additional setup after loading the view.
+        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
+        {
+            registerForPreviewing(with: self, sourceView: table2)
+            
+        }
+        //self.table2.addSubview(self.refreshControl)
         
     }
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        pake.removeAll()
+        
+        ref = Database.database().reference()
+        ref.keepSynced(true)
+        
+        ref.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
+            
+            let value = snapshot.value as? [String:Any]
+            
+            let temp = ambilData(fetch: value!)
+            
+            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
+            
+            self.loggedInUser = Auth.auth().currentUser
+            
+            if temp.poster == self.loggedInUser!.uid{
+                self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+                
+            }
+            
+            pake = kumpulanData.datas
+            //pake.sort(by: {$0.date > $1.date})
+            
+            self.dispatchDelay(delay: 2.0) {
+                self.table2.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
+    
+    func dispatchDelay(delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay, execute: closure)
+    }
+    
+    func detailViewController(for index: Int) -> detail1ViewController {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "detail1ViewController") as? detail1ViewController else {
+            fatalError("Couldn't load detail view controller")
+        }
+        
+        vc.index = index
+        return vc
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let indexPath = table2.indexPathForRow(at: location) {
+            previewingContext.sourceRect = table2.rectForRow(at: indexPath)
+            return detailViewController(for: indexPath.row)
+        }
+        
+        return nil
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        navigationController?.pushViewController(viewControllerToCommit, animated: true)
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -123,28 +184,29 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        //        if tableView == table2{
-        //
-        //        }
+
         return 125
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return pake.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = table2.dequeueReusableCell(withIdentifier: "rumahCell2", for: indexPath) as! rumahTableViewCell
         
+        cell.homeImageLoader.startAnimating()
+        
         let url = URL(string: pake[indexPath.row].imageUrl)
-        
-        let dataImage = try? Data(contentsOf: url!)
-        
-        if let imageData = dataImage {
-            cell.foto.image = UIImage(data: imageData)
+        ImageService.getImage(withURL: url!) { (image) in
+        cell.foto.image = image
+            
+            cell.homeImageLoader.stopAnimating()
+            cell.homeImageLoader.hidesWhenStopped = true
+            
         }
-        
-        //cell.foto.image = pake[indexPath.row].image
         
         cell.judul.text = pake[indexPath.row].title
         
@@ -177,7 +239,11 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         cell.location.text = pake[indexPath.row].location
         
-        cell.poster.text = "poster"
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E, d MMM"
+        guard let dateInShow = pake[indexPath.row].date.date else {return cell}
+        cell.poster.text = formatter.string(from: dateInShow)
         
         //cell.configure(poster: self.loggedInUserData!["fullname"] as! String)
         
@@ -240,5 +306,15 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 destination.index = index
             }
         }
+    }
+}
+
+
+extension String{
+    var date : Date?{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "id_ID")
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        return dateFormatter.date(from: self)
     }
 }

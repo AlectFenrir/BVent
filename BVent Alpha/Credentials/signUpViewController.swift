@@ -22,82 +22,13 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var tapToChangeProfileButton: UIButton!
     
-    var imagePicker: UIImagePickerController!
+    @IBOutlet weak var darkView: UIView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
-    @IBAction func signUp(_ sender: UIButton) {
-        
-        guard let fullname = fullNameField.text else { return }
-        guard let email = emailField.text else { return }
-        guard let pass = passwordField.text else { return }
-        guard let image = profileImageView.image else { return }
-        guard let phoneNumber = phoneNumberField.text else { return }
-        
-        Auth.auth().createUser(withEmail: email, password: pass)
-        {
-            user, error in
-            if error == nil && user != nil
-            {
-                print("User created!")
-                
-                self.uploadProfileImage(image)
-                { url in
-                    
-                    if url != nil
-                    {
-                        let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-                        changeRequest?.displayName = fullname
-                        changeRequest?.photoURL = url
-                        
-                        changeRequest?.commitChanges { error in
-                            if error == nil
-                            {
-                                print("User display name changed!")
-                                
-                                self.saveProfile(fullname: fullname, phoneNumber: phoneNumber, email: email, profileImageURL: url!)
-                                { success in
-                                    
-                                    if success
-                                    {
-                                        self.dismiss(animated: true, completion: nil)
-                                        
-                                        //                                        let defaults = UserDefaults.standard
-                                        //                                        defaults.setValue(true, forKey: "signUp")
-                                        //                                        defaults.synchronize()
-                                        //
-                                        //
-                                        //                                        let nextView: UIViewController = (self.storyboard?.instantiateViewController(withIdentifier: "chooseInterest"))!
-                                        //
-                                        //                                        let appdelegate = UIApplication.shared.delegate as! AppDelegate
-                                        //
-                                        //                                        appdelegate.window!.rootViewController = nextView
-                                    }
-                                    else
-                                    {
-                                        self.resetForm()
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                print("Error: \(error!.localizedDescription)")
-                                self.resetForm()
-                            }
-                        }
-                    }
-                    else
-                    {
-                        self.resetForm()
-                    }
-                }
-            }
-            else
-            {
-                print("User already exist!: \(error!.localizedDescription)")
-                self.resetForm()
-            }
-        }
-    }
-    //var users: [NSManagedObject] = []
+    var imagePicker: UIImagePickerController!
+    @IBOutlet var inputFields: [UITextField]!
+    //var waringLabels = "Wrong Input Password"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,6 +63,56 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
         imagePicker.delegate = self
         
     }
+    
+    func showLoading(state: Bool)  {
+        if state {
+            self.darkView.isHidden = false
+            self.spinner.startAnimating()
+            UIView.animate(withDuration: 0.3, animations: {
+                self.darkView.alpha = 0.5
+            })
+        } else {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.darkView.alpha = 0
+            }, completion: { _ in
+                self.spinner.stopAnimating()
+                self.darkView.isHidden = true
+            })
+        }
+    }
+    
+    func pushTomainView() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
+        self.show(vc, sender: nil)
+    }
+    
+    @IBAction func signUp(_ sender: UIButton) {
+        
+        for item in self.inputFields {
+            item.resignFirstResponder()
+        }
+        self.showLoading(state: true)
+        User.registerUser(withName: self.fullNameField.text!, email: self.emailField.text!, phoneNumber: phoneNumberField.text!, password: self.passwordField.text!, profilePic: self.profileImageView.image!, SAT: "0") { [weak weakSelf = self] (status) in
+            DispatchQueue.main.async {
+                weakSelf?.showLoading(state: false)
+                for item in self.inputFields {
+                    item.text = ""
+                }
+                if status == true {
+                    weakSelf?.pushTomainView()
+                    weakSelf?.profileImageView.image = UIImage.init(named: "ava3")
+                } else {
+                    self.resetForm()
+                    print("Wrong Input Password!")
+//                    for item in (weakSelf?.waringLabels)! {
+//                        item.isHidden = false
+//                    }
+                }
+            }
+        }
+    }
+    //var users: [NSManagedObject] = []
+    
     
     @objc func openImagePicker(_ sender:Any) {
         // Open Image Picker
@@ -255,7 +236,6 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
             completion(error == nil)
         }
     }
-    
     
 }
 
