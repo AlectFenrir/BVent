@@ -34,7 +34,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
         //self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedStringKey.font: navigationTitleFont, NSAttributedStringKey.foregroundColor: UIColor.blue]
         // notification setup
         NotificationCenter.default.addObserver(self, selector: #selector(self.pushToUserMesssages(notification:)), name: NSNotification.Name(rawValue: "showUserMessages"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.showEmailAlert), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(self.showEmailAlert), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
         self.tabBarController?.tabBar.isHidden = true
         //right bar button
 //        let icon = UIImage.init(named: "compose")?.withRenderingMode(.alwaysOriginal)
@@ -180,7 +180,7 @@ class ConversationViewController: UIViewController, UITableViewDelegate, UITable
                 cell.messageLabel.font = UIFont(name:"AvenirNext-DemiBold", size: 14.0)
                 cell.timeLabel.font = UIFont(name:"AvenirNext-DemiBold", size: 13.0)
                 cell.profilePic.layer.borderColor = GlobalVariables.blue.cgColor
-                cell.messageLabel.textColor = GlobalVariables.purple
+                cell.messageLabel.textColor = GlobalVariables.blue
             }
             return cell
         }
