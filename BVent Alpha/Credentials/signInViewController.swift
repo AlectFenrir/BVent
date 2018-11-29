@@ -12,25 +12,36 @@ import Firebase
 import FirebaseAuth
 
 class signInViewController: UIViewController, UITextFieldDelegate {
+    
     @IBOutlet weak var emailField2: UITextField!
     @IBOutlet weak var passwordField2: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet var inputFields: [UITextField]!
-    @IBOutlet weak var darkView: UIView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    //@IBOutlet weak var darkView: UIView!
+    //@IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    var signInActivityIndicator: UIActivityIndicatorView!
+    let loadingTextLabel = UILabel()
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     var imageFileName: String!
     
+    let notificationCenter = NotificationCenter.default
+    
     @IBAction func signIn(_ sender: UIButton) {
+        signInActivityIndicator.isHidden = false
+        signInActivityIndicator.startAnimating()
+        
+        loadingTextLabel.isHidden = false
         
         for item in self.inputFields {
             item.resignFirstResponder()
         }
-        self.showLoading(state: true)
+        //self.showLoading(state: true)
         User.loginUser(withEmail: self.emailField2.text!, password: self.passwordField2.text!) { [weak weakSelf = self](status) in
             DispatchQueue.main.async {
-                weakSelf?.showLoading(state: false)
+                //weakSelf?.showLoading(state: false)
                 for item in self.inputFields {
                     item.text = ""
                 }
@@ -43,6 +54,9 @@ class signInViewController: UIViewController, UITextFieldDelegate {
 //                    }
                 }
                 weakSelf = nil
+                self.signInActivityIndicator.stopAnimating()
+                self.signInActivityIndicator.isHidden = true
+                self.loadingTextLabel.isHidden = true
             }
         }
         
@@ -90,22 +104,22 @@ class signInViewController: UIViewController, UITextFieldDelegate {
         //newPoint.point = 0
     }
     
-    func showLoading(state: Bool)  {
-        if state {
-            self.darkView.isHidden = false
-            self.spinner.startAnimating()
-            UIView.animate(withDuration: 0.3, animations: {
-                self.darkView.alpha = 0.5
-            })
-        } else {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.darkView.alpha = 0
-            }, completion: { _ in
-                self.spinner.stopAnimating()
-                self.darkView.isHidden = true
-            })
-        }
-    }
+//    func showLoading(state: Bool)  {
+//        if state {
+//            self.darkView.isHidden = false
+//            self.spinner.startAnimating()
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.darkView.alpha = 0.5
+//            })
+//        } else {
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.darkView.alpha = 0
+//            }, completion: { _ in
+//                self.spinner.stopAnimating()
+//                self.darkView.isHidden = true
+//            })
+//        }
+//    }
     
     func pushTomainView() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
@@ -149,6 +163,21 @@ class signInViewController: UIViewController, UITextFieldDelegate {
     //    }
     
     override func viewDidLoad() {
+        signInActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        signInActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        signInActivityIndicator.hidesWhenStopped = true
+        signInActivityIndicator.isHidden = true
+        signInActivityIndicator.center = view.center
+        self.view.addSubview(signInActivityIndicator)
+        
+        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.text = "Signing In"
+        loadingTextLabel.font = UIFont(name: "Avenir Light", size: 20)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: signInActivityIndicator.center.x, y: signInActivityIndicator.center.y + 30)
+        loadingTextLabel.isHidden = true
+        self.view.addSubview(loadingTextLabel)
+        
         super.viewDidLoad()
         
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -160,13 +189,35 @@ class signInViewController: UIViewController, UITextFieldDelegate {
         emailField2.keyboardType = UIKeyboardType.emailAddress
         passwordField2.keyboardType = UIKeyboardType.alphabet
         
+        emailField2.underlined()
+        passwordField2.underlined()
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
         view.addGestureRecognizer(tapGesture)
+        
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
         //signIn().layer.cornerRadius = 7
         //signIn().layer.masksToBounds = true
         
         // Do any additional setup after loading the view.
+    }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        let userInfo = notification.userInfo!
+        
+        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+        
+        if notification.name == NSNotification.Name.UIKeyboardWillHide {
+            scrollView.contentInset = UIEdgeInsets.zero
+        } else {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+        }
+        
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

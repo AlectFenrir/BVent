@@ -25,6 +25,11 @@ class ImageService {
                 cache.setObject(downloadedImage!, forKey: url.absoluteString as NSString)
             }
             
+//            else if downloadedImage == nil{
+//                let placeholderImage = UIImage(named: "noun_34476.png")
+//                cache.setObject(placeholderImage!, forKey: url.absoluteString as NSString)
+//            }
+            
             DispatchQueue.main.async {
                 completion(downloadedImage)
             }

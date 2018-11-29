@@ -51,7 +51,6 @@
 		2C40730520AAA081003CC93E /* ongoingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072FF20AAA081003CC93E /* ongoingTableViewCell.swift */; };
 		2C40730620AAA081003CC93E /* oongoingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C40730020AAA081003CC93E /* oongoingTableViewController.swift */; };
 		2C40730820AAA3A6003CC93E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C40730720AAA3A6003CC93E /* GoogleService-Info.plist */; };
-		2C64FC8220BBFDA100EE16DB /* signUpTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C64FC8120BBFDA100EE16DB /* signUpTest.swift */; };
 		2C64FC8420BBFE0300EE16DB /* RoundedWhiteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C64FC8320BBFE0300EE16DB /* RoundedWhiteButton.swift */; };
 		2C64FC8620BBFF1C00EE16DB /* HelperExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */; };
 		2C9B037820AC488000467158 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B037720AC488000467158 /* AlertController.swift */; };
@@ -144,7 +143,6 @@
 		2C4072FF20AAA081003CC93E /* ongoingTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ongoingTableViewCell.swift; sourceTree = "<group>"; };
 		2C40730020AAA081003CC93E /* oongoingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = oongoingTableViewController.swift; sourceTree = "<group>"; };
 		2C40730720AAA3A6003CC93E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		2C64FC8120BBFDA100EE16DB /* signUpTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = signUpTest.swift; sourceTree = "<group>"; };
 		2C64FC8320BBFE0300EE16DB /* RoundedWhiteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedWhiteButton.swift; sourceTree = "<group>"; };
 		2C64FC8520BBFF1C00EE16DB /* HelperExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperExtension.swift; sourceTree = "<group>"; };
 		2C65CED121948A3000A84118 /* BVent Alpha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BVent Alpha.entitlements"; sourceTree = "<group>"; };
@@ -271,7 +269,6 @@
 				2C4072D120AA9F88003CC93E /* forgotPasswordViewController.swift */,
 				2C4072D320AA9F88003CC93E /* signInViewController.swift */,
 				2C4072D220AA9F88003CC93E /* signUpViewController.swift */,
-				2C64FC8120BBFDA100EE16DB /* signUpTest.swift */,
 			);
 			path = Credentials;
 			sourceTree = "<group>";
@@ -683,7 +680,6 @@
 				2CA8B90F2192C9DA00CFD8CF /* SenderTableViewCell.swift in Sources */,
 				2CA8B9022191FD2700CFD8CF /* Message.swift in Sources */,
 				2CA8B90B2192BDDE00CFD8CF /* ChatViewController.swift in Sources */,
-				2C64FC8220BBFDA100EE16DB /* signUpTest.swift in Sources */,
 				2C40730220AAA081003CC93E /* postEventViewController.swift in Sources */,
 				2C4072F520AAA055003CC93E /* detail5ViewController.swift in Sources */,
 				2CA8B9092192AEC900CFD8CF /* LandingViewController.swift in Sources */,

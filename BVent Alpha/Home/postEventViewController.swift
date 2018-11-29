@@ -52,6 +52,14 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
         postActivityIndicator.center = view.center
         self.view.addSubview(postActivityIndicator)
         
+        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.text = "Posting"
+        loadingTextLabel.font = UIFont(name: "Avenir Light", size: 20)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: postActivityIndicator.center.x, y: postActivityIndicator.center.y + 30)
+        loadingTextLabel.isHidden = true
+        self.view.addSubview(loadingTextLabel)
+        
         super.viewDidLoad()
         
         createCategoryPicker()
@@ -226,16 +234,10 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     //    }
     
     @IBAction func eventPost(_ sender: UIButton) {
-        
         postActivityIndicator.isHidden = false
         postActivityIndicator.startAnimating()
         
-        loadingTextLabel.textColor = UIColor.black
-        loadingTextLabel.text = "Posting"
-        loadingTextLabel.font = UIFont(name: "Avenir Light", size: 20)
-        loadingTextLabel.sizeToFit()
-        loadingTextLabel.center = CGPoint(x: postActivityIndicator.center.x, y: postActivityIndicator.center.y + 30)
-        self.view.addSubview(loadingTextLabel)
+        loadingTextLabel.isHidden = false
         
         ref = Database.database().reference()
         self.loggedInUser = Auth.auth().currentUser
@@ -269,6 +271,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
                 print("Post Success!")
                 self.postActivityIndicator.stopAnimating()
                 self.postActivityIndicator.isHidden = true
+                self.loadingTextLabel.isHidden = true
                 _ = self.navigationController?.popViewController(animated: true)
             }
         }

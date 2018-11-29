@@ -61,11 +61,10 @@ class User: NSObject {
                 let userId = Auth.auth().currentUser?.uid
                 
                 ref.child("users").child("regular").child(userId!).child("profile").observeSingleEvent(of: .value, with: {(snapshot) in
-                    let snapshot = snapshot.value as! [String: Any]
-                    
-                    let tmp = snapshot["SAT"] as! String
-                    point = Int(tmp) ?? 0
-                    
+                    if let snapshot = snapshot.value as? [String:Any] {
+                        let tmp = snapshot["SAT"] as! String
+                        point = Int(tmp) ?? 0
+                    }
                     
                 })
                 
