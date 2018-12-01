@@ -639,6 +639,9 @@
                                                         <color key="value" red="0.40784313729999999" green="0.56078431370000004" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="resetPassword:" destination="7IQ-AR-akd" eventType="touchUpInside" id="do4-np-CVc"/>
+                                                </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tvc-ug-U4L">
                                                 <rect key="frame" x="0.0" y="394" width="343" height="32"/>

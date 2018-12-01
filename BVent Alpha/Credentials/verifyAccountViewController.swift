@@ -17,6 +17,20 @@ class verifyAccountViewController: UIViewController {
     let loadingTextLabel = UILabel()
 
     override func viewDidLoad() {
+        verifyAccountActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        verifyAccountActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        verifyAccountActivityIndicator.hidesWhenStopped = true
+        verifyAccountActivityIndicator.isHidden = true
+        verifyAccountActivityIndicator.center = view.center
+        self.view.addSubview(verifyAccountActivityIndicator)
+        
+        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.text = "Verifying"
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 20)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: verifyAccountActivityIndicator.center.x, y: verifyAccountActivityIndicator.center.y + 30)
+        loadingTextLabel.isHidden = true
+        self.view.addSubview(loadingTextLabel)
         
         super.viewDidLoad()
         
@@ -34,6 +48,11 @@ class verifyAccountViewController: UIViewController {
     }
 
     @IBAction func verifiedButton(_ sender: Any) {
+        verifyAccountActivityIndicator.isHidden = false
+        verifyAccountActivityIndicator.startAnimating()
+        
+        loadingTextLabel.isHidden = false
+        
         User.checkUserVerification { (status) in
             if status == true {
                 self.pushTomainView()

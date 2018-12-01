@@ -172,7 +172,7 @@ class signInViewController: UIViewController, UITextFieldDelegate {
         
         loadingTextLabel.textColor = UIColor.black
         loadingTextLabel.text = "Signing In"
-        loadingTextLabel.font = UIFont(name: "Avenir Light", size: 20)
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 20)
         loadingTextLabel.sizeToFit()
         loadingTextLabel.center = CGPoint(x: signInActivityIndicator.center.x, y: signInActivityIndicator.center.y + 30)
         loadingTextLabel.isHidden = true
