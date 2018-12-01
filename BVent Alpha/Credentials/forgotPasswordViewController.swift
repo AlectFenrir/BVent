@@ -47,18 +47,19 @@ class forgotPasswordViewController: UIViewController, UITextFieldDelegate {
     }
     
     override func viewDidLoad() {
-        resetNowActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        resetNowActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         resetNowActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        resetNowActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
         resetNowActivityIndicator.hidesWhenStopped = true
         resetNowActivityIndicator.isHidden = true
         resetNowActivityIndicator.center = view.center
         self.view.addSubview(resetNowActivityIndicator)
         
-        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.textColor = UIColor.white
         loadingTextLabel.text = "Resetting"
-        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 20)
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 30)
         loadingTextLabel.sizeToFit()
-        loadingTextLabel.center = CGPoint(x: resetNowActivityIndicator.center.x, y: resetNowActivityIndicator.center.y + 30)
+        loadingTextLabel.center = CGPoint(x: resetNowActivityIndicator.center.x, y: resetNowActivityIndicator.center.y + 40)
         loadingTextLabel.isHidden = true
         self.view.addSubview(loadingTextLabel)
         

@@ -163,18 +163,19 @@ class signInViewController: UIViewController, UITextFieldDelegate {
     //    }
     
     override func viewDidLoad() {
-        signInActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        signInActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         signInActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        signInActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
         signInActivityIndicator.hidesWhenStopped = true
         signInActivityIndicator.isHidden = true
         signInActivityIndicator.center = view.center
         self.view.addSubview(signInActivityIndicator)
         
-        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.textColor = UIColor.white
         loadingTextLabel.text = "Signing In"
-        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 20)
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 30)
         loadingTextLabel.sizeToFit()
-        loadingTextLabel.center = CGPoint(x: signInActivityIndicator.center.x, y: signInActivityIndicator.center.y + 30)
+        loadingTextLabel.center = CGPoint(x: signInActivityIndicator.center.x, y: signInActivityIndicator.center.y + 40)
         loadingTextLabel.isHidden = true
         self.view.addSubview(loadingTextLabel)
         

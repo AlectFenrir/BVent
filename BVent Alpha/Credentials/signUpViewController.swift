@@ -32,18 +32,19 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
     let notificationCenter = NotificationCenter.default
     
     override func viewDidLoad() {
-        signUpActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        signUpActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         signUpActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        resetNowActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
         signUpActivityIndicator.hidesWhenStopped = true
         signUpActivityIndicator.isHidden = true
         signUpActivityIndicator.center = view.center
         self.view.addSubview(signUpActivityIndicator)
         
-        loadingTextLabel.textColor = UIColor.black
+        loadingTextLabel.textColor = UIColor.white
         loadingTextLabel.text = "Signing Up"
-        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 20)
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 30)
         loadingTextLabel.sizeToFit()
-        loadingTextLabel.center = CGPoint(x: signUpActivityIndicator.center.x, y: signUpActivityIndicator.center.y + 30)
+        loadingTextLabel.center = CGPoint(x: signUpActivityIndicator.center.x, y: signUpActivityIndicator.center.y + 40)
         loadingTextLabel.isHidden = true
         self.view.addSubview(loadingTextLabel)
         
