@@ -124,8 +124,8 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
 //        }
 //    }
     
-    func pushTomainView() {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
+    func pushToVerifyView() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "verifyAccountViewController") as! UIViewController
         self.show(vc, sender: nil)
     }
     
@@ -146,7 +146,7 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
                     item.text = ""
                 }
                 if status == true {
-                    weakSelf?.pushTomainView()
+                    weakSelf?.pushToVerifyView()
                     //weakSelf?.profileImageView.image = UIImage.init(named: "ava3")
                 } else {
                     self.resetForm()

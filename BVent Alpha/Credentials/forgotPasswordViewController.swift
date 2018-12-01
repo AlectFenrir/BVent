@@ -7,30 +7,45 @@
 //
 
 import UIKit
+import Foundation
+import Firebase
 
 class forgotPasswordViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailField3: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var sender: UIButton!
-    @IBAction func send(_ sender: UIButton) {
-    }
-    
+    var resetNowActivityIndicator: UIActivityIndicatorView!
+    let loadingTextLabel = UILabel()
+    let notificationCenter = NotificationCenter.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
         emailField3.delegate = self
-        
         emailField3.keyboardType = UIKeyboardType.emailAddress
+        emailField3.underlined()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
         view.addGestureRecognizer(tapGesture)
         
-        sender.layer.cornerRadius = 7
-        sender.layer.masksToBounds = true
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        let userInfo = notification.userInfo!
         
-        // Do any additional setup after loading the view.
+        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+        
+        if notification.name == NSNotification.Name.UIKeyboardWillHide {
+            scrollView.contentInset = UIEdgeInsets.zero
+        } else {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+        }
+        
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

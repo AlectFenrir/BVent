@@ -14,6 +14,7 @@
 		2798A9C82188519E00F9923B /* myPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798A9C72188519E00F9923B /* myPostViewController.swift */; };
 		2798A9CA218851B800F9923B /* myPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2798A9C9218851B800F9923B /* myPostTableViewCell.swift */; };
 		27C373B420DC94C20096AE28 /* fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C373B320DC94C20096AE28 /* fetch.swift */; };
+		2C00CCDA21B273F000DFEFA8 /* verifyAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C00CCD921B273F000DFEFA8 /* verifyAccountViewController.swift */; };
 		2C1D742D20B80914008850A9 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D742C20B80914008850A9 /* UserService.swift */; };
 		2C1D742F20B80AC0008850A9 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D742E20B80AC0008850A9 /* UserProfile.swift */; };
 		2C1D743320B83DD0008850A9 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D743220B83DD0008850A9 /* Post.swift */; };
@@ -106,6 +107,7 @@
 		2798A9C72188519E00F9923B /* myPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPostViewController.swift; sourceTree = "<group>"; };
 		2798A9C9218851B800F9923B /* myPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myPostTableViewCell.swift; sourceTree = "<group>"; };
 		27C373B320DC94C20096AE28 /* fetch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = fetch.swift; sourceTree = "<group>"; };
+		2C00CCD921B273F000DFEFA8 /* verifyAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = verifyAccountViewController.swift; sourceTree = "<group>"; };
 		2C1D742C20B80914008850A9 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		2C1D742E20B80AC0008850A9 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		2C1D743220B83DD0008850A9 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				2C4072D120AA9F88003CC93E /* forgotPasswordViewController.swift */,
 				2C4072D320AA9F88003CC93E /* signInViewController.swift */,
 				2C4072D220AA9F88003CC93E /* signUpViewController.swift */,
+				2C00CCD921B273F000DFEFA8 /* verifyAccountViewController.swift */,
 			);
 			path = Credentials;
 			sourceTree = "<group>";
@@ -719,6 +722,7 @@
 				2C4072C620AA9E6C003CC93E /* dataBase.swift in Sources */,
 				2CA8B91D21931AC800CFD8CF /* MyChatViewController.swift in Sources */,
 				2CA8B9042191FDF700CFD8CF /* Conversation.swift in Sources */,
+				2C00CCDA21B273F000DFEFA8 /* verifyAccountViewController.swift in Sources */,
 				2C4072EA20AAA035003CC93E /* bookmarkTableViewCell.swift in Sources */,
 				2C4072F420AAA055003CC93E /* detail2ViewController.swift in Sources */,
 				2C4072F320AAA055003CC93E /* detail4ViewController.swift in Sources */,
