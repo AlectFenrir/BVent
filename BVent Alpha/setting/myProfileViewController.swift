@@ -13,13 +13,10 @@ import Firebase
 class myProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var myProfileScrollView: UIScrollView!
-    @IBOutlet weak var himaBinus: UIImageView!
-    @IBOutlet weak var himaBinusButton: UIButton!
     @IBOutlet weak var accountName: UILabel!
-    @IBOutlet weak var SATPoint: UILabel!
-    @IBOutlet weak var accountEmail: UILabel!
-    @IBOutlet weak var accountPhoneNumber: UILabel!
+    @IBOutlet weak var accountUniversity: UILabel!
     @IBOutlet weak var accountProfilePicture: UIImageView!
+    @IBOutlet weak var accountHeaderPicture: UIImageView!
     @IBOutlet weak var myProfileImageLoader: UIActivityIndicatorView!
     
     @IBOutlet weak var eTicketCellController: UICollectionView!
@@ -97,11 +94,12 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         ref.child("users").child("regular").child(userID!).child("profile").queryLimited(toLast: 10).observe(.value, with: { (snapshot) in
             let snapshot = snapshot.value as! [String: AnyObject]
             self.accountName.text = snapshot["fullname"] as? String
+            self.accountUniversity.text = snapshot["university"] as? String
             //self.accountPhoneNumber.text = snapshot["phoneNumber"] as? String
             //self.accountEmail.text = snapshot["email"] as? String
             
             let satPoint = snapshot["SAT"]!
-            self.SATPoint.text = "Your SAT Point Is: \(satPoint) from \(remainPoint)"
+            //self.SATPoint.text = "Your SAT Point Is: \(satPoint) from \(remainPoint)"
             
             let databaseProfilePic = snapshot["photoURL"] as! String
             
@@ -122,10 +120,10 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 //            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
         })
         
-        btn.layer.cornerRadius = 7
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 0.25
-        btn.layer.borderColor = UIColor.black.cgColor
+//        btn.layer.cornerRadius = 7
+//        btn.clipsToBounds = true
+//        btn.layer.borderWidth = 0.25
+//        btn.layer.borderColor = UIColor.black.cgColor
         
         self.eTicketCellController.reloadData()
         
@@ -152,8 +150,8 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     
     internal func setProfilePicture(_ imageView:UIImageView,imageToSet:UIImage)
     {
-        imageView.layer.cornerRadius = 10.0
-        imageView.layer.borderColor = UIColor.white.cgColor
+        imageView.layer.cornerRadius = self.accountProfilePicture.frame.size.width / 2
+        imageView.layer.borderColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 1).cgColor
         imageView.layer.masksToBounds = true
         imageView.image = imageToSet
     }
@@ -175,7 +173,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         btn.layer.borderColor = UIColor.black.cgColor
         
         
-        SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
+        //SATPoint.text = "Your SAT Point Is: \(point) from \(remainPoint)"
     }
     
     func dispatchDelay(delay:Double, closure:@escaping ()->()) {

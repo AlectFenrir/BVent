@@ -11,7 +11,7 @@ import Firebase
 
 class settingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let judul = ["Account", "Bookmarks", "More"]
+    let judul = ["Edit Profile", "Help", "Feedback", "About"]
     
     @IBOutlet weak var tabel1: UITableView!
     

@@ -43,8 +43,45 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         return refreshControl
     }()
     
+    lazy var leftButton: UIBarButtonItem = {
+        let image = UIImage.init(named: "default profile")?.withRenderingMode(.alwaysOriginal)
+        let button  = UIBarButtonItem.init(image: image, style: .plain, target: self, action: #selector(rumahViewController.showProfile))
+        return button
+    }()
+    
+    func customization()  {
+        //left bar button image fetching
+        self.navigationItem.leftBarButtonItem = self.leftButton
+        //self.tableView.tableFooterView = UIView.init(frame: CGRect.zero)
+        if let id = Auth.auth().currentUser?.uid {
+            User.info(forUserID: id, completion: { [weak weakSelf = self] (user) in
+                let image = user.profilePic
+                let contentSize = CGSize.init(width: 30, height: 30)
+                UIGraphicsBeginImageContextWithOptions(contentSize, false, 0.0)
+                let _  = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.zero, size: contentSize), cornerRadius: 14).addClip()
+                image.draw(in: CGRect(origin: CGPoint.zero, size: contentSize))
+                let path = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.zero, size: contentSize), cornerRadius: 14)
+                path.lineWidth = 2
+                UIColor.white.setStroke()
+                path.stroke()
+                let finalImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!.withRenderingMode(.alwaysOriginal)
+                UIGraphicsEndImageContext()
+                DispatchQueue.main.async {
+                    weakSelf?.leftButton.image = finalImage
+                    weakSelf = nil
+                }
+            })
+        }
+    }
+    
+    @objc func showProfile() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "account") as! UIViewController
+        self.show(vc, sender: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        customization()
         
         table2.dataSource = self
         

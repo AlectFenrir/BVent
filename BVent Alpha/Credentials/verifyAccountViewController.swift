@@ -78,6 +78,9 @@ class verifyAccountViewController: UIViewController {
                     }
                 }
             }
+            self.verifyAccountActivityIndicator.stopAnimating()
+            self.verifyAccountActivityIndicator.isHidden = true
+            self.loadingTextLabel.isHidden = true
         }
     }
     

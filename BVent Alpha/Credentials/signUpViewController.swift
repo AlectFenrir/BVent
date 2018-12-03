@@ -34,7 +34,7 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         signUpActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         signUpActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-        resetNowActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
+        signUpActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
         signUpActivityIndicator.hidesWhenStopped = true
         signUpActivityIndicator.isHidden = true
         signUpActivityIndicator.center = view.center
@@ -140,7 +140,7 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
             item.resignFirstResponder()
         }
         //self.showLoading(state: true)
-        User.registerUser(withName: self.fullNameField.text!, email: self.emailField.text!, phoneNumber: "", password: self.passwordField.text!, profilePic: UIImage(named: "noun_34476")!, SAT: "0") { [weak weakSelf = self] (status) in
+        User.registerUser(withName: self.fullNameField.text!, email: self.emailField.text!, studentID: "", major: "", university: "", phoneNumber: "", password: self.passwordField.text!, profilePic: UIImage(named: "noun_34476")!, SAT: "0") { [weak weakSelf = self] (status) in
             DispatchQueue.main.async {
                 //weakSelf?.showLoading(state: false)
                 for item in self.inputFields {

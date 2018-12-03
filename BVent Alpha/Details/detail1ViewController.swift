@@ -416,6 +416,9 @@ class detail1ViewController: UIViewController {
             
             let fullname = credentials["fullname"]!
             let email = credentials["email"]!
+            let studentID = credentials["studentID"]!
+            let major = credentials["major"]!
+            let university = credentials["university"]!
             let phoneNumber = credentials["phoneNumber"]!
             let SAT = credentials["SAT"]
             let link = URL.init(string: credentials["photoURL"]!)
@@ -423,7 +426,7 @@ class detail1ViewController: UIViewController {
             ImageService.getImage(withURL: link!) {(image) in
                 
                 let profilePic = image
-                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!, SAT: SAT!)
+                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, studentID: studentID, major: major, university: university, profilePic: profilePic!, SAT: SAT!)
                 self.userLempar = user
                 
                 if (userID != self.posterId) {

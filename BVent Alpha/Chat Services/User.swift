@@ -15,13 +15,17 @@ class User: NSObject {
     //MARK: Properties
     let fullname: String
     let email: String
+    let studentID: String
+    let major: String
+    let university: String
     let phoneNumber: String
     let id: String
     var SAT: String
     var profilePic: UIImage
+    //var headerPic: UIImage
     
     //MARK: Methods
-    class func registerUser(withName: String, email: String, phoneNumber: String, password: String, profilePic: UIImage, SAT: String, completion: @escaping (Bool) -> Swift.Void) {
+    class func registerUser(withName: String, email: String, studentID: String, major: String, university: String, phoneNumber: String, password: String, profilePic: UIImage, /*headerPic: UIImage,*/ SAT: String, completion: @escaping (Bool) -> Swift.Void) {
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
                 user?.sendEmailVerification(completion: nil)
@@ -30,7 +34,7 @@ class User: NSObject {
                 storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
                     if err == nil {
                         let path = metadata?.downloadURL()?.absoluteString
-                        let values = ["fullname": withName, "email": email, "phoneNumber": phoneNumber, "photoURL": path!, "SAT": SAT]
+                        let values = ["fullname": withName, "email": email, "studentID": studentID, "major": major, "university": university, "phoneNumber": phoneNumber, "photoURL": path!, /*"headerPic": path!,*/ "SAT": SAT]
                         Database.database().reference().child("users").child("regular").child((user?.uid)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
                             if errr == nil {
                                 let userInfo = ["email" : email, "password" : password]
@@ -93,13 +97,17 @@ class User: NSObject {
             if let data = snapshot.value as? [String: String] {
                 let fullname = data["fullname"]!
                 let email = data["email"]!
+                let studentID = data["studentID"]!
+                let major = data["major"]!
+                let university = data["university"]!
                 let phoneNumber = data["phoneNumber"]!
                 let SAT = data["SAT"]!
                 let link = URL.init(string: data["photoURL"]!)
+                //let link2 = URL.init(string: data["headerPic"]!)
                 URLSession.shared.dataTask(with: link!, completionHandler: { (data, response, error) in
                     if error == nil {
                         let profilePic = UIImage.init(data: data!)
-                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: forUserID, profilePic: profilePic!, SAT: SAT )
+                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: forUserID, studentID: studentID, major: major, university: university, profilePic: profilePic!, SAT: SAT)
                         completion(user)
                     }
                 }).resume()
@@ -115,13 +123,17 @@ class User: NSObject {
             
                 let fullname = credentials["fullname"]!
                 let email = credentials["email"]!
+                let studentID = credentials["studentID"]!
+                let major = credentials["major"]!
+                let university = credentials["university"]!
                 let phoneNumber = credentials["phoneNumber"]!
                 let SAT = credentials["SAT"]
                 let link = URL.init(string: credentials["photoURL"]!)
                 URLSession.shared.dataTask(with: link!, completionHandler: { (data, response, error) in
                     if error == nil {
                         let profilePic = UIImage.init(data: data!)
-                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!, SAT: SAT!)
+                        //let headerPic = UIImage.init(data: data!)
+                        let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, studentID: studentID, major: major, university: university, profilePic: profilePic!, /*headerPic: headerPic!,*/ SAT: SAT!)
                         completion(user)
                     }
                 }).resume()
@@ -138,12 +150,16 @@ class User: NSObject {
     
     
     //MARK: Inits
-    init(fullname: String, email: String, phoneNumber: String, id: String, profilePic: UIImage, SAT: String) {
+    init(fullname: String, email: String, phoneNumber: String, id: String, studentID: String, major: String, university: String, profilePic: UIImage, /*headerPic: UIImage,*/ SAT: String) {
         self.fullname = fullname
         self.email = email
         self.phoneNumber = phoneNumber
         self.id = id
+        self.studentID = studentID
+        self.major = major
+        self.university = university
         self.profilePic = profilePic
+        //self.headerPic = headerPic
         self.SAT = SAT
     }
 }
