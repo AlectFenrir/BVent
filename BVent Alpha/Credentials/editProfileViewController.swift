@@ -215,7 +215,7 @@ class editProfileViewController: UIViewController, UITextFieldDelegate {
             
             if let new_profilePic = profileImageView.image {
                 let storageRef = Storage.storage().reference().child("users").child("regular").child(userID!).child("profileImage")
-                let imageData = UIImageJPEGRepresentation(new_profilePic, 0.25)
+                let imageData = UIImageJPEGRepresentation(new_profilePic, 0.5)
                 storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
                     if err == nil {
                         let path = metadata?.downloadURL()?.absoluteString

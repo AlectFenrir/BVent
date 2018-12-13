@@ -266,6 +266,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
                     "timestamp": "\(Date().timeIntervalSince1970)",
                     "poster": self.loggedInUser!.uid!,
                     "imageUrl": url!,
+                    "highlights": true
                     //"postId": String(self.ref!.childByAutoId().key)
                     ] as [String: Any])
                 

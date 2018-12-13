@@ -43,7 +43,7 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         self.title = category
         
-        //self.navigationController?.navigationBar.prefersLargeTitles = true
+        //self.navigationController?.navigationBar.prefersLargeTitles = false
         
         if (category != "All"){
             //print("HELLO")

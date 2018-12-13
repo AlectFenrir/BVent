@@ -220,3 +220,13 @@ extension UITextField {
         self.layer.masksToBounds = true
     }
 }
+
+extension String{
+    var date : Date?{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "id_ID")
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        return dateFormatter.date(from: self)
+    }
+}
+

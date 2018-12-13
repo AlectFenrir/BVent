@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 import Firebase
 
-class rumahViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate {
+class rumahViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIViewControllerPreviewingDelegate {
     
     
     //var temp: [ambilData] = []
@@ -22,13 +22,18 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     var storageRef: StorageReference?
     
     @IBOutlet weak var table2: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     let main = ["All", "Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
-    
     let cat = ["cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8"]
     
     var lempar: String? = ""
     var index: Int?
+    
+    fileprivate let sectionInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    var itemSize = CGSize(width: 0, height: 0)
+    var highlights: Bool = false
+    //var appStoreItems = [highlightsPake]
     
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -75,8 +80,76 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     @objc func showProfile() {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "account") as! UIViewController
-        self.show(vc, sender: nil)
+        let VC1 = self.storyboard!.instantiateViewController(withIdentifier: "account")
+        let navController = UINavigationController(rootViewController: VC1) // Creating a navigation controller with VC1 at the root of the navigation stack.
+        self.present(navController, animated:true, completion: nil)
+    }
+    
+    func fetchHighlights() {
+        automaticallyAdjustsScrollViewInsets = false
+        
+//        highlightsPake.removeAll()
+//        kumpulanData.highlights.removeAll()
+
+//        ref = Database.database().reference()
+//        ref.keepSynced(true)
+////        ref.child("posts").observeSingleEvent(of: .value, with: { (snapshot) in
+////            let value = snapshot.value as? NSDictionary
+////
+////            if (snapshot.exists()) {
+////                for highlights in (value?.allKeys(for: true))! {
+//                    ref.child("posts").observeSingleEvent(of: .value, with: { (snapshot2) in
+//                        let value2 = snapshot2.value as? NSDictionary
+//
+////                            let appStoreItem = AppStoreItem()
+////                            appStoreItem.imageName = "example-\(index).jpg"
+////                            appStoreItems.append(appStoreItem)
+//                        kumpulanData.highlights.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+//                                                                    bookmark: value2?["bookmark"] as? Bool ?? false,
+//                                                                    category: value2?["category"] as? String ?? "",
+//                                                                    certification: value2?["certification"] as? Bool ?? false,
+//                                                                    confirmCode: value2?["confirmCode"] as? String ?? "",
+//                                                                    cp: value2?["cp"] as? String ?? "",
+//                                                                    date: value2?["date"] as? String ?? "",
+//                                                                    desc: value2?["desc"] as? String ?? "",
+//                                                                    done: value2?["done"] as? Bool ?? false,
+//                                                                    enroll: value2?["enroll"] as? Bool ?? false,
+//                                                                    location: value2?["location"] as? String ?? "",
+//                                                                    price: value2?["price"] as? String ?? "",
+//                                                                    sat: value2?["sat"] as? Int ?? 0,
+//                                                                    time: value2?["time"] as? String ?? "",
+//                                                                    title: value2?["title"] as? String ?? "",
+//                                                                    timestamp: value2?["timestamp"] as? String ?? "",
+//                                                                    poster: value2?["poster"] as? String ?? "",
+//                                                                    imageUrl: value2?["imageUrl"] as? String ?? "",
+//                                                                    postId: snapshot2.key,
+//                                                                    highlights: value2?["highlights"] as? Bool ?? true))
+//
+//                        highlightsPake = kumpulanData.highlights
+        
+                        self.collectionView.dataSource = self
+                        self.collectionView.delegate = self
+                        if let layout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+                            layout.minimumLineSpacing = 0
+                            layout.minimumInteritemSpacing = 0
+                            layout.sectionInset = self.sectionInsets
+                            layout.scrollDirection = .horizontal
+                        }
+                        self.collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                        self.collectionView.isPagingEnabled = false
+                        self.view.layoutIfNeeded()
+                    
+                        let width = self.collectionView.bounds.size.width
+                        let height = self.collectionView.bounds.size.height // width * (9/16)
+                        self.itemSize = CGSize(width: width, height: height)
+                        print("itemSize: \(self.itemSize)")
+                        //self.collectionViewHeight.constant = height
+                        self.view.layoutIfNeeded()
+                        self.collectionView.reloadData()
+//                    })
+//                }
+//            }
+//        })
     }
     
     override func viewDidLoad() {
@@ -84,55 +157,67 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         customization()
         
         table2.dataSource = self
+        table2.delegate = self
         
-        pake.removeAll()
-        
-        kumpulanData.datas.removeAll()
-        
-        ref = Database.database().reference()
-        ref.keepSynced(true)
-        
-        //let postsImageRef = storageRef?.child("posts")
-        //self.postsRef.keepSynced(true)
-        
-//        self.loggedInUser = Auth.auth().currentUser
+//        pake.removeAll()
+//        kumpulanData.datas.removeAll()
 //
-//        self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("profile").observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+//        ref = Database.database().reference()
+//        ref.keepSynced(true)
 //
-//            self.loggedInUserData = snapshot.value as? NSDictionary
+//        //let postsImageRef = storageRef?.child("posts")
+//        //self.postsRef.keepSynced(true)
+//
+////        self.loggedInUser = Auth.auth().currentUser
+////
+////        self.ref?.child("users").child("regular").child(self.loggedInUser!.uid).child("profile").observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+////
+////            self.loggedInUserData = snapshot.value as? NSDictionary
+//
+//        self.databaseHandle = self.ref.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
+//
+//                let value = snapshot.value as? [String:Any]
+//
+//                let temp = ambilData(fetch: value!)
+//
+//            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key, highlights: temp.highlights), at: 0)
+//
+//                self.loggedInUser = Auth.auth().currentUser
+//
+//                if temp.poster == self.loggedInUser?.uid{
+//                self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
+//
+//                }
+//
+//                pake = kumpulanData.datas
+//                //pake.sort(by: {$0.date > $1.date})
+//
+//
+//        }
         
-        self.databaseHandle = self.ref.child("posts").queryOrdered(byChild: "timestamp").observe(.childAdded) { (snapshot) in
-            
-                let value = snapshot.value as? [String:Any]
-            
-                let temp = ambilData(fetch: value!)
-            
-            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
-                
-                self.loggedInUser = Auth.auth().currentUser
-                
-                if temp.poster == self.loggedInUser?.uid{
-                self.ref.child("users").child("regular").child(self.loggedInUser!.uid).child("posts").child(snapshot.key).setValue(true)
-                    
-                }
-            
-                pake = kumpulanData.datas
-                //pake.sort(by: {$0.date > $1.date})
-                
-                self.table2.reloadData()
-        }
+        self.table2.reloadData()
+        self.collectionView.reloadData()
+        self.fetchHighlights()
         
-        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
-        {
-            registerForPreviewing(with: self, sourceView: table2)
-            
-        }
-        //self.table2.addSubview(self.refreshControl)
+//        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
+//        {
+//            registerForPreviewing(with: self, sourceView: table2)
+//
+//        }
+        
+        self.table2.addSubview(self.refreshControl)
+        //self.collectionView.addSubview(self.refreshControl)
         
     }
     
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.tabBarController?.tabBar.isHidden = false
+//    }
+    
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         pake.removeAll()
+        kumpulanData.datas.removeAll()
         
         ref = Database.database().reference()
         ref.keepSynced(true)
@@ -143,7 +228,7 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             
             let temp = ambilData(fetch: value!)
             
-            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key), at: 0)
+            kumpulanData.datas.insert(kumpulanData(benefit: temp.benefit, bookmark: temp.bookmark, category: temp.category, certification: temp.certification, confirmCode: temp.confirmCode, cp: temp.cp, date: temp.date, desc: temp.desc, done: temp.done, enroll: temp.enroll, location: temp.location, price: temp.price, sat: temp.sat, time: temp.time, title: temp.title, timestamp: temp.timestamp, poster: temp.poster, imageUrl: temp.imageUrl, postId: snapshot.key, highlights: temp.highlights), at: 0)
             
             self.loggedInUser = Auth.auth().currentUser
             
@@ -155,8 +240,9 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             pake = kumpulanData.datas
             //pake.sort(by: {$0.date > $1.date})
             
-            self.dispatchDelay(delay: 2.0) {
+            self.dispatchDelay(delay: 1.0) {
                 self.table2.reloadData()
+                self.collectionView.reloadData()
                 self.refreshControl.endRefreshing()
             }
         }
@@ -180,10 +266,10 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
             previewingContext.sourceRect = table2.rectForRow(at: indexPath)
             return detailViewController(for: indexPath.row)
         }
-        
+
         return nil
     }
-    
+
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         navigationController?.pushViewController(viewControllerToCommit, animated: true)
     }
@@ -193,138 +279,143 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "rumahCell", for: indexPath) as! rumahCollectionViewCell
-        
-        cell.foto.image = UIImage(named: cat[indexPath.row])
-        cell.cat.text = main[indexPath.row]
-        //cell.cat.text = main[indexPath.row]
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-
-        return 125
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+        print("appStoreItems.count: \(pake.count)")
         return pake.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    @available(iOS 6.0, *)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "rumahCell", for: indexPath) as! rumahCollectionViewCell
+        let url = URL(string: pake[indexPath.row].imageUrl)
         
+//        cell.cornerRadius = 9
+        ImageService.getImage(withURL: url!) { (image) in
+            cell.foto.image = image
+        }
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
+    }
+    
+    //MARK: flowlayout
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        
+        return sectionInsets
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        
+        return sectionInsets.left
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return itemSize
+    }
+    
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let pageWidth = itemSize.width
+        targetContentOffset.pointee = scrollView.contentOffset
+        var factor: CGFloat = 0.5
+        if velocity.x < 0 {
+            factor = -factor
+            print("swipe right")
+        } else {
+            print("swipe left")
+        }
+        
+        var index = Int( round((scrollView.contentOffset.x/pageWidth)+factor) )
+        if index < 0 {
+            index = 0
+        }
+        if index > pake.count-1 {
+            index = pake.count-1
+        }
+        let indexPath = IndexPath(row: index, section: 0)
+        collectionView?.scrollToItem(at: indexPath, at: .left, animated: true)
+    }
+    
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//
+//        return 125
+//    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = table2.dequeueReusableCell(withIdentifier: "rumahCell2", for: indexPath) as! rumahTableViewCell
         
-        cell.homeImageLoader.startAnimating()
-        
-        let url = URL(string: pake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-        cell.foto.image = image
-            
-            cell.homeImageLoader.stopAnimating()
-            cell.homeImageLoader.hidesWhenStopped = true
-            
+        if cell.collectionController == nil {
+            let collectionController = storyboard?.instantiateViewController(withIdentifier: "UpcomingCollection") as! UpcomingEventsCollectionViewController
+            cell.collectionController = collectionController
+            let collectionControllerView = collectionController.view!
+            collectionControllerView.translatesAutoresizingMaskIntoConstraints = false
+            cell.columnStack.addArrangedSubview(collectionController.view)
+            let layout = collectionController.collectionViewLayout as! UICollectionViewFlowLayout
+            NSLayoutConstraint.activate([
+                collectionControllerView.widthAnchor.constraint(equalTo: cell.columnStack.widthAnchor),
+                collectionControllerView.heightAnchor.constraint(equalToConstant: layout.itemSize.height * 3),
+                ])
         }
-        
-        cell.judul.text = pake[indexPath.row].title
-        
-        if (pake[indexPath.row].benefit != ""){
-            
-            if (pake[indexPath.row].certification == true){
-                cell.benefit.text = "\(pake[indexPath.row].benefit), Certificate"
-            }
-            else{
-                cell.benefit.text = "\(pake[indexPath.row].benefit)"
-            }
-            
-        }
-        else{
-            
-            if (pake[indexPath.row].certification == true){
-                cell.benefit.text = "Certificate"
-            }
-            else{
-                cell.benefit.text = ""
-            }
-        }
-        
-        if (pake[indexPath.row].price == ""){
-            cell.price.text = "Free"
-        }
-        else{
-            cell.price.text = "Rp. \(pake[indexPath.row].price)"
-        }
-        
-        cell.location.text = pake[indexPath.row].location
-        
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "E, d MMM"
-        guard let dateInShow = pake[indexPath.row].date.date else {return cell}
-        cell.poster.text = formatter.string(from: dateInShow)
-        
-        //cell.configure(poster: self.loggedInUserData!["fullname"] as! String)
         
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        index = indexPath.row
-        performSegue(withIdentifier: "details", sender: nil)
-        
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//
+//        index = indexPath.row
+//        performSegue(withIdentifier: "details", sender: nil)
+//
+//    }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        if (main[indexPath.row] != "All"){
-            lempar = main[indexPath.row]
-        }
-        else{
-            lempar = "All"
-        }
-        
-        performSegue(withIdentifier: "category", sender: nil)
-        
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        let share = UITableViewRowAction(style: .default, title: "Share") { (action, indexPath) in
-            // delete item at indexPath
-            
-            let alert3 = UIAlertController(title: "This Feature Is Not Ready Yet!", message: nil, preferredStyle: .alert)
-            let action3 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-            
-            alert3.addAction(action3)
-            self.present(alert3, animated: true, completion: nil)
-            
-        }
-        
-        share.backgroundColor = UIColor(red: 54/255, green: 215/255, blue: 183/255, alpha: 1.0)
-        
-        
-        return [share]
-    }
+//    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+//
+//        let share = UITableViewRowAction(style: .default, title: "Share") { (action, indexPath) in
+//            // delete item at indexPath
+//
+//            let alert3 = UIAlertController(title: "This Feature Is Not Ready Yet!", message: nil, preferredStyle: .alert)
+//            let action3 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
+//
+//            alert3.addAction(action3)
+//            self.present(alert3, animated: true, completion: nil)
+//
+//        }
+//
+//        share.backgroundColor = UIColor(red: 54/255, green: 215/255, blue: 183/255, alpha: 1.0)
+//
+//
+//        return [share]
+//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier{
@@ -343,15 +434,5 @@ class rumahViewController: UIViewController, UICollectionViewDataSource, UIColle
                 destination.index = index
             }
         }
-    }
-}
-
-
-extension String{
-    var date : Date?{
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "id_ID")
-        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
-        return dateFormatter.date(from: self)
     }
 }

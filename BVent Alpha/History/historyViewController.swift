@@ -1,20 +1,20 @@
 //
-//  ongoingViewController.swift
-//  BVent Pre-Alpha
+//  historyViewController.swift
+//  BVent Alpha
 //
-//  Created by Rayhan Martiza Faluda on 03/05/18.
+//  Created by Rayhan Martiza Faluda on 05/12/18.
 //  Copyright © 2018 Rayhan Martiza Faluda. All rights reserved.
 //
 
 import UIKit
-import CoreData
 import Firebase
-import LocalAuthentication
+import CoreData
 import EventKit
+import LocalAuthentication
 
-class ongoingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
-    @IBOutlet weak var ongoingTable: UITableView!
+class historyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+    @IBOutlet weak var historyTable: UITableView!
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var ongoing: [Enroll] = []
@@ -38,12 +38,10 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
-        let attributedTitle = NSAttributedString(string: "Fetching Ongoing Event Data", attributes: attributes)
+        let attributedTitle = NSAttributedString(string: "Fetching History Event Data", attributes: attributes)
         
-        refreshControl.addTarget(self, action: #selector(ongoingViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(historyViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
-//        refreshControl.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-//        refreshControl.center = CGPoint(x: (navigationController?.navigationBar.center.x)!, y: (navigationController?.navigationBar.center.y)! + 80)
         refreshControl.attributedTitle = attributedTitle
         refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
         
@@ -54,11 +52,11 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.ongoingTable.estimatedRowHeight = 10
-        self.ongoingTable.rowHeight = UITableViewAutomaticDimension
+        self.historyTable.estimatedRowHeight = 10
+        self.historyTable.rowHeight = UITableViewAutomaticDimension
         
-        ongoingPake.removeAll()
-        kumpulanData.ongoing.removeAll()
+        historyPake.removeAll()
+        kumpulanData.history.removeAll()
         
         ref = Database.database().reference()
         ref.keepSynced(true)
@@ -74,13 +72,13 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                     if (snapshot.exists()){
                         
-                        for postId in (value?.allKeys(for: true))!{
+                        for postId in (value?.allKeys(for: false))!{
                             
                             self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
                                 // Get user value
                                 let value2 = snapshot2.value as? NSDictionary
                                 
-                                kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                                kumpulanData.history.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
                                                                          bookmark: value2?["bookmark"] as? Bool ?? false,
                                                                          category: value2?["category"] as? String ?? "",
                                                                          certification: value2?["certification"] as? Bool ?? false,
@@ -101,9 +99,9 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                                                          postId: snapshot2.key,
                                                                          highlights: value2?["highlights"] as? Bool ?? true))
                                 
-                                ongoingPake = kumpulanData.ongoing
+                                historyPake = kumpulanData.history
                                 
-                                self.ongoingTable.reloadData()
+                                self.historyTable.reloadData()
                                 //print("p")
                             }) { (error) in
                                 print(error.localizedDescription)
@@ -112,7 +110,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                     else{
-                        print("Ongoing Snapshot Exists!")
+                        print("History Snapshot Exists!")
                     }
                     
                 }
@@ -123,15 +121,15 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         
-        self.ongoingTable.addSubview(self.refreshControl)
+        self.historyTable.addSubview(self.refreshControl)
         
         // Do any additional setup after loading the view.
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         
-        ongoingPake.removeAll()
-        kumpulanData.ongoing.removeAll()
+        historyPake.removeAll()
+        kumpulanData.history.removeAll()
         
         ref = Database.database().reference()
         ref.keepSynced(true)
@@ -143,13 +141,13 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if (snapshot.exists()){
                 
-                for postId in (value?.allKeys(for: true))!{
+                for postId in (value?.allKeys(for: false))!{
                     
                     self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
                         // Get user value
                         let value2 = snapshot2.value as? NSDictionary
                         
-                        kumpulanData.ongoing.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                        kumpulanData.history.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
                                                                  bookmark: value2?["bookmark"] as? Bool ?? false,
                                                                  category: value2?["category"] as? String ?? "",
                                                                  certification: value2?["certification"] as? Bool ?? false,
@@ -170,10 +168,10 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                                                  postId: snapshot2.key,
                                                                  highlights: value2?["highlights"] as? Bool ?? true))
                         
-                        ongoingPake = kumpulanData.ongoing
+                        historyPake = kumpulanData.history
                         
                         self.dispatchDelay(delay: 1.0) {
-                            self.ongoingTable.reloadData()
+                            self.historyTable.reloadData()
                             self.refreshControl.endRefreshing()
                         }
                         //print("p")
@@ -183,13 +181,14 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                     
                 }
                 self.dispatchDelay(delay: 1.0) {
-                    self.ongoingTable.reloadData()
+                    self.historyTable.reloadData()
                     self.refreshControl.endRefreshing()
                 }
+                
             }
             else{
                 self.dispatchDelay(delay: 1.0) {
-                    self.ongoingTable.reloadData()
+                    self.historyTable.reloadData()
                     self.refreshControl.endRefreshing()
                 }
             }
@@ -210,25 +209,25 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        fetchData()
-//    }
-//
-//    func fetchData()
-//    {
-//        do
-//        {
-//            ongoing = try context.fetch(Enroll.fetchRequest())
-//            filteredData = ongoing
-//            DispatchQueue.main.async {
-//                self.ongoingTable.reloadData()
-//            }
-//        }
-//        catch
-//        {
-//            print("Couldn't Fetch Data")
-//        }
-//    }
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        fetchData()
+    //    }
+    //
+    //    func fetchData()
+    //    {
+    //        do
+    //        {
+    //            ongoing = try context.fetch(Enroll.fetchRequest())
+    //            filteredData = ongoing
+    //            DispatchQueue.main.async {
+    //                self.ongoingTable.reloadData()
+    //            }
+    //        }
+    //        catch
+    //        {
+    //            print("Couldn't Fetch Data")
+    //        }
+    //    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 135
@@ -238,80 +237,49 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return ongoingPake.count
+        return historyPake.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ongoingTable.dequeueReusableCell(withIdentifier: "ongoingCell", for: indexPath) as! ongoingTableViewCell
+        let cell = historyTable.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! historyTableViewCell
         
         // Configure the cell...
-        cell.ongoingImageLoader.startAnimating()
+        cell.historyImageLoader.startAnimating()
         
-        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
+        let url = URL(string: historyPake[indexPath.row].imageUrl)
         ImageService.getImage(withURL: url!) { (image) in
-            cell.ongoingEventImage.image = image
+            cell.historyImage.image = image
             
-            cell.ongoingImageLoader.stopAnimating()
-            cell.ongoingImageLoader.hidesWhenStopped = true
+            cell.historyImageLoader.stopAnimating()
+            cell.historyImageLoader.hidesWhenStopped = true
         }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage
-        cell.ongoingEventTitle.text = ongoingPake[indexPath.row].title
+        cell.historyTitle.text = historyPake[indexPath.row].title
+        cell.historyDate.text =  historyPake[indexPath.row].time
+        cell.historyPlace.text = historyPake[indexPath.row].location
         
-        if (ongoingPake[indexPath.row].price == ""){
-            cell.ongoingEventPrice.text = "Free"
-        }
-        else{
-            cell.ongoingEventPrice.text = "Rp. \(String(describing: ongoingPake[indexPath.row].price))"
-        }
+//        ref = Database.database().reference()
+//        ref.child("users").child("regular").child(pake[indexPath.row].poster).child("profile").observeSingleEvent(of: .value, with: { (snapshot) in
+//            // Get user value
+//            let value = snapshot.value as? NSDictionary
+//            self.name = value?["fullname"] as? String ?? ""
+//            //cell.ongoingEventPoster.text = self.name
+//
+//            print("a")
+//
+//        }) { (error) in
+//            print(error.localizedDescription)
+//        }
         
-        //cell.ongoingEventPrice.text = filteredData[indexPath.row].ongoingEventPrice
-        
-        if (ongoingPake[indexPath.row].benefit != ""){
-            
-            if (ongoingPake[indexPath.row].certification == true){
-                cell.ongoingEventBenefit.text = "\(String(describing: ongoingPake[indexPath.row].benefit)), Certificate"
-            }
-            else{
-                cell.ongoingEventBenefit.text = "\(String(describing: ongoingPake[indexPath.row].benefit)))"
-            }
-            
-        }
-        else{
-            
-            if (ongoingPake[indexPath.row].certification == true){
-                cell.ongoingEventBenefit.text = "Certificate"
-            }
-            else{
-                cell.ongoingEventBenefit.text = ""
-            }
-        }
-        
-        //cell.ongoingEventBenefit.text = filteredData[indexPath.row].ongoingEventBenefit
-        
-        cell.ongoingEventCDown.text =  ongoingPake[indexPath.row].time
-        
-        ref = Database.database().reference()
-        ref.child("users").child("regular").child(pake[indexPath.row].poster).child("profile").observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get user value
-            let value = snapshot.value as? NSDictionary
-            self.name = value?["fullname"] as? String ?? ""
-            cell.ongoingEventPoster.text = self.name
-            
-            print("a")
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-        if (ongoingPake[indexPath.row].done == true){ //REVISI
-            cell.done.text = "DONE"
-            cell.done.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
-        }
-        else{
-            cell.done.text = ""
-        }
+//        if (historyPake[indexPath.row].done == true){ //REVISI
+//            cell.done.text = "DONE"
+//            cell.done.textColor = #colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1)
+//        }
+//        else{
+//            cell.done.text = ""
+//        }
         
         return cell
     }
@@ -322,14 +290,14 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         let context = LAContext()
         var error: NSError?
         context.localizedFallbackTitle = "Use Passcode"
-
+        
         let delete = UITableViewRowAction(style: .destructive, title: "Un-Enroll") { (action, indexPath) in
             // delete item at indexPath
             //let event:EKEvent = EKEvent(eventStore: self.eventStore)
             let userID = Auth.auth().currentUser?.uid
             let ref = Database.database().reference(fromURL: "https://bvent-alpha-1.firebaseio.com/")
-            let groupRef = ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId)
-            let attendeesRef = ref.child("posts").child(ongoingPake[indexPath.row].postId).child("attendees").child(userID!)
+            let groupRef = ref.child("users").child("regular").child(userID!).child("enroll").child(historyPake[indexPath.row].postId)
+            let attendeesRef = ref.child("posts").child(historyPake[indexPath.row].postId).child("attendees").child(userID!)
             // ^^ this only works if the value is set to the firebase uid, otherwise you need to pull that data from somewhere else.
             
             let alert = UIAlertController(title: "Un-Enroll", message: "You can't undo this un-errollment", preferredStyle: .alert)
@@ -347,7 +315,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                 print("Confirm button tapped");
                                 groupRef.removeValue()
                                 attendeesRef.removeValue()
-                                ongoingPake.remove(at: indexPath.row)
+                                historyPake.remove(at: indexPath.row)
                                 tableView.deleteRows(at: [indexPath], with: .fade)
                                 //self.deleteEntry(event: event)
                             } else {
@@ -372,22 +340,22 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             alert.addAction(cancelAction)
             
             self.present(alert, animated: true, completion: nil)
-
+            
         }
         let share = UITableViewRowAction(style: .default, title: "Share") { (action, indexPath) in
             // delete item at indexPath
-
+            
             let alert3 = UIAlertController(title: "This Feature Is Not Ready Yet!", message: nil, preferredStyle: .alert)
             let action3 = UIAlertAction(title: "Dismiss", style: .default) { (_) in}
-
+            
             alert3.addAction(action3)
             self.present(alert3, animated: true, completion: nil)
-
+            
         }
-
+        
         //delete.backgroundColor = #colorLiteral(red: 0.2293260694, green: 0.4044057131, blue: 0.57067734, alpha: 1)
         share.backgroundColor = UIColor(red: 54/255, green: 215/255, blue: 183/255, alpha: 1.0)
-
+        
         return [delete,share]
     }
     
@@ -396,7 +364,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         let userID = Auth.auth().currentUser?.uid
         ref = Database.database().reference()
         ref.keepSynced(true)
-        ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("users").child("regular").child(userID!).child("enroll").child(historyPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             self.val = (snapshot.value as? Bool)!
             
@@ -406,7 +374,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.failed()
             }
             else{
-                self.postId = ongoingPake[indexPath.row].postId
+                self.postId = historyPake[indexPath.row].postId
                 self.success()
             }
             
@@ -439,13 +407,11 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-//    func deleteEntry(event : EKEvent){
-//        do{
-//            try eventStore.remove(event, span: EKSpan.thisEvent, commit: true)
-//        }catch{
-//            print("Error while deleting event: \(error.localizedDescription)")
-//        }
-//    }
-    
-    
+    //    func deleteEntry(event : EKEvent){
+    //        do{
+    //            try eventStore.remove(event, span: EKSpan.thisEvent, commit: true)
+    //        }catch{
+    //            print("Error while deleting event: \(error.localizedDescription)")
+    //        }
+    //    }
 }
