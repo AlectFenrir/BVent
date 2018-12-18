@@ -61,6 +61,12 @@ class LandingViewController: UIViewController {
         pake.removeAll()
         kumpulanData.datas.removeAll()
         
+        highlightsPake.removeAll()
+        kumpulanData.highlights.removeAll()
+        
+        upcomingPake.removeAll()
+        kumpulanData.upcoming.removeAll()
+        
         ref = Database.database().reference()
         ref.keepSynced(true)
         
@@ -89,6 +95,8 @@ class LandingViewController: UIViewController {
             }
             
             pake = kumpulanData.datas
+            highlightsPake = kumpulanData.datas
+            upcomingPake = kumpulanData.datas
             //pake.sort(by: {$0.date > $1.date})
 
         }

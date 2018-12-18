@@ -28,18 +28,29 @@ class User: NSObject {
     class func registerUser(withName: String, email: String, studentID: String, major: String, university: String, phoneNumber: String, password: String, profilePic: UIImage, /*headerPic: UIImage,*/ SAT: String, completion: @escaping (Bool) -> Swift.Void) {
         Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
-                user?.sendEmailVerification(completion: nil)
-                let storageRef = Storage.storage().reference().child("users").child("regular").child(user!.uid).child("profileImage")
+                user?.user.sendEmailVerification(completion: nil)
+                let storageRef = Storage.storage().reference().child("users").child("regular").child(user!.user.uid).child("profileImage")
                 let imageData = UIImageJPEGRepresentation(profilePic, 0.1)
                 storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
                     if err == nil {
-                        let path = metadata?.downloadURL()?.absoluteString
-                        let values = ["fullname": withName, "email": email, "studentID": studentID, "major": major, "university": university, "phoneNumber": phoneNumber, "photoURL": path!, /*"headerPic": path!,*/ "SAT": SAT]
-                        Database.database().reference().child("users").child("regular").child((user?.uid)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
-                            if errr == nil {
-                                let userInfo = ["email" : email, "password" : password]
-                                UserDefaults.standard.set(userInfo, forKey: "userInformation")
-                                completion(true)
+                        guard let path = metadata else {
+                            print("Error!")
+                            return
+                        }
+                        storageRef.downloadURL(completion: { (url, error) in
+                            if error != nil {
+                                print(error!)
+                            } else {
+                                let imageURL = url!.absoluteString
+                                print(imageURL)
+                                let values = ["fullname": withName, "email": email, "studentID": studentID, "major": major, "university": university, "phoneNumber": phoneNumber, "photoURL": imageURL, /*"headerPic": path!,*/ "SAT": SAT] as [String : Any]
+                                Database.database().reference().child("users").child("regular").child((user?.user.uid)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
+                                    if errr == nil {
+                                        let userInfo = ["email" : email, "password" : password]
+                                        UserDefaults.standard.set(userInfo, forKey: "userInformation")
+                                        completion(true)
+                                    }
+                                })
                             }
                         })
                     }

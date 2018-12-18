@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '11.0'
 
 target 'BVent Alpha' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -10,6 +10,9 @@ target 'BVent Alpha' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
+  pod 'Cards', :path => '../'
+  pod 'MaterialComponents/Buttons'
+  pod 'ActionButton'
   
   # Pods for RxSwift+MVVM
   pod 'Alamofire', '~> 4.5'

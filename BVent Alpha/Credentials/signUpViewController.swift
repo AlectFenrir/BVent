@@ -248,19 +248,36 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        storageRef.putData(imageData, metadata: metaData) { metaData, error in
+        _ = storageRef.putData(imageData, metadata: nil) { (metadata, error) in
             if error == nil, metaData != nil {
-                if let url = metaData?.downloadURL() {
-                    completion(url)
-                } else {
-                    completion(nil)
+                guard let metadata = metadata else {
+                    print("Error!")
+                    return
                 }
-                // success!
-            } else {
-                // failed
-                completion(nil)
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!)
+                    } else {
+                        let imageURL = url!.absoluteString
+                        print(imageURL)
+                    }
+                })
             }
         }
+        
+//        storageRef.putData(imageData, metadata: metaData) { metaData, error in
+//            if error == nil, metaData != nil {
+//                if let url = metaData?.downloadURL() {
+//                    completion(url)
+//                } else {
+//                    completion(nil)
+//                }
+//                // success!
+//            } else {
+//                // failed
+//                completion(nil)
+//            }
+//        }
     }
     
     func saveProfile(fullname:String, phoneNumber:String, email:String, profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {

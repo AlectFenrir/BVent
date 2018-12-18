@@ -216,18 +216,45 @@ class editProfileViewController: UIViewController, UITextFieldDelegate {
             if let new_profilePic = profileImageView.image {
                 let storageRef = Storage.storage().reference().child("users").child("regular").child(userID!).child("profileImage")
                 let imageData = UIImageJPEGRepresentation(new_profilePic, 0.5)
-                storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
+                _ = storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
                     if err == nil {
-                        let path = metadata?.downloadURL()?.absoluteString
-                        let values = ["photoURL": path!]
-                        Database.database().reference().child("users").child("regular").child((userID)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
-                            if errr == nil {
-                                print(errr?.localizedDescription as Any)
+                        guard let path = metadata else {
+                            print("Error!")
+                            return
+                        }
+                        storageRef.downloadURL(completion: { (url, error) in
+                            if error != nil {
+                                print(error!)
+                            } else {
+                                let imageURL = url!.absoluteString
+                                print(imageURL)
+                                let values = ["photoURL": imageURL]
+                                Database.database().reference().child("users").child("regular").child((userID)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
+                                    if errr == nil {
+                                        print(errr?.localizedDescription as Any)
+                                    }
+                                })
                             }
                         })
                     }
                 })
             }
+            
+//            if let new_profilePic = profileImageView.image {
+//                let storageRef = Storage.storage().reference().child("users").child("regular").child(userID!).child("profileImage")
+//                let imageData = UIImageJPEGRepresentation(new_profilePic, 0.5)
+//                storageRef.putData(imageData!, metadata: nil, completion: { (metadata, err) in
+//                    if err == nil {
+//                        let path = metadata?.downloadURL()?.absoluteString
+//                        let values = ["photoURL": path!]
+//                        Database.database().reference().child("users").child("regular").child((userID)!).child("profile").updateChildValues(values, withCompletionBlock: { (errr, _) in
+//                            if errr == nil {
+//                                print(errr?.localizedDescription as Any)
+//                            }
+//                        })
+//                    }
+//                })
+//            }
             
 //            if let new_Email = emailField4.text, let new_password = passwordField.text{
 //
@@ -335,11 +362,18 @@ class editProfileViewController: UIViewController, UITextFieldDelegate {
         
         storageRef.putData(imageData, metadata: metaData) { metaData, error in
             if error == nil, metaData != nil {
-                if let url = metaData?.downloadURL() {
-                    completion(url)
-                } else {
-                    completion(nil)
+                guard let path = metaData else {
+                    print("Error!")
+                    return
                 }
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!)
+                    } else {
+                        let imageURL = url!.absoluteString
+                        print(imageURL)
+                    }
+                })
                 // success!
             } else {
                 // failed

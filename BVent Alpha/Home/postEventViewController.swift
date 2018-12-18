@@ -244,39 +244,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
         self.loggedInUser = Auth.auth().currentUser
         
         
-        uploadMedia() { url in
-            if url != nil {
-                self.ref?.child("posts").childByAutoId().setValue([
-                    "category": self.categories.text!,
-                    "title": self.eventTitleField.text!,
-                    "price": self.eventPriceField.text!,
-                    "date": self.tanggal,
-                    "location": self.eventLocationField.text!,
-                    "desc": self.eventDesc.text!,
-//                    "desc": self.eventDescriptionField.text!,
-                    "benefit": "3 SAT Points",
-                    "bookmark": false,
-                    "confirmCode": "qwerty",
-                    "cp": "081282311233",
-                    "done": false,
-                    "enroll": false,
-                    "sat": 3,
-                    "certification": true,
-                    "time": "09.00 - 10.00",
-                    "timestamp": "\(Date().timeIntervalSince1970)",
-                    "poster": self.loggedInUser!.uid!,
-                    "imageUrl": url!,
-                    "highlights": true
-                    //"postId": String(self.ref!.childByAutoId().key)
-                    ] as [String: Any])
-                
-                print("Post Success!")
-                self.postActivityIndicator.stopAnimating()
-                self.postActivityIndicator.isHidden = true
-                self.loadingTextLabel.isHidden = true
-                _ = self.navigationController?.popViewController(animated: true)
-            }
-        }
+        uploadMedia()
         
     }
     
@@ -284,7 +252,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     //var events: [NSManagedObject] = []
     
     
-    func uploadMedia(completion: @escaping (_ url: String?) -> Void) {
+    func uploadMedia() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         
         let key = self.ref?.child("posts").childByAutoId().key
@@ -295,15 +263,51 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
         metaData.contentType = "image/jpg"
         
         /*if let uploadData = UIImagePNGRepresentation(self.eventImage.image!)*/ if let uploadData = UIImageJPEGRepresentation(self.eventImage.image!, 0.2) {
-            storageRef.putData(uploadData, metadata: metaData) { (metaData, error) in
+            storageRef.putData(uploadData, metadata: metaData, completion: { (metaData, error) in
                 if error != nil {
                     print("error")
-                    completion(nil)
+                    return
                 } else {
-                    completion((metaData?.downloadURL()?.absoluteString)!)
+                    storageRef.downloadURL(completion: { (url, error) in
+                        if error != nil {
+                            print(error!)
+                        } else {
+                            let imageURL = url!.absoluteString
+                            print(imageURL)
+                            self.ref?.child("posts").childByAutoId().setValue([
+                                "category": self.categories.text!,
+                                "title": self.eventTitleField.text!,
+                                "price": self.eventPriceField.text!,
+                                "date": self.tanggal,
+                                "location": self.eventLocationField.text!,
+                                "desc": self.eventDesc.text!,
+                                //                    "desc": self.eventDescriptionField.text!,
+                                "benefit": "3 SAT Points",
+                                "bookmark": false,
+                                "confirmCode": "qwerty",
+                                "cp": "081282311233",
+                                "done": false,
+                                "enroll": false,
+                                "sat": 3,
+                                "certification": true,
+                                "time": "09.00 - 10.00",
+                                "timestamp": "\(Date().timeIntervalSince1970)",
+                                "poster": self.loggedInUser!.uid!,
+                                "imageUrl": imageURL,
+                                "highlights": true
+                                //"postId": String(self.ref!.childByAutoId().key)
+                                ] as [String: Any])
+                            
+                            print("Post Success!")
+                            self.postActivityIndicator.stopAnimating()
+                            self.postActivityIndicator.isHidden = true
+                            self.loadingTextLabel.isHidden = true
+                            _ = self.navigationController?.popViewController(animated: true)
+                        }
+                    })
                     // your uploaded photo url.
                 }
-            }
+            })
         }
     }
 }
