@@ -10,7 +10,12 @@ import UIKit
 
 class highlightsCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var highlightsImage: UIImageView!
+    @IBOutlet weak var highlightsImage: WebImageView! {
+        didSet {
+            highlightsImage.configuration.placeholderImage = UIImage(named: "lightGray")
+            highlightsImage.configuration.animationOptions = .transitionCrossDissolve
+        }
+    }
     //var highlightsCollectionController: highlightsCollectionViewController?
     
     override func prepareForReuse() {
@@ -20,6 +25,5 @@ class highlightsCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         highlightsImage.clipsToBounds = true
-        highlightsImage.layer.cornerRadius = 8
     }
 }

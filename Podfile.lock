@@ -45,6 +45,7 @@ PODS:
     - FirebaseAuthInterop (~> 1.0)
     - FirebaseCore (~> 5.0)
     - GTMSessionFetcher/Core (~> 1.1)
+  - FloatingView (0.0.3)
   - GoogleAppMeasurement (5.3.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
     - GoogleUtilities/MethodSwizzler (~> 5.2)
@@ -106,6 +107,7 @@ PODS:
     - RxSwift (~> 4.0)
   - RxSwift (4.4.0):
     - RxAtomic (~> 4.4)
+  - Shimmer (1.0.2)
 
 DEPENDENCIES:
   - ActionButton
@@ -115,9 +117,11 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
+  - FloatingView (~> 0.0.3)
   - MaterialComponents/Buttons
   - RxCocoa (~> 4.0)
   - RxSwift (~> 4.0)
+  - Shimmer
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -131,6 +135,7 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseStorage
+    - FloatingView
     - GoogleAppMeasurement
     - GoogleUtilities
     - GTMSessionFetcher
@@ -143,6 +148,7 @@ SPEC REPOS:
     - RxAtomic
     - RxCocoa
     - RxSwift
+    - Shimmer
 
 EXTERNAL SOURCES:
   Cards:
@@ -160,6 +166,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: e2bcbc106adc4b11a2da3ec2eb63c0c4a44f2f54
   FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
   FirebaseStorage: fd82e5e5c474897e19972b34b22ac0f589dce04e
+  FloatingView: ac98ddfe72fb0bd0e9c4c59b1a88e41c1f55bdb3
   GoogleAppMeasurement: 5029d78f2b438bd30ffb44e6c558b57c21622727
   GoogleUtilities: abb092d2c12e817fa3e0e7b274987dd72fb86ec3
   GTMSessionFetcher: 0c4baf0a73acd0041bf9f71ea018deedab5ea84e
@@ -172,7 +179,8 @@ SPEC CHECKSUMS:
   RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
   RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
   RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
+  Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
 
-PODFILE CHECKSUM: d469936f00194e5177fb19afd154d6257320a08e
+PODFILE CHECKSUM: 60a395777bd4a38345082b1a0e9ee25ef5681b29
 
 COCOAPODS: 1.5.3

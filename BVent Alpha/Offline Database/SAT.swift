@@ -18,6 +18,7 @@ var eTicketPake: [kumpulanData] = []
 var historyPake: [kumpulanData] = []
 var highlightsPake: [kumpulanData] = []
 var upcomingPake: [kumpulanData] = []
+var nearbyPake: [kumpulanData] = []
 var remainPoint: Int = 120
 
 //pake = data

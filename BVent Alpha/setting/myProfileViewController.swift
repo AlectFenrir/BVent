@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import EventKit
 
 class myProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -20,6 +21,9 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     @IBOutlet weak var myProfileImageLoader: UIActivityIndicatorView!
     //@IBOutlet weak var alertBottomConstraint: NSLayoutConstraint!
     var selectedUser: User?
+    
+    let eventStore: EKEventStore = EKEventStore()
+    var events: [EKEvent]?
     
     lazy var leftButton: UIBarButtonItem = {
         //let image = UIImage.init(named: "default profile")?.withRenderingMode(.alwaysOriginal)
@@ -49,22 +53,22 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         sender.view?.removeFromSuperview()
     }
     
-    var tableView = UITableView()
-    lazy var refreshControl: UIRefreshControl = {
-        tableView.frame = view.frame
-        
-        let refreshControl = UIRefreshControl()
-        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
-        let attributedTitle = NSAttributedString(string: "Fetching My Profile Data", attributes: attributes)
-        
-        refreshControl.addTarget(self, action: #selector(myProfileViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
-        tableView.addSubview(refreshControl)
-        refreshControl.tintColor = UIColor.gray
-        refreshControl.attributedTitle = attributedTitle
-        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
-        
-        return refreshControl
-    }()
+//    var tableView = UITableView()
+//    lazy var refreshControl: UIRefreshControl = {
+//        tableView.frame = view.frame
+//
+//        let refreshControl = UIRefreshControl()
+//        let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
+//        let attributedTitle = NSAttributedString(string: "Fetching My Profile Data", attributes: attributes)
+//
+//        refreshControl.addTarget(self, action: #selector(myProfileViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+//        tableView.addSubview(refreshControl)
+//        refreshControl.tintColor = UIColor.gray
+//        refreshControl.attributedTitle = attributedTitle
+//        refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
+//
+//        return refreshControl
+//    }()
     
     func customization()  {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
@@ -80,7 +84,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         self.navigationItem.rightBarButtonItem = rightButton
         //left bar button image fetching
         self.navigationItem.leftBarButtonItem = self.leftButton
-        self.tableView.tableFooterView = UIView.init(frame: CGRect.zero)
+//        self.tableView.tableFooterView = UIView.init(frame: CGRect.zero)
 //        if let id = Auth.auth().currentUser?.uid {
 //            User.info(forUserID: id, completion: { [weak weakSelf = self] (user) in
 //                let image = user.profilePic
@@ -162,8 +166,9 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         //customization()
         
         val = false
-        kumpulanData.eTicket.removeAll()
-        eTicketPake.removeAll()
+        
+        eTicketCellController.dataSource = self
+        eTicketCellController.delegate = self
         
         ref = Database.database().reference()
         //storageRef = Storage.storage().reference()
@@ -202,30 +207,19 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 //            self.setProfilePicture(self.accountProfilePicture,imageToSet:UIImage(data:data!)!)
         })
         
-//        btn.layer.cornerRadius = 7
-//        btn.clipsToBounds = true
-//        btn.layer.borderWidth = 0.25
-//        btn.layer.borderColor = UIColor.black.cgColor
-        
-        self.eTicketCellController.reloadData()
-        
-        //self.view.addSubview(tableView)
-        //self.view.addSubview(backgroundView)
-        
-        //himaBinus.image = UIImage(named: "calendar")
-        
-        // Do any additional setup after loading the view.
+        fetchETicket()
+
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        //self.tabBarController?.tabBar.isHidden = true
-        
-        self.eTicketCellController.reloadData()
-        
-        //kumpulanData.eTicket.removeAll()
-        //eTicketPake.removeAll()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        //self.tabBarController?.tabBar.isHidden = true
+//
+//        self.eTicketCellController.reloadData()
+//
+//        //kumpulanData.eTicket.removeAll()
+//        //eTicketPake.removeAll()
+//    }
     
     //var users: [NSManagedObject] = []
     
@@ -240,7 +234,9 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         val = false
-        kumpulanData.eTicket.removeAll()
+        
+        ongoingPake.removeAll()
+        kumpulanData.ongoing.removeAll()
         
         ref = Database.database().reference()
         //storageRef = Storage.storage().reference()
@@ -267,22 +263,28 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
         // Dispose of any resources that can be recreated.
     }
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return ongoingPake.count
+        return eTicketPake.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = eTicketCellController.dequeueReusableCell(withReuseIdentifier: "ticketCell", for: indexPath) as! eTicketCollectionViewCell
 
-        cell.eTicketImageLoader.startAnimating()
+//        cell.eTicketImageLoader.startAnimating()
 
-        let url = URL(string: ongoingPake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.eTicketImage.image = image
-
-            cell.eTicketImageLoader.stopAnimating()
-            cell.eTicketImageLoader.hidesWhenStopped = true
-        }
+        let url = URL(string: eTicketPake[indexPath.row].imageUrl)
+        cell.eTicketImage.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.eTicketImage.image = image
+//
+//            cell.eTicketImageLoader.stopAnimating()
+//            cell.eTicketImageLoader.hidesWhenStopped = true
+//        }
 
         return cell
     }
@@ -293,12 +295,12 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 //        print("synced!")
         print("!")
         
-        postId = ongoingPake[indexPath.row].postId
+        postId = eTicketPake[indexPath.row].postId
         
         let userID = Auth.auth().currentUser?.uid
         ref = Database.database().reference()
         ref.keepSynced(true)
-        ref.child("users").child("regular").child(userID!).child("enroll").child(ongoingPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
+        ref.child("users").child("regular").child(userID!).child("enroll").child(eTicketPake[indexPath.row].postId).observeSingleEvent(of: .value, with: { (snapshot) in
             // Get user value
             self.val = (snapshot.value as? Bool)!
             
@@ -308,7 +310,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
                 self.failed()
             }
             else{
-                self.postId = ongoingPake[indexPath.row].postId
+                self.postId = eTicketPake[indexPath.row].postId
                 self.success()
             }
             
@@ -321,8 +323,8 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier{
-            if identifier == "eTicketDetails"{
-                let destination = segue.destination as! detail6ViewController
+            if identifier == "myTicketDetails"{
+                let destination = segue.destination as! eTicketViewController
                 print("2")
                 destination.postId = postId
             }
@@ -340,7 +342,7 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func success(){
-        performSegue(withIdentifier: "eTicketDetails", sender: nil)
+        performSegue(withIdentifier: "myTicketDetails", sender: nil)
     }
     
     @IBAction func message(_ sender: Any) {
@@ -349,6 +351,74 @@ class myProfileViewController: UIViewController, UICollectionViewDelegate, UICol
     
     @IBAction func close(_ sender: Any) {
         self.showHome()
+    }
+    
+    func fetchETicket() {
+        eTicketPake.removeAll()
+        kumpulanData.eTicket.removeAll()
+        
+        ref = Database.database().reference()
+        ref.keepSynced(true)
+        
+        let userID = Auth.auth().currentUser?.uid
+        
+        self.eventStore.requestAccess(to: .event) { (granted, error) in
+            
+            if (granted) && (error == nil) {
+                self.ref.child("users").child("regular").child(userID!).child("enroll").observe(.value) { (snapshot) in
+                    // Get user value
+                    let value = snapshot.value as? NSDictionary
+                    
+                    if (snapshot.exists()){
+                        
+                        for postId in (value?.allKeys(for: true))!{
+                            
+                            self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
+                                // Get user value
+                                let value2 = snapshot2.value as? NSDictionary
+                                
+                                kumpulanData.eTicket.append(kumpulanData(benefit: value2?["benefit"] as? String ?? "",
+                                                                         bookmark: value2?["bookmark"] as? Bool ?? false,
+                                                                         category: value2?["category"] as? String ?? "",
+                                                                         certification: value2?["certification"] as? Bool ?? false,
+                                                                         confirmCode: value2?["confirmCode"] as? String ?? "",
+                                                                         cp: value2?["cp"] as? String ?? "",
+                                                                         date: value2?["date"] as? String ?? "",
+                                                                         desc: value2?["desc"] as? String ?? "",
+                                                                         done: value2?["done"] as? Bool ?? false,
+                                                                         enroll: value2?["enroll"] as? Bool ?? false,
+                                                                         location: value2?["location"] as? String ?? "",
+                                                                         price: value2?["price"] as? String ?? "",
+                                                                         sat: value2?["sat"] as? Int ?? 0,
+                                                                         time: value2?["time"] as? String ?? "",
+                                                                         title: value2?["title"] as? String ?? "",
+                                                                         timestamp: value2?["timestamp"] as? String ?? "",
+                                                                         poster: value2?["poster"] as? String ?? "",
+                                                                         imageUrl: value2?["imageUrl"] as? String ?? "",
+                                                                         postId: snapshot2.key,
+                                                                         highlights: value2?["highlights"] as? Bool ?? true))
+                                
+                                eTicketPake = kumpulanData.eTicket
+                                
+                                self.eTicketCellController.reloadData()
+                                //print("p")
+                            }) { (error) in
+                                print(error.localizedDescription)
+                            }
+                            
+                        }
+                    }
+                    else{
+                        print("Ongoing Snapshot Exists!")
+                    }
+                    
+                }
+            }
+            else{
+                
+                print("failed to save event with error : \(error) or access not granted")
+            }
+        }
     }
     
 }

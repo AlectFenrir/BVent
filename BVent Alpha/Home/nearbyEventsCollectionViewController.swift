@@ -9,23 +9,23 @@
 import UIKit
 import Firebase
 
-class UpcomingEventsCollectionViewController: UICollectionViewController {
+class nearbyEventsCollectionViewController: UICollectionViewController {
     
-    @IBOutlet var UpcomingCollectionView: UICollectionView!
+    @IBOutlet var nearbyCollectionView: UICollectionView!
     var index: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        UpcomingCollectionView?.dataSource = self
-        UpcomingCollectionView?.delegate = self
+        nearbyCollectionView?.dataSource = self
+        nearbyCollectionView?.delegate = self
 //        collectionView!.decelerationRate = .fast
-        UpcomingCollectionView?.decelerationRate = UIScrollViewDecelerationRateFast
-        UpcomingCollectionView?.reloadData()
+        nearbyCollectionView?.decelerationRate = UIScrollViewDecelerationRateFast
+        nearbyCollectionView?.reloadData()
     }
     
 //    override func viewDidAppear(_ animated: Bool) {
-//
-//        UpcomingCollection.reloadData()
+//        super.viewDidAppear(animated)
+//        startAnimation()
 //    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -40,7 +40,7 @@ class UpcomingEventsCollectionViewController: UICollectionViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
-        layout.itemSize.width = min(UpcomingCollectionView!.bounds.size.width - 25, 500)
+        layout.itemSize.width = min(nearbyCollectionView!.bounds.size.width - 30, 600)
     }
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -48,24 +48,29 @@ class UpcomingEventsCollectionViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return upcomingPake.count
+        return nearbyPake.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = UpcomingCollectionView.dequeueReusableCell(withReuseIdentifier: "UpcomingCell", for: indexPath) as! UpcomingEventsCollectionViewCell
-        cell.eventTitle.text = upcomingPake[indexPath.row].title
-        cell.eventDate.text = upcomingPake[indexPath.row].date
-        cell.eventLocation.text = upcomingPake[indexPath.row].location
-        let url = URL(string: upcomingPake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.eventImage.image = image
-        }
+        let cell = nearbyCollectionView.dequeueReusableCell(withReuseIdentifier: "nearbyCell", for: indexPath) as! nearbyEventsCollectionViewCell
+        cell.eventTitle.text = nearbyPake[indexPath.row].title
+        cell.eventDate.text = nearbyPake[indexPath.row].date
+        cell.eventLocation.text = nearbyPake[indexPath.row].location
+        
+        let url = URL(string: nearbyPake[indexPath.row].imageUrl)
+        cell.eventImage.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.eventImage.image = image
+//            self.stopAnimation()
+//        }
+        
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         index = indexPath.row
-        performSegue(withIdentifier: "upcomingDetails", sender: nil)
+        goToLocation()
     }
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
@@ -99,13 +104,51 @@ class UpcomingEventsCollectionViewController: UICollectionViewController {
     // Velocity is measured in points per millisecond.
     private var snapToMostVisibleColumnVelocityThreshold: CGFloat { return 0.3 }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if let identifier = segue.identifier{
-//            if identifier == "upcomingDetails"{
-//                let destination = segue.destination as! detail1ViewController
-//                destination.index = index
-//            }
-//        }
-//    }
+    func goToLocation() {
+        let locationTableVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "detail1ViewController") as! detail1ViewController
+        locationTableVC.index = index!
+        let navigationController = UINavigationController(rootViewController: locationTableVC)
+        //self.present(navigationController, animated: true, completion: nil)
+        self.show(navigationController, sender: nil)
+    }
 
+}
+
+extension nearbyEventsCollectionViewController {
+    func startAnimation() {
+        for animateView in getSubViewsForAnimate() {
+            animateView.clipsToBounds = true
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.colors = [UIColor.clear.cgColor, UIColor.white.withAlphaComponent(0.8).cgColor, UIColor.clear.cgColor]
+            gradientLayer.startPoint = CGPoint(x: 0.7, y: 1.0)
+            gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.8)
+            gradientLayer.frame = animateView.bounds
+            animateView.layer.mask = gradientLayer
+            
+            let animation = CABasicAnimation(keyPath: "transform.translation.x")
+            animation.duration = 1.5
+            animation.fromValue = -animateView.frame.size.width
+            animation.toValue = animateView.frame.size.width
+            animation.repeatCount = .infinity
+            
+            gradientLayer.add(animation, forKey: "")
+        }
+    }
+    
+    func stopAnimation() {
+        for animateView in getSubViewsForAnimate() {
+            animateView.layer.removeAllAnimations()
+            animateView.layer.mask = nil
+        }
+    }
+    
+    func getSubViewsForAnimate() -> [UIView] {
+        var obj: [UIView] = []
+        for objView in view.subviewsRecursive() {
+            obj.append(objView)
+        }
+        return obj.filter({ (obj) -> Bool in
+            obj.shimmerAnimation
+        })
+    }
 }

@@ -62,7 +62,8 @@ class settingViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func signOut(_ sender: UIButton) {
         User.logOutUser { (status) in
             if status == true {
-                self.dismiss(animated: true, completion: nil)
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "welcomeViewController")
+                self.present(vc!, animated:true, completion: nil)
             }
         }
     }

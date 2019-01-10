@@ -121,7 +121,7 @@ class historyViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
         
-        self.historyTable.addSubview(self.refreshControl)
+        historyTable.refreshControl = refreshControl
         
         // Do any additional setup after loading the view.
     }
@@ -245,15 +245,17 @@ class historyViewController: UIViewController, UITableViewDelegate, UITableViewD
         let cell = historyTable.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! historyTableViewCell
         
         // Configure the cell...
-        cell.historyImageLoader.startAnimating()
+//        cell.historyImageLoader.startAnimating()
         
         let url = URL(string: historyPake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.historyImage.image = image
-            
-            cell.historyImageLoader.stopAnimating()
-            cell.historyImageLoader.hidesWhenStopped = true
-        }
+        cell.historyImage.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.historyImage.image = image
+//
+//            cell.historyImageLoader.stopAnimating()
+//            cell.historyImageLoader.hidesWhenStopped = true
+//        }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage
         cell.historyTitle.text = historyPake[indexPath.row].title

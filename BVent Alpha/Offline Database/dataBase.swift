@@ -37,6 +37,7 @@ struct kumpulanData {
     static var history: [kumpulanData] = []
     static var highlights: [kumpulanData] = []
     static var upcoming: [kumpulanData] = []
+    static var nearby: [kumpulanData] = []
     
     static func fetch()-> [kumpulanData]{
         //        var ft: [kumpulanData] = []

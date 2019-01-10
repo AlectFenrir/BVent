@@ -19,7 +19,7 @@ class rumahTableViewCell: UITableViewCell {
 //    @IBOutlet weak var homeImageLoader: UIActivityIndicatorView!
     
     @IBOutlet var columnStack: UIStackView!
-    var collectionController: UpcomingEventsCollectionViewController?
+    var collectionController: nearbyEventsCollectionViewController?
     
 //    override func awakeFromNib() {
 //        super.awakeFromNib()

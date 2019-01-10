@@ -13,6 +13,8 @@ target 'BVent Alpha' do
   pod 'Cards', :path => '../'
   pod 'MaterialComponents/Buttons'
   pod 'ActionButton'
+  pod 'Shimmer'
+  pod 'FloatingView', '~> 0.0.3'
   
   # Pods for RxSwift+MVVM
   pod 'Alamofire', '~> 4.5'

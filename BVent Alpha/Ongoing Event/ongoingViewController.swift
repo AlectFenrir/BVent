@@ -123,7 +123,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         
-        self.ongoingTable.addSubview(self.refreshControl)
+        ongoingTable.refreshControl = refreshControl
         
         // Do any additional setup after loading the view.
     }
@@ -246,15 +246,17 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = ongoingTable.dequeueReusableCell(withIdentifier: "ongoingCell", for: indexPath) as! ongoingTableViewCell
         
         // Configure the cell...
-        cell.ongoingImageLoader.startAnimating()
+//        cell.ongoingImageLoader.startAnimating()
         
         let url = URL(string: ongoingPake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.ongoingEventImage.image = image
-            
-            cell.ongoingImageLoader.stopAnimating()
-            cell.ongoingImageLoader.hidesWhenStopped = true
-        }
+        cell.ongoingEventImage.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.ongoingEventImage.image = image
+//
+//            cell.ongoingImageLoader.stopAnimating()
+//            cell.ongoingImageLoader.hidesWhenStopped = true
+//        }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage
         cell.ongoingEventTitle.text = ongoingPake[indexPath.row].title

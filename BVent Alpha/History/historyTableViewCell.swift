@@ -10,7 +10,12 @@ import UIKit
 
 class historyTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var historyImage: UIImageView!
+    @IBOutlet weak var historyImage: WebImageView! {
+        didSet {
+            historyImage.configuration.placeholderImage = UIImage(named: "lightGray")
+            historyImage.configuration.animationOptions = .transitionCrossDissolve
+        }
+    }
     @IBOutlet weak var historyDate: UILabel!
     @IBOutlet weak var historyTitle: UILabel!
     @IBOutlet weak var historyPlace: UILabel!

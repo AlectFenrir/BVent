@@ -39,12 +39,13 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let refreshControl = UIRefreshControl()
         let attributes = [NSAttributedStringKey.foregroundColor: UIColor.black]
         let attributedTitle = NSAttributedString(string: "Fetching Event Data", attributes: attributes)
-        
-        refreshControl.addTarget(self, action: #selector(rumahViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+
+        refreshControl.addTarget(self, action: #selector(handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
         refreshControl.attributedTitle = attributedTitle
         refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
-        
+        refreshControl.sizeToFit()
+
         return refreshControl
     }()
     
@@ -56,7 +57,7 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func customization()  {
         //left bar button image fetching
-        self.navigationItem.leftBarButtonItem = self.leftButton
+        navigationItem.leftBarButtonItem = self.leftButton
         //self.tableView.tableFooterView = UIView.init(frame: CGRect.zero)
         if let id = Auth.auth().currentUser?.uid {
             User.info(forUserID: id, completion: { [weak weakSelf = self] (user) in
@@ -66,7 +67,7 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let _  = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.zero, size: contentSize), cornerRadius: 14).addClip()
                 image.draw(in: CGRect(origin: CGPoint.zero, size: contentSize))
                 let path = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.zero, size: contentSize), cornerRadius: 14)
-                path.lineWidth = 2
+                path.lineWidth = 0
                 UIColor.white.setStroke()
                 path.stroke()
                 let finalImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!.withRenderingMode(.alwaysOriginal)
@@ -82,7 +83,7 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func showProfile() {
         let VC1 = self.storyboard!.instantiateViewController(withIdentifier: "account")
         let navController = UINavigationController(rootViewController: VC1) // Creating a navigation controller with VC1 at the root of the navigation stack.
-        self.present(navController, animated:true, completion: nil)
+        present(navController, animated:true, completion: nil)
     }
     
 //    func fetchHighlights() {
@@ -195,18 +196,13 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //
 //        }
         
-        self.table2.reloadData()
-//        self.collectionView.reloadData()
-//        self.fetchHighlights()
+        table2.reloadData()
         
-//        if UIApplication.shared.keyWindow?.traitCollection.forceTouchCapability == UIForceTouchCapability.available
-//        {
-//            registerForPreviewing(with: self, sourceView: table2)
-//
-//        }
-        
-        self.table2.addSubview(self.refreshControl)
-        //self.collectionView.addSubview(self.refreshControl)
+        if #available(iOS 10.0, *) {
+            table2.refreshControl = refreshControl
+        } else {
+            table2.addSubview(refreshControl)
+        }
         
     }
     
@@ -221,6 +217,9 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         highlightsPake.removeAll()
         kumpulanData.highlights.removeAll()
+        
+        nearbyPake.removeAll()
+        kumpulanData.nearby.removeAll()
         
         upcomingPake.removeAll()
         kumpulanData.upcoming.removeAll()
@@ -245,12 +244,19 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             pake = kumpulanData.datas
             highlightsPake = kumpulanData.datas
+            nearbyPake = kumpulanData.datas
             upcomingPake = kumpulanData.datas
             //pake.sort(by: {$0.date > $1.date})
             
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [refreshControl] in
+//                self.table2.reloadData()
+//                self.updateViewConstraints()
+//                refreshControl.endRefreshing()
+//            }
+            
             self.dispatchDelay(delay: 1.0) {
                 self.table2.reloadData()
-                //self.collectionView.reloadData()
+                self.updateViewConstraints()
                 self.refreshControl.endRefreshing()
             }
         }
@@ -368,23 +374,29 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0{
+        if indexPath.section == 0 {
             return 220
         }
-        else{
-            return 300
+        else if indexPath.section == 1 {
+            return 305
+        }
+        else {
+            return 1000
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0{
             return ""
         }
-        else{
+        else if section == 1{
+            return ""
+        }
+        else {
             return ""
         }
     }
@@ -393,7 +405,10 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if section == 0{
             return 1
         }
-        else{
+        else if section == 1{
+            return 1
+        }
+        else {
             return 1
         }
     }
@@ -401,6 +416,7 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell2 = table2.dequeueReusableCell(withIdentifier: "rumahCell2"/*, for: indexPath*/) as! rumahTableViewCell
         let cell3 = table2.dequeueReusableCell(withIdentifier: "rumahCell3"/*, for: indexPath*/) as! highlightsTableViewCell
+        let cell4 = table2.dequeueReusableCell(withIdentifier: "rumahCell4") as! upcomingTableViewCell2
         
         if indexPath.section == 0{
             if cell3.highlightsCollectionController == nil {
@@ -412,9 +428,9 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             return cell3
         }
-        else{
+        else if indexPath.section == 1 {
             if cell2.collectionController == nil {
-                let collectionController = storyboard?.instantiateViewController(withIdentifier: "UpcomingCollection") as! UpcomingEventsCollectionViewController
+                let collectionController = storyboard?.instantiateViewController(withIdentifier: "nearbyCollection") as! nearbyEventsCollectionViewController
                 cell2.collectionController = collectionController
                 let collectionControllerView = collectionController.view!
                 collectionControllerView.translatesAutoresizingMaskIntoConstraints = false
@@ -427,7 +443,16 @@ class rumahViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             return cell2
         }
-        
+        else {
+            if cell4.upcomingTableController == nil {
+                let upcomingTableController = storyboard?.instantiateViewController(withIdentifier: "upcomingTable") as! upcomingTableViewController
+                cell4.upcomingTableController = upcomingTableController
+                let upcomingTableControllerView = upcomingTableController.view!
+                upcomingTableControllerView.translatesAutoresizingMaskIntoConstraints = false
+                cell4.upcomingColumnStack.addArrangedSubview(upcomingTableController.view)
+            }
+        }
+        return cell4
     }
     
 //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

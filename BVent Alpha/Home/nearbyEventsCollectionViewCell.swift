@@ -8,8 +8,13 @@
 
 import UIKit
 
-class UpcomingEventsCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var eventImage: UIImageView!
+class nearbyEventsCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var eventImage: WebImageView! {
+        didSet {
+            eventImage.configuration.placeholderImage = UIImage(named: "lightGray")
+            eventImage.configuration.animationOptions = .transitionCrossDissolve
+        }
+    }
     @IBOutlet weak var eventDate: UILabel!
     @IBOutlet weak var eventTitle: UILabel!
     @IBOutlet weak var eventLocation: UILabel!

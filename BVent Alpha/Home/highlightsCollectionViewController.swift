@@ -9,6 +9,7 @@
 import UIKit
 import Firebase
 import Cards
+import Shimmer
 
 class highlightsCollectionViewController: UICollectionViewController {
     
@@ -50,7 +51,11 @@ class highlightsCollectionViewController: UICollectionViewController {
         fetchHighlights()
         startTimer()
     }
-
+    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        startAnimation()
+//    }
     
     // MARK: - Navigation
 
@@ -58,7 +63,7 @@ class highlightsCollectionViewController: UICollectionViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let identifier = segue.identifier {
             if identifier == "highlightsDetails" {
-                let destination = segue.destination as! detail1ViewController
+                let destination = segue.destination as! highlightsDetailsViewController
                 destination.index = index
             }
         }
@@ -84,9 +89,30 @@ class highlightsCollectionViewController: UICollectionViewController {
 //        let card = cell.viewWithTag(1000) as! CardArticle
 //        let cardContent = storyboard!.instantiateViewController(withIdentifier: "detail1ViewController")
         
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.highlightsImage.image = image
-        }
+//        var shimmeringView = FBShimmeringView(frame: cell.highlightsImage.frame)
+//        shimmeringView.layer.cornerRadius = 8
+//        shimmeringView.shimmeringOpacity = 1
+//        var loadingLabel = UIImageView(frame: cell.highlightsImage.frame)
+//        loadingLabel.image = UIImage(imageLiteralResourceName: "lightGray")
+//        shimmeringView.contentView = loadingLabel
+//        view.addSubview(shimmeringView)
+        
+//        var loadingLabel = UIImageView(frame: shimmeringView.frame)
+//        //loadingLabel.textAlignment = .center
+//        loadingLabel.image = UIImage(imageLiteralResourceName: "lightGray")
+//        shimmeringView.contentView = loadingLabel
+        
+        // Start shimmering.
+        //shimmeringView.isShimmering = true
+        
+        cell.highlightsImage.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.highlightsImage.image = image
+//            self.stopAnimation()
+////            shimmeringView.isShimmering = false
+////            shimmeringView.isHidden = true
+//        }
         
 //        card.shouldPresent(cardContent, from: self, fullscreen: true)
     
@@ -105,7 +131,7 @@ class highlightsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.scrollToItem(at: indexPath, at: .left, animated: false)
         index = indexPath.row
-        performSegue(withIdentifier: "highlightsDetails", sender: nil)
+        goToLocation()
     }
     
     //MARK: flowlayout
@@ -177,5 +203,52 @@ class highlightsCollectionViewController: UICollectionViewController {
     func startTimer() {
         Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(self.scrollAutomatically), userInfo: nil, repeats: true)
     }
+    
+    func goToLocation() {
+        let locationTableVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "detail1ViewController") as! detail1ViewController
+        locationTableVC.index = index!
+        let navigationController = UINavigationController(rootViewController: locationTableVC)
+        //self.present(navigationController, animated: true, completion: nil)
+        self.show(navigationController, sender: nil)
+    }
 
+}
+
+extension highlightsCollectionViewController {
+    func startAnimation() {
+        for animateView in getSubViewsForAnimate() {
+            animateView.clipsToBounds = true
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.colors = [UIColor.clear.cgColor, UIColor.white.withAlphaComponent(0.8).cgColor, UIColor.clear.cgColor]
+            gradientLayer.startPoint = CGPoint(x: 0.7, y: 1.0)
+            gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.8)
+            gradientLayer.frame = animateView.bounds
+            animateView.layer.mask = gradientLayer
+            
+            let animation = CABasicAnimation(keyPath: "transform.translation.x")
+            animation.duration = 1.5
+            animation.fromValue = -animateView.frame.size.width
+            animation.toValue = animateView.frame.size.width
+            animation.repeatCount = .infinity
+            
+            gradientLayer.add(animation, forKey: "")
+        }
+    }
+    
+    func stopAnimation() {
+        for animateView in getSubViewsForAnimate() {
+            animateView.layer.removeAllAnimations()
+            animateView.layer.mask = nil
+        }
+    }
+    
+    func getSubViewsForAnimate() -> [UIView] {
+        var obj: [UIView] = []
+        for objView in view.subviewsRecursive() {
+            obj.append(objView)
+        }
+        return obj.filter({ (obj) -> Bool in
+            obj.shimmerAnimation
+        })
+    }
 }
