@@ -7,30 +7,88 @@
 //
 
 import UIKit
+import Foundation
+import Firebase
 
 class forgotPasswordViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var emailField3: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var sender: UIButton!
-    @IBAction func send(_ sender: UIButton) {
+    var resetNowActivityIndicator: UIActivityIndicatorView!
+    let loadingTextLabel = UILabel()
+    
+    let notificationCenter = NotificationCenter.default
+    
+    @IBAction func resetPassword(_ sender: Any) {
+        resetNowActivityIndicator.isHidden = false
+        resetNowActivityIndicator.startAnimating()
+        
+        loadingTextLabel.isHidden = false
+        
+        Auth.auth().sendPasswordReset(withEmail: emailField3.text!, completion: { (error) in
+            //Make sure you execute the following code on the main queue
+            DispatchQueue.main.async {
+                //Use "if let" to access the error, if it is non-nil
+                if let error = error {
+                    let resetFailedAlert = UIAlertController(title: "Reset Failed", message: error.localizedDescription, preferredStyle: .alert)
+                    resetFailedAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(resetFailedAlert, animated: true, completion: nil)
+                } else {
+                    let resetEmailSentAlert = UIAlertController(title: "Reset email sent successfully", message: "Check your email", preferredStyle: .alert)
+                    resetEmailSentAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(resetEmailSentAlert, animated: true, completion: nil)
+                }
+                self.resetNowActivityIndicator.stopAnimating()
+                self.resetNowActivityIndicator.isHidden = true
+                self.loadingTextLabel.isHidden = true
+            }
+        })
     }
     
-    
     override func viewDidLoad() {
+        resetNowActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        resetNowActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        resetNowActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
+        resetNowActivityIndicator.hidesWhenStopped = true
+        resetNowActivityIndicator.isHidden = true
+        resetNowActivityIndicator.center = view.center
+        self.view.addSubview(resetNowActivityIndicator)
+        
+        loadingTextLabel.textColor = UIColor.white
+        loadingTextLabel.text = "Resetting"
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 30)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: resetNowActivityIndicator.center.x, y: resetNowActivityIndicator.center.y + 40)
+        loadingTextLabel.isHidden = true
+        self.view.addSubview(loadingTextLabel)
+        
         super.viewDidLoad()
         emailField3.delegate = self
-        
         emailField3.keyboardType = UIKeyboardType.emailAddress
+        emailField3.underlined()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
         view.addGestureRecognizer(tapGesture)
         
-        sender.layer.cornerRadius = 7
-        sender.layer.masksToBounds = true
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    @objc func adjustForKeyboard(notification: Notification) {
+        let userInfo = notification.userInfo!
         
-        // Do any additional setup after loading the view.
+        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+        
+        if notification.name == NSNotification.Name.UIKeyboardWillHide {
+            scrollView.contentInset = UIEdgeInsets.zero
+        } else {
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
+        }
+        
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

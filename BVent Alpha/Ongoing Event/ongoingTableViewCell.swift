@@ -11,7 +11,12 @@ import UIKit
 class ongoingTableViewCell: UITableViewCell {
     
     
-    @IBOutlet weak var ongoingEventImage: UIImageView!
+    @IBOutlet weak var ongoingEventImage: WebImageView! {
+        didSet {
+            ongoingEventImage.configuration.placeholderImage = UIImage(named: "lightGray")
+            ongoingEventImage.configuration.animationOptions = .transitionCrossDissolve
+        }
+    }
     @IBOutlet weak var ongoingEventTitle: UILabel!
     @IBOutlet weak var ongoingEventPrice: UILabel!
     @IBOutlet weak var ongoingEventBenefit: UILabel!

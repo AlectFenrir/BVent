@@ -11,7 +11,7 @@ import Firebase
 
 class settingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let judul = ["Account", "Bookmarks", "More"]
+    let judul = ["Edit Profile", "Help", "Feedback", "About"]
     
     @IBOutlet weak var tabel1: UITableView!
     
@@ -62,7 +62,8 @@ class settingViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func signOut(_ sender: UIButton) {
         User.logOutUser { (status) in
             if status == true {
-                self.dismiss(animated: true, completion: nil)
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "welcomeViewController")
+                self.present(vc!, animated:true, completion: nil)
             }
         }
     }

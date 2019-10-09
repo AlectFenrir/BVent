@@ -42,6 +42,8 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         refreshControl.addTarget(self, action: #selector(ongoingViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
         refreshControl.tintColor = UIColor.gray
+//        refreshControl.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+//        refreshControl.center = CGPoint(x: (navigationController?.navigationBar.center.x)!, y: (navigationController?.navigationBar.center.y)! + 80)
         refreshControl.attributedTitle = attributedTitle
         refreshControl.attributedTitle = NSAttributedString(string:"Last updated on " + NSDate().description)
         
@@ -55,9 +57,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.ongoingTable.estimatedRowHeight = 10
         self.ongoingTable.rowHeight = UITableViewAutomaticDimension
         
-        val = false
-        
-        //ongoing.removeAll()
+        ongoingPake.removeAll()
         kumpulanData.ongoing.removeAll()
         
         ref = Database.database().reference()
@@ -68,13 +68,13 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.eventStore.requestAccess(to: .event) { (granted, error) in
             
             if (granted) && (error == nil) {
-                self.ref.child("users").child("regular").child(userID!).child("enroll").observeSingleEvent(of: .value, with: { (snapshot) in
+                self.ref.child("users").child("regular").child(userID!).child("enroll").observe(.value) { (snapshot) in
                     // Get user value
                     let value = snapshot.value as? NSDictionary
                     
                     if (snapshot.exists()){
                         
-                        for postId in (value?.allKeys)!{
+                        for postId in (value?.allKeys(for: true))!{
                             
                             self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
                                 // Get user value
@@ -98,7 +98,8 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                                                          timestamp: value2?["timestamp"] as? String ?? "",
                                                                          poster: value2?["poster"] as? String ?? "",
                                                                          imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                         postId: snapshot2.key))
+                                                                         postId: snapshot2.key,
+                                                                         highlights: value2?["highlights"] as? Bool ?? true))
                                 
                                 ongoingPake = kumpulanData.ongoing
                                 
@@ -111,11 +112,9 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                     else{
-                        
+                        print("Ongoing Snapshot Exists!")
                     }
                     
-                }) { (error) in
-                    print(error.localizedDescription)
                 }
             }
             else{
@@ -124,16 +123,14 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         
-        self.ongoingTable.addSubview(self.refreshControl)
+        ongoingTable.refreshControl = refreshControl
         
         // Do any additional setup after loading the view.
     }
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         
-        val = false
-        
-        //ongoing.removeAll()
+        ongoingPake.removeAll()
         kumpulanData.ongoing.removeAll()
         
         ref = Database.database().reference()
@@ -146,7 +143,7 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
             
             if (snapshot.exists()){
                 
-                for postId in (value?.allKeys)!{
+                for postId in (value?.allKeys(for: true))!{
                     
                     self.ref.child("posts").child(postId as! String).observeSingleEvent(of: .value, with: { (snapshot2) in
                         // Get user value
@@ -170,11 +167,10 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                                                                  timestamp: value2?["timestamp"] as? String ?? "",
                                                                  poster: value2?["poster"] as? String ?? "",
                                                                  imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot2.key))
+                                                                 postId: snapshot2.key,
+                                                                 highlights: value2?["highlights"] as? Bool ?? true))
                         
                         ongoingPake = kumpulanData.ongoing
-                        
-                        
                         
                         self.dispatchDelay(delay: 1.0) {
                             self.ongoingTable.reloadData()
@@ -186,9 +182,16 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     
                 }
+                self.dispatchDelay(delay: 1.0) {
+                    self.ongoingTable.reloadData()
+                    self.refreshControl.endRefreshing()
+                }
             }
             else{
-                self.refreshControl.endRefreshing()
+                self.dispatchDelay(delay: 1.0) {
+                    self.ongoingTable.reloadData()
+                    self.refreshControl.endRefreshing()
+                }
             }
             
         }) { (error) in
@@ -243,15 +246,17 @@ class ongoingViewController: UIViewController, UITableViewDataSource, UITableVie
         let cell = ongoingTable.dequeueReusableCell(withIdentifier: "ongoingCell", for: indexPath) as! ongoingTableViewCell
         
         // Configure the cell...
-        cell.ongoingImageLoader.startAnimating()
+//        cell.ongoingImageLoader.startAnimating()
         
         let url = URL(string: ongoingPake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.ongoingEventImage.image = image
-            
-            cell.ongoingImageLoader.stopAnimating()
-            cell.ongoingImageLoader.hidesWhenStopped = true
-        }
+        cell.ongoingEventImage.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.ongoingEventImage.image = image
+//
+//            cell.ongoingImageLoader.stopAnimating()
+//            cell.ongoingImageLoader.hidesWhenStopped = true
+//        }
         
         //cell.ongoingEventImage.image = filteredData[indexPath.row].ongoingImage as? UIImage
         cell.ongoingEventTitle.text = ongoingPake[indexPath.row].title

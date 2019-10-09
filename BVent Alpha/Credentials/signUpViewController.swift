@@ -16,103 +16,152 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var fullNameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
-    @IBOutlet weak var phoneNumberField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var tapToChangeProfileButton: UIButton!
     
-    @IBOutlet weak var darkView: UIView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
+//    @IBOutlet weak var darkView: UIView!
+//    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    var signUpActivityIndicator: UIActivityIndicatorView!
+    let loadingTextLabel = UILabel()
     
     var imagePicker: UIImagePickerController!
     @IBOutlet var inputFields: [UITextField]!
     //var waringLabels = "Wrong Input Password"
     
+    let notificationCenter = NotificationCenter.default
     
     override func viewDidLoad() {
+        signUpActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
+        signUpActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        signUpActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
+        signUpActivityIndicator.hidesWhenStopped = true
+        signUpActivityIndicator.isHidden = true
+        signUpActivityIndicator.center = view.center
+        self.view.addSubview(signUpActivityIndicator)
+        
+        loadingTextLabel.textColor = UIColor.white
+        loadingTextLabel.text = "Signing Up"
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 30)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: signUpActivityIndicator.center.x, y: signUpActivityIndicator.center.y + 40)
+        loadingTextLabel.isHidden = true
+        self.view.addSubview(loadingTextLabel)
+        
         super.viewDidLoad()
+        
         fullNameField.delegate = self
         emailField.delegate = self
-        phoneNumberField.delegate = self
         passwordField.delegate = self
+        
         fullNameField.keyboardType = UIKeyboardType.alphabet
         emailField.keyboardType = UIKeyboardType.emailAddress
-        phoneNumberField.keyboardType = UIKeyboardType.numberPad
         passwordField.keyboardType = UIKeyboardType.alphabet
+        
+        fullNameField.underlined()
+        emailField.underlined()
+        passwordField.underlined()
         
         // Do any additional setup after loading the view.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView(gesture:)))
         view.addGestureRecognizer(tapGesture)
+        
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        self.notificationCenter.addObserver(self, selector: #selector(adjustForKeyboard(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
         
         //signUp.layer.cornerRadius = 7
         //signUp.layer.masksToBounds = true
         
         // Do any additional setup after loading the view.
         
-        let imageTap = UITapGestureRecognizer(target: self, action: #selector(openImagePicker))
-        profileImageView.isUserInteractionEnabled = true
-        profileImageView.addGestureRecognizer(imageTap)
-        profileImageView.layer.cornerRadius = profileImageView.bounds.height / 2
-        profileImageView.clipsToBounds = true
-        tapToChangeProfileButton.addTarget(self, action: #selector(openImagePicker), for: .touchUpInside)
+//        let imageTap = UITapGestureRecognizer(target: self, action: #selector(openImagePicker))
+//        profileImageView.isUserInteractionEnabled = true
+//        profileImageView.addGestureRecognizer(imageTap)
+//        profileImageView.layer.cornerRadius = profileImageView.bounds.height / 2
+//        profileImageView.clipsToBounds = true
+//        tapToChangeProfileButton.addTarget(self, action: #selector(openImagePicker), for: .touchUpInside)
         
-        imagePicker = UIImagePickerController()
-        imagePicker.allowsEditing = true
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
+//        imagePicker = UIImagePickerController()
+//        imagePicker.allowsEditing = true
+//        imagePicker.sourceType = .photoLibrary
+//        imagePicker.delegate = self
         
     }
     
-    func showLoading(state: Bool)  {
-        if state {
-            self.darkView.isHidden = false
-            self.spinner.startAnimating()
-            UIView.animate(withDuration: 0.3, animations: {
-                self.darkView.alpha = 0.5
-            })
+    @objc func adjustForKeyboard(notification: Notification) {
+        let userInfo = notification.userInfo!
+        
+        let keyboardScreenEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
+        
+        if notification.name == NSNotification.Name.UIKeyboardWillHide {
+            scrollView.contentInset = UIEdgeInsets.zero
         } else {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.darkView.alpha = 0
-            }, completion: { _ in
-                self.spinner.stopAnimating()
-                self.darkView.isHidden = true
-            })
+            scrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardViewEndFrame.height, right: 0)
         }
+        
+        scrollView.scrollIndicatorInsets = scrollView.contentInset
+        
     }
     
-    func pushTomainView() {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
+    @objc func didTapView(gesture: UITapGestureRecognizer)  {
+        view.endEditing(true)
+    }
+    
+//    func showLoading(state: Bool)  {
+//        if state {
+//            self.darkView.isHidden = false
+//            self.spinner.startAnimating()
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.darkView.alpha = 0.5
+//            })
+//        } else {
+//            UIView.animate(withDuration: 0.3, animations: {
+//                self.darkView.alpha = 0
+//            }, completion: { _ in
+//                self.spinner.stopAnimating()
+//                self.darkView.isHidden = true
+//            })
+//        }
+//    }
+    
+    func pushToVerifyView() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "verifyAccountViewController") as! UIViewController
         self.show(vc, sender: nil)
     }
     
-    @IBAction func signUp(_ sender: UIButton) {
+    @IBAction func signUp(_ sender: Any) {
+        signUpActivityIndicator.isHidden = false
+        signUpActivityIndicator.startAnimating()
+        
+        loadingTextLabel.isHidden = false
         
         for item in self.inputFields {
             item.resignFirstResponder()
         }
-        self.showLoading(state: true)
-        User.registerUser(withName: self.fullNameField.text!, email: self.emailField.text!, phoneNumber: phoneNumberField.text!, password: self.passwordField.text!, profilePic: self.profileImageView.image!, SAT: "0") { [weak weakSelf = self] (status) in
+        //self.showLoading(state: true)
+        User.registerUser(withName: self.fullNameField.text!, email: self.emailField.text!, studentID: "", major: "", university: "", phoneNumber: "", password: self.passwordField.text!, profilePic: UIImage(named: "noun_34476")!, SAT: "0") { [weak weakSelf = self] (status) in
             DispatchQueue.main.async {
-                weakSelf?.showLoading(state: false)
+                //weakSelf?.showLoading(state: false)
                 for item in self.inputFields {
                     item.text = ""
                 }
                 if status == true {
-                    weakSelf?.pushTomainView()
-                    weakSelf?.profileImageView.image = UIImage.init(named: "ava3")
+                    weakSelf?.pushToVerifyView()
+                    //weakSelf?.profileImageView.image = UIImage.init(named: "ava3")
                 } else {
                     self.resetForm()
                     print("Wrong Input Password!")
-//                    for item in (weakSelf?.waringLabels)! {
-//                        item.isHidden = false
-//                    }
+                    //                    for item in (weakSelf?.waringLabels)! {
+                    //                        item.isHidden = false
+                    //                    }
                 }
+                self.signUpActivityIndicator.stopAnimating()
+                self.signUpActivityIndicator.isHidden = true
+                self.loadingTextLabel.isHidden = true
             }
         }
     }
-    //var users: [NSManagedObject] = []
-    
     
     @objc func openImagePicker(_ sender:Any) {
         // Open Image Picker
@@ -124,9 +173,6 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
             emailField.becomeFirstResponder()
         }
         if textField == emailField {
-            phoneNumberField.becomeFirstResponder()
-        }
-        if textField == phoneNumberField {
             passwordField.becomeFirstResponder()
         }
         if textField == passwordField {
@@ -150,10 +196,6 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
         removeObserver()
         
         //        Auth.auth().removeStateDidChangeListener(handle!)
-    }
-    
-    @objc func didTapView(gesture: UITapGestureRecognizer)  {
-        view.endEditing(true)
     }
     
     func addObservers(){
@@ -206,19 +248,36 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpg"
         
-        storageRef.putData(imageData, metadata: metaData) { metaData, error in
+        _ = storageRef.putData(imageData, metadata: nil) { (metadata, error) in
             if error == nil, metaData != nil {
-                if let url = metaData?.downloadURL() {
-                    completion(url)
-                } else {
-                    completion(nil)
+                guard let metadata = metadata else {
+                    print("Error!")
+                    return
                 }
-                // success!
-            } else {
-                // failed
-                completion(nil)
+                storageRef.downloadURL(completion: { (url, error) in
+                    if error != nil {
+                        print(error!)
+                    } else {
+                        let imageURL = url!.absoluteString
+                        print(imageURL)
+                    }
+                })
             }
         }
+        
+//        storageRef.putData(imageData, metadata: metaData) { metaData, error in
+//            if error == nil, metaData != nil {
+//                if let url = metaData?.downloadURL() {
+//                    completion(url)
+//                } else {
+//                    completion(nil)
+//                }
+//                // success!
+//            } else {
+//                // failed
+//                completion(nil)
+//            }
+//        }
     }
     
     func saveProfile(fullname:String, phoneNumber:String, email:String, profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {
@@ -240,20 +299,20 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
 }
 
 
-extension signUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            self.profileImageView.image = pickedImage
-        }
-        
-        picker.dismiss(animated: true, completion: nil)
-    }
-    
-    
-}
+//extension signUpViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//
+//    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+//        picker.dismiss(animated: true, completion: nil)
+//    }
+//
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+//
+//        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+//            self.profileImageView.image = pickedImage
+//        }
+//
+//        picker.dismiss(animated: true, completion: nil)
+//    }
+//
+//
+//}

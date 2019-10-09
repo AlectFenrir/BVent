@@ -74,7 +74,8 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                                              timestamp: value2?["timestamp"] as? String ?? "",
                                                              poster: value2?["poster"] as? String ?? "",
                                                              imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                             postId: snapshot2.key))
+                                                             postId: snapshot2.key,
+                                                             highlights: value2?["highlights"] as? Bool ?? true))
                     
                     myPostPake = kumpulanData.myPosts
                     
@@ -136,7 +137,8 @@ class myPostViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                                                  timestamp: value2?["timestamp"] as? String ?? "",
                                                                  poster: value2?["poster"] as? String ?? "",
                                                                  imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot2.key))
+                                                                 postId: snapshot2.key,
+                                                                 highlights: value2?["highlights"] as? Bool ?? true))
                         
                         myPostPake = kumpulanData.myPosts
                         

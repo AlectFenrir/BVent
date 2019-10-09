@@ -15,7 +15,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var categories: UITextField!
-    let categoryPickerVal = ["Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
+    let categoryPickerVal = ["Design", "Economy", "Engineering", "Jobs", "Lifestyle", "Social", "Technologies", "More"]
     var categoryPicker = UIPickerView()
     @IBOutlet weak var eventTitleField: UITextField!
     @IBOutlet weak var eventPriceField: UITextField!
@@ -45,12 +45,21 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     //var pickerData:[String] = [String]()
     
     override func viewDidLoad() {
-        postActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        postActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
         postActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
+        postActivityIndicator.backgroundColor = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
         postActivityIndicator.hidesWhenStopped = true
         postActivityIndicator.isHidden = true
         postActivityIndicator.center = view.center
         self.view.addSubview(postActivityIndicator)
+        
+        loadingTextLabel.textColor = UIColor.white
+        loadingTextLabel.text = "Posting"
+        loadingTextLabel.font = UIFont(name: "Helvetica Neue Bold", size: 30)
+        loadingTextLabel.sizeToFit()
+        loadingTextLabel.center = CGPoint(x: postActivityIndicator.center.x, y: postActivityIndicator.center.y + 40)
+        loadingTextLabel.isHidden = true
+        self.view.addSubview(loadingTextLabel)
         
         super.viewDidLoad()
         
@@ -226,52 +235,16 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     //    }
     
     @IBAction func eventPost(_ sender: UIButton) {
-        
         postActivityIndicator.isHidden = false
         postActivityIndicator.startAnimating()
         
-        loadingTextLabel.textColor = UIColor.black
-        loadingTextLabel.text = "Posting"
-        loadingTextLabel.font = UIFont(name: "Avenir Light", size: 20)
-        loadingTextLabel.sizeToFit()
-        loadingTextLabel.center = CGPoint(x: postActivityIndicator.center.x, y: postActivityIndicator.center.y + 30)
-        self.view.addSubview(loadingTextLabel)
+        loadingTextLabel.isHidden = false
         
         ref = Database.database().reference()
         self.loggedInUser = Auth.auth().currentUser
         
         
-        uploadMedia() { url in
-            if url != nil {
-                self.ref?.child("posts").childByAutoId().setValue([
-                    "category": self.categories.text!,
-                    "title": self.eventTitleField.text!,
-                    "price": self.eventPriceField.text!,
-                    "date": self.tanggal,
-                    "location": self.eventLocationField.text!,
-                    "desc": self.eventDesc.text!,
-//                    "desc": self.eventDescriptionField.text!,
-                    "benefit": "3 SAT Points",
-                    "bookmark": false,
-                    "confirmCode": "qwerty",
-                    "cp": "081282311233",
-                    "done": false,
-                    "enroll": false,
-                    "sat": 3,
-                    "certification": true,
-                    "time": "09.00 - 10.00",
-                    "timestamp": "\(Date().timeIntervalSince1970)",
-                    "poster": self.loggedInUser!.uid!,
-                    "imageUrl": url!,
-                    //"postId": String(self.ref!.childByAutoId().key)
-                    ] as [String: Any])
-                
-                print("Post Success!")
-                self.postActivityIndicator.stopAnimating()
-                self.postActivityIndicator.isHidden = true
-                _ = self.navigationController?.popViewController(animated: true)
-            }
-        }
+        uploadMedia()
         
     }
     
@@ -279,7 +252,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     //var events: [NSManagedObject] = []
     
     
-    func uploadMedia(completion: @escaping (_ url: String?) -> Void) {
+    func uploadMedia() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
         
         let key = self.ref?.child("posts").childByAutoId().key
@@ -290,15 +263,51 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
         metaData.contentType = "image/jpg"
         
         /*if let uploadData = UIImagePNGRepresentation(self.eventImage.image!)*/ if let uploadData = UIImageJPEGRepresentation(self.eventImage.image!, 0.2) {
-            storageRef.putData(uploadData, metadata: metaData) { (metaData, error) in
+            storageRef.putData(uploadData, metadata: metaData, completion: { (metaData, error) in
                 if error != nil {
                     print("error")
-                    completion(nil)
+                    return
                 } else {
-                    completion((metaData?.downloadURL()?.absoluteString)!)
+                    storageRef.downloadURL(completion: { (url, error) in
+                        if error != nil {
+                            print(error!)
+                        } else {
+                            let imageURL = url!.absoluteString
+                            print(imageURL)
+                            self.ref?.child("posts").childByAutoId().setValue([
+                                "category": self.categories.text!,
+                                "title": self.eventTitleField.text!,
+                                "price": self.eventPriceField.text!,
+                                "date": self.tanggal,
+                                "location": self.eventLocationField.text!,
+                                "desc": self.eventDesc.text!,
+                                //                    "desc": self.eventDescriptionField.text!,
+                                "benefit": "3 SAT Points",
+                                "bookmark": false,
+                                "confirmCode": "qwerty",
+                                "cp": "081282311233",
+                                "done": false,
+                                "enroll": false,
+                                "sat": 3,
+                                "certification": true,
+                                "time": "09.00 - 10.00",
+                                "timestamp": "\(Date().timeIntervalSince1970)",
+                                "poster": self.loggedInUser!.uid!,
+                                "imageUrl": imageURL,
+                                "highlights": true
+                                //"postId": String(self.ref!.childByAutoId().key)
+                                ] as [String: Any])
+                            
+                            print("Post Success!")
+                            self.postActivityIndicator.stopAnimating()
+                            self.postActivityIndicator.isHidden = true
+                            self.loadingTextLabel.isHidden = true
+                            _ = self.navigationController?.popViewController(animated: true)
+                        }
+                    })
                     // your uploaded photo url.
                 }
-            }
+            })
         }
     }
 }

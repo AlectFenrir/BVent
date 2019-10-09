@@ -85,7 +85,8 @@ class bookmarkViewController: UIViewController, UITableViewDelegate, UITableView
                                                                  timestamp: value2?["timestamp"] as? String ?? "",
                                                                  poster: value2?["poster"] as? String ?? "",
                                                                  imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot2.key))
+                                                                 postId: snapshot2.key,
+                                                                 highlights: value2?["highlights"] as? Bool ?? true))
                         
                         bookmarkPake = kumpulanData.bookmark
                         
@@ -151,7 +152,8 @@ class bookmarkViewController: UIViewController, UITableViewDelegate, UITableView
                                                                  timestamp: value2?["timestamp"] as? String ?? "",
                                                                  poster: value2?["poster"] as? String ?? "",
                                                                  imageUrl: value2?["imageUrl"] as? String ?? "",
-                                                                 postId: snapshot2.key))
+                                                                 postId: snapshot2.key,
+                                                                 highlights: value2?["highlights"] as? Bool ?? true))
                         
                         bookmarkPake = kumpulanData.bookmark
                         

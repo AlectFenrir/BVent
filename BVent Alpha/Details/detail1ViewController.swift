@@ -13,7 +13,14 @@ import EventKit
 
 class detail1ViewController: UIViewController {
     
-    @IBOutlet weak var foto: UIImageView!
+    @IBOutlet weak var foto: WebImageView! {
+        didSet {
+            foto.configuration.placeholderImage = UIImage(named: "lightGray")
+            foto.configuration.animationOptions = .transitionCrossDissolve
+        }
+    }
+    @IBOutlet weak var eventTitle: UILabel!
+    @IBOutlet weak var eventPoster: UILabel!
     @IBOutlet weak var time: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var category: UILabel!
@@ -24,7 +31,6 @@ class detail1ViewController: UIViewController {
     @IBOutlet weak var jam: UILabel!
     @IBOutlet weak var saveBtn: UIButton!
     @IBOutlet weak var enrollBtn: UIButton!
-    @IBOutlet weak var decsBtn: UITextView!
     @IBOutlet weak var detail1ImageLoader: UIActivityIndicatorView!
     
     @IBAction func imageTapped(_ sender: UITapGestureRecognizer) {
@@ -61,32 +67,47 @@ class detail1ViewController: UIViewController {
     
     var posterId: String = ""
     
+    var name: String = ""
+    
     var userLempar: User!
     
     let eventStore: EKEventStore = EKEventStore()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         val = false
-        
-        //self.navigationController?.navigationBar.prefersLargeTitles = false
         
         pake = data
         
         self.title = pake[index!].title
+        eventTitle.text = pake[index!].title
+        
+        ref = Database.database().reference()
+        ref.child("users").child("regular").child(pake[index!].poster).child("profile").observeSingleEvent(of: .value, with: { (snapshot) in
+            // Get user value
+            let value = snapshot.value as? NSDictionary
+            self.name = value?["fullname"] as? String ?? ""
+            self.eventPoster.text = "by \(self.name)"
+            
+            print("a")
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
         
         //foto.image = pake[index!].image
         
-        detail1ImageLoader.startAnimating()
+        //detail1ImageLoader.startAnimating()
         
         let url = URL(string: pake[index!].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            self.foto.image = image
-            
-            self.detail1ImageLoader.stopAnimating()
-            self.detail1ImageLoader.hidesWhenStopped = true
-        }
+        self.foto.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            self.foto.image = image
+//
+//            self.detail1ImageLoader.stopAnimating()
+//            self.detail1ImageLoader.hidesWhenStopped = true
+//        }
         
         //time.text = pake[index!].cdown
         
@@ -97,7 +118,7 @@ class detail1ViewController: UIViewController {
             price.text = "Rp. \(pake[index!].price)"
         }
         
-        category.text = "in \(pake[index!].category)"
+        //category.text = "in \(pake[index!].category)"
         isi.text = pake[index!].desc
         tempat.text = "Place: \(pake[index!].location)"
         waktu.text = "Date: \(pake[index!].date)"
@@ -123,24 +144,24 @@ class detail1ViewController: UIViewController {
             }
         }
         
-        
+        isi.sizeToFit()
         
         phoneNumber = pake[index!].cp
         
-        saveBtn.layer.cornerRadius = 7
-        saveBtn.clipsToBounds = true
-        saveBtn.layer.borderWidth = 0.25
-        saveBtn.layer.borderColor = UIColor.black.cgColor
-        
-        enrollBtn.layer.cornerRadius = 7
-        enrollBtn.clipsToBounds = true
-        enrollBtn.layer.borderWidth = 0.25
-        enrollBtn.layer.borderColor = UIColor.black.cgColor
-        
-        decsBtn.layer.cornerRadius = 7
-        decsBtn.clipsToBounds = true
-        decsBtn.layer.borderWidth = 0.25
-        decsBtn.layer.borderColor = UIColor.white.cgColor
+//        saveBtn.layer.cornerRadius = 7
+//        saveBtn.clipsToBounds = true
+//        saveBtn.layer.borderWidth = 0.25
+//        saveBtn.layer.borderColor = UIColor.black.cgColor
+//        
+//        enrollBtn.layer.cornerRadius = 7
+//        enrollBtn.clipsToBounds = true
+//        enrollBtn.layer.borderWidth = 0.25
+//        enrollBtn.layer.borderColor = UIColor.black.cgColor
+//
+//        decsBtn.layer.cornerRadius = 7
+//        decsBtn.clipsToBounds = true
+//        decsBtn.layer.borderWidth = 0.25
+//        decsBtn.layer.borderColor = UIColor.white.cgColor
         
         
         // Do any additional setup after loading the view.
@@ -416,6 +437,9 @@ class detail1ViewController: UIViewController {
             
             let fullname = credentials["fullname"]!
             let email = credentials["email"]!
+            let studentID = credentials["studentID"]!
+            let major = credentials["major"]!
+            let university = credentials["university"]!
             let phoneNumber = credentials["phoneNumber"]!
             let SAT = credentials["SAT"]
             let link = URL.init(string: credentials["photoURL"]!)
@@ -423,7 +447,7 @@ class detail1ViewController: UIViewController {
             ImageService.getImage(withURL: link!) {(image) in
                 
                 let profilePic = image
-                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, profilePic: profilePic!, SAT: SAT!)
+                let user = User.init(fullname: fullname, email: email, phoneNumber: phoneNumber, id: id, studentID: studentID, major: major, university: university, profilePic: profilePic!, SAT: SAT!)
                 self.userLempar = user
                 
                 if (userID != self.posterId) {
@@ -448,6 +472,18 @@ class detail1ViewController: UIViewController {
         }
         
         
+    }
+    
+    @IBAction func close(_ sender: Any) {
+        let transition = CATransition()
+        transition.duration = 0.3
+        transition.type = kCATransitionReveal
+        transition.subtype = kCATransitionFromBottom
+        //view.backgroundColor = UIColor.clear
+        //view.window?.backgroundColor = UIColor.clear
+        //view.window?.isOpaque = true
+        view.window!.layer.add(transition, forKey: kCATransition)
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {

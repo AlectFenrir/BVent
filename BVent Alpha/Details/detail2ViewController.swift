@@ -71,12 +71,14 @@ class detail2ViewController: UIViewController {
         //self.navigationController?.navigationBar.prefersLargeTitles = false
         
         if categ != "All"{
+            print("Hello Details 2 All")
             pake = data.filter({ (s1) -> Bool in
                 return s1.category.contains(categ!)
             })
         }
         else{
             pake = data
+            print("Hello Details 2 Categories")
         }
         
         

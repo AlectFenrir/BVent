@@ -11,7 +11,12 @@ import UIKit
 class catTableViewCell: UITableViewCell {
     
     
-    @IBOutlet weak var foto: UIImageView!
+    @IBOutlet weak var foto: WebImageView! {
+        didSet {
+            foto.configuration.placeholderImage = UIImage(named: "lightGray")
+            foto.configuration.animationOptions = .transitionCrossDissolve
+        }
+    }
     @IBOutlet weak var judul: UILabel!
     @IBOutlet weak var bg: UIView!
     @IBOutlet weak var benefit: UILabel!

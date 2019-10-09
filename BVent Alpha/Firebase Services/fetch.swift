@@ -29,6 +29,7 @@ struct ambilData{
     var timestamp: String
     var poster: String
     var imageUrl: String
+    var highlights: Bool
     
     init(fetch: [String : Any]){
         
@@ -50,6 +51,7 @@ struct ambilData{
         timestamp = fetch["timestamp"] as? String ?? ""
         poster = fetch["poster"] as? String ?? ""
         imageUrl = fetch["imageUrl"] as? String ?? ""
+        highlights = fetch["highlights"] as? Bool ?? true
         
     }
     

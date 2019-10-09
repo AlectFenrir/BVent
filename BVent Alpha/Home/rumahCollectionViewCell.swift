@@ -12,14 +12,14 @@ class rumahCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var cat: UILabel!
     @IBOutlet weak var foto: UIImageView!
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        foto.layer.cornerRadius = 5
+        foto.layer.cornerRadius = 7
         foto.layer.masksToBounds = true
-        
-        //        userImage.layer.cornerRadius = 6
-        //        userImage.layer.masksToBounds = true
     }
-    
 }

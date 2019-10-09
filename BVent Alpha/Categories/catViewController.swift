@@ -43,10 +43,9 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         self.title = category
         
-        //self.navigationController?.navigationBar.prefersLargeTitles = true
+        //self.navigationController?.navigationBar.prefersLargeTitles = false
         
         if (category != "All"){
-            //print("HELLO")
             pake = data.filter({ (s1) -> Bool in
                 return s1.category.contains(category!)
             })
@@ -76,15 +75,17 @@ class catViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tabel1.dequeueReusableCell(withIdentifier: "cat1", for: indexPath) as! catTableViewCell
         
-        cell.categoryImageLoader.startAnimating()
+//        cell.categoryImageLoader.startAnimating()
         
         let url = URL(string: pake[indexPath.row].imageUrl)
-        ImageService.getImage(withURL: url!) { (image) in
-            cell.foto.image = image
-            
-            cell.categoryImageLoader.stopAnimating()
-            cell.categoryImageLoader.hidesWhenStopped = true
-        }
+        cell.foto.load(url: url!)
+        
+//        ImageService.getImage(withURL: url!) { (image) in
+//            cell.foto.image = image
+//
+//            cell.categoryImageLoader.stopAnimating()
+//            cell.categoryImageLoader.hidesWhenStopped = true
+//        }
         
         //cell.foto.image = pake[indexPath.row].image
         cell.judul.text = pake[indexPath.row].title
