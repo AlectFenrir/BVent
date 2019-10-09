@@ -24,6 +24,7 @@
 		2C1D743320B83DD0008850A9 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D743220B83DD0008850A9 /* Post.swift */; };
 		2C1D743520B84459008850A9 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C1D743420B84459008850A9 /* ImageService.swift */; };
 		2C20281D21C7480700BE7B1A /* highlightsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C20281C21C7480700BE7B1A /* highlightsDetailsViewController.swift */; };
+		2C33055E22B91DFA006ED975 /* BVent_Alpha.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2C33055C22B91DFA006ED975 /* BVent_Alpha.xcdatamodeld */; };
 		2C3A8A5D20E4FA030084D056 /* myProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3A8A5C20E4FA030084D056 /* myProfile.swift */; };
 		2C3F7F0621940572000A7F87 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C3F7F0521940572000A7F87 /* MapKit.framework */; };
 		2C4072C520AA9E6C003CC93E /* SAT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C4072C320AA9E6B003CC93E /* SAT.swift */; };
@@ -88,7 +89,6 @@
 		2CBD8E2021D3F35C00E4C83D /* WebImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBD8E1F21D3F35C00E4C83D /* WebImageView.swift */; };
 		2CC16C0420A1869A000205FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0320A1869A000205FE /* AppDelegate.swift */; };
 		2CC16C0920A1869B000205FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0720A1869B000205FE /* Main.storyboard */; };
-		2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */; };
 		2CC16C0E20A1869B000205FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CC16C0D20A1869B000205FE /* Assets.xcassets */; };
 		2CC16C1C20A1869B000205FE /* BVent_AlphaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C1B20A1869B000205FE /* BVent_AlphaTests.swift */; };
 		2CC16C2720A1869B000205FE /* BVent_AlphaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC16C2620A1869B000205FE /* BVent_AlphaUITests.swift */; };
@@ -132,6 +132,7 @@
 		2C1D743220B83DD0008850A9 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		2C1D743420B84459008850A9 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		2C20281C21C7480700BE7B1A /* highlightsDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = highlightsDetailsViewController.swift; sourceTree = "<group>"; };
+		2C33055D22B91DFA006ED975 /* BVent_Alpha.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BVent_Alpha.xcdatamodel; sourceTree = "<group>"; };
 		2C3A8A5C20E4FA030084D056 /* myProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myProfile.swift; sourceTree = "<group>"; };
 		2C3F7F0521940572000A7F87 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2C4072C320AA9E6B003CC93E /* SAT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAT.swift; sourceTree = "<group>"; };
@@ -198,7 +199,6 @@
 		2CC16C0020A1869A000205FE /* BVent Alpha.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BVent Alpha.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CC16C0320A1869A000205FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2CC16C0820A1869B000205FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		2CC16C0B20A1869B000205FE /* BVent_Alpha.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BVent_Alpha.xcdatamodel; sourceTree = "<group>"; };
 		2CC16C0D20A1869B000205FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CC16C1220A1869B000205FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2CC16C1720A1869B000205FE /* BVent AlphaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BVent AlphaTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -436,7 +436,7 @@
 				2CC16C0D20A1869B000205FE /* Assets.xcassets */,
 				2CC16C0320A1869A000205FE /* AppDelegate.swift */,
 				2CC16C1220A1869B000205FE /* Info.plist */,
-				2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */,
+				2C33055C22B91DFA006ED975 /* BVent_Alpha.xcdatamodeld */,
 				2C1D743020B8357F008850A9 /* Offline Database */,
 				2C1D743120B83597008850A9 /* Ongoing Event */,
 				2C4072F620AAA05F003CC93E /* Poster */,
@@ -705,47 +705,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-BVent Alpha/Pods-BVent Alpha-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/ActionButton/ActionButton.framework",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Cards/Cards.framework",
-				"${BUILT_PRODUCTS_DIR}/FloatingView/FloatingView.framework",
-				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
-				"${BUILT_PRODUCTS_DIR}/MDFInternationalization/MDFInternationalization.framework",
-				"${BUILT_PRODUCTS_DIR}/MDFTextAccessibility/MDFTextAccessibility.framework",
-				"${BUILT_PRODUCTS_DIR}/MaterialComponents/MaterialComponents.framework",
-				"${BUILT_PRODUCTS_DIR}/Player/Player.framework",
-				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Shimmer/Shimmer.framework",
-				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
-				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BVent Alpha/Pods-BVent Alpha-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ActionButton.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cards.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FloatingView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MDFInternationalization.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MDFTextAccessibility.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialComponents.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Player.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Shimmer.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BVent Alpha/Pods-BVent Alpha-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BVent Alpha/Pods-BVent Alpha-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BVent Alpha/Pods-BVent Alpha-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -761,7 +730,6 @@
 				2C4072F220AAA055003CC93E /* detail3ViewController.swift in Sources */,
 				2CA8B9192192DAD100CFD8CF /* ContactsCollectionViewCell.swift in Sources */,
 				2C00CCE221B796C800DFEFA8 /* historyViewController.swift in Sources */,
-				2CC16C0C20A1869B000205FE /* BVent_Alpha.xcdatamodeld in Sources */,
 				2C4072F120AAA055003CC93E /* detail1ViewController.swift in Sources */,
 				2C4072DD20AA9FA9003CC93E /* rumahViewController.swift in Sources */,
 				2CA8B8FA21907AEA00CFD8CF /* eTicketCollectionViewCell.swift in Sources */,
@@ -804,6 +772,7 @@
 				2C40730420AAA081003CC93E /* catTableViewCell.swift in Sources */,
 				2C1D742F20B80AC0008850A9 /* UserProfile.swift in Sources */,
 				2CBD8E1A21D348C900E4C83D /* upcomingTableViewController.swift in Sources */,
+				2C33055E22B91DFA006ED975 /* BVent_Alpha.xcdatamodeld in Sources */,
 				5FFB7869210CDF40005ED749 /* QRGenViewController.swift in Sources */,
 				2C4072D520AA9F89003CC93E /* forgotPasswordViewController.swift in Sources */,
 				2C4072CF20AA9F06003CC93E /* CollectionViewCell.swift in Sources */,
@@ -1162,12 +1131,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		2CC16C0A20A1869B000205FE /* BVent_Alpha.xcdatamodeld */ = {
+		2C33055C22B91DFA006ED975 /* BVent_Alpha.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				2CC16C0B20A1869B000205FE /* BVent_Alpha.xcdatamodel */,
+				2C33055D22B91DFA006ED975 /* BVent_Alpha.xcdatamodel */,
 			);
-			currentVersion = 2CC16C0B20A1869B000205FE /* BVent_Alpha.xcdatamodel */;
+			currentVersion = 2C33055D22B91DFA006ED975 /* BVent_Alpha.xcdatamodel */;
 			path = BVent_Alpha.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

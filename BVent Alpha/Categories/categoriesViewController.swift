@@ -10,9 +10,9 @@ import UIKit
 import Firebase
 
 class categoriesViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    let main = ["All", "Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
+    let main = ["All", "Design", "Economy", "Engineering", "Jobs", "Lifestyle", "Social", "Technologies"]
     
-    let cat = ["cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7", "cat8"]
+    let cat = ["icons8-categorize-90", "cat4", "cat2", "cat7", "cat6", "cat5", "cat3", "cat1"]
     
     var lempar: String? = ""
     var index: Int?

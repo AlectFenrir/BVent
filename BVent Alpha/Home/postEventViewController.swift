@@ -15,7 +15,7 @@ class postEventViewController: UIViewController, UITextFieldDelegate, UIPickerVi
     
     @IBOutlet weak var eventImage: UIImageView!
     @IBOutlet weak var categories: UITextField!
-    let categoryPickerVal = ["Business", "Technology", "Economy", "Lifestyle", "Design", "Music", "More"]
+    let categoryPickerVal = ["Design", "Economy", "Engineering", "Jobs", "Lifestyle", "Social", "Technologies", "More"]
     var categoryPicker = UIPickerView()
     @IBOutlet weak var eventTitleField: UITextField!
     @IBOutlet weak var eventPriceField: UITextField!

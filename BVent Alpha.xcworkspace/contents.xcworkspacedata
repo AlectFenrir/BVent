@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BVent Alpha.xcodeproj">
+      location = "group:/Users/rayhanfaluda/Documents/GitHub/BVent/BVent Alpha.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:BVent Alpha.xcodeproj">
    </FileRef>
 </Workspace>
