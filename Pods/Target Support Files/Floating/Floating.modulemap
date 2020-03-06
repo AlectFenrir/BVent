@@ -1,0 +1,6 @@
+framework module Floating {
+  umbrella header "Floating-umbrella.h"
+
+  export *
+  module * { export * }
+}

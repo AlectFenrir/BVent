@@ -28,9 +28,11 @@ class LandingViewController: UIViewController {
         switch viewController {
         case .home:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
+            vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: false, completion: nil)
         case .welcome:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "welcomeViewController") as! welcomeViewController
+            vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: false, completion: nil)
         }
     }

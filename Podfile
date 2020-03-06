@@ -7,19 +7,15 @@ target 'BVent Alpha' do
 
   # Pods for BVent Alpha
   pod 'Firebase/Core'
+  pod 'Firebase/Analytics'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
-  pod 'Cards', :path => '../'
+  pod 'Cards'
   pod 'MaterialComponents/Buttons'
   pod 'ActionButton'
   pod 'Shimmer'
-  pod 'FloatingView', '~> 0.0.3'
-  
-  # Pods for RxSwift+MVVM
-  pod 'Alamofire', '~> 4.5'
-  pod 'RxSwift', '~> 4.0'
-  pod 'RxCocoa', '~> 4.0'
+  pod 'Floating'
 
   target 'BVent AlphaTests' do
     inherit! :search_paths
@@ -30,7 +26,6 @@ target 'BVent Alpha' do
     inherit! :search_paths
     # Pods for testing
   end
-
 end
 
 post_install do |installer|
