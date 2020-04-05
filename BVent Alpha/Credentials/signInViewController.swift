@@ -123,7 +123,8 @@ class signInViewController: UIViewController, UITextFieldDelegate {
     
     func pushTomainView() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "main") as! UITabBarController
-        self.show(vc, sender: nil)
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false, completion: nil)
     }
     
     @objc func handleSignIn() {
