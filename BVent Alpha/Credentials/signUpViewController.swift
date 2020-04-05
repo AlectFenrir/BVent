@@ -127,7 +127,8 @@ class signUpViewController: UIViewController, UITextFieldDelegate {
     
     func pushToVerifyView() {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "verifyAccountViewController") as! UIViewController
-        self.show(vc, sender: nil)
+        vc.modalPresentationStyle = .fullScreen
+        self.present(vc, animated: false, completion: nil)
     }
     
     @IBAction func signUp(_ sender: Any) {
