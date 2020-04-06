@@ -61,19 +61,10 @@ class upcomingTableViewController: UITableViewController {
 
         return cell
     }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         index = indexPath.row
         goToLocation()
-    }
-
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let identifier = segue.identifier {
-            if identifier == "upcomingDetails" {
-                let destination = segue.destination as! detail1ViewController
-                destination.index = index
-            }
-        }
     }
     
     func goToLocation() {
@@ -82,6 +73,15 @@ class upcomingTableViewController: UITableViewController {
         let navigationController = UINavigationController(rootViewController: locationTableVC)
         //self.present(navigationController, animated: true, completion: nil)
         self.show(navigationController, sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if identifier == "upcomingDetails" {
+                let destination = segue.destination as! detail1ViewController
+                destination.index = index
+            }
+        }
     }
 
 }
